@@ -14,7 +14,7 @@ L.toComp(L.transform.anchorPoint);
 // AnimToolbox 0.1 
 // by Nick Fox-Gieg
 //
-// based on KinectToPin Motion Capture Tools
+// based on KinectToPin Motion Capture Tools panel
 // by Victoria Nece and Nick Fox-Gieg
 // www.kinecttopin.com
 // 
