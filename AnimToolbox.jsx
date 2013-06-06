@@ -1,4 +1,16 @@
-﻿//
+﻿/*
+Step 1. Add a new puppet pin (after completing mocap rigging, to avoid errors).
+
+Step 2. Give the pin a position expression parenting it to a null "l_finger1_ctl":
+fromComp(thisComp.layer("l_finger1_ctl").toComp(thisComp.layer("l_finger1_ctl").anchorPoint));
+
+Step 3. Parent "l_finger1_ctl" to a master control null "l_fingers_ctl".
+
+Step 4. Apply an expression to "l_fingers_ctl" to link it to the mocap null. 
+L = thisComp.layer("l_hand");
+L.toComp(L.transform.anchorPoint);
+*/
+
 // AnimToolbox 0.1 
 // by Nick Fox-Gieg
 //
@@ -32,16 +44,16 @@ win.basicGroup = win.add('panel', [4,4,165,93], 'Basic', {borderStyle: "etched"}
 win.advGroup = win.add('panel', [174,4,335,93], 'Advanced', {borderStyle: "etched"});
 
 win.but_01 = win.basicGroup.add('button', [8,15,152,43], 'Bake Keyframes');
-win.but_02 = win.basicGroup.add('button', [8,45,152,73], 'placeholder');
+win.but_02 = win.basicGroup.add('button', [8,45,152,73], 'Nulls for Pins');
 //--
 win.but_03 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
-win.but_04 = win.advGroup.add('button', [8,45,152,73], 'placeholder');
+win.but_04 = win.advGroup.add('button', [8,45,152,73], 'Parentable Null');
 
 
 win.but_01.onClick = bakePinKeyframes;
-win.but_02.onClick = importMocap2D;
+win.but_02.onClick = nullsForPins;
 win.but_03.onClick = lockRotation;
-win.but_04.onClick = importMocap3D;
+win.but_04.onClick = parentableNull;
 
 return win
 }
@@ -51,6 +63,177 @@ w;
 } else {
 w.show();
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// generate nulls for pins
+function nullsForPins(){  //start script
+    app.beginUndoGroup("Generate Nulls for Pins");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // Select layer to add expression to
+            if (curLayer.matchName == "ADBE AV Layer"){
+                if(curLayer.effect.puppet != null){
+                    var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
+                    var pinCount = wherePins.numProperties;
+                    for (var n = 1; n <= pinCount; n++){
+                        // Get position of puppet pin
+                        try{ 
+                        var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
+                        var nullName = pin.name + "_ctl";
+                        //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
+                        var solid = theComp.layers.addNull();
+                        solid.name = nullName;
+                        //solid.guideLayer = true;
+                        //solid.property("opacity").setValue(0);
+                        //alert(pin.position);
+                        //solid.property("position").setValue([100,100]);
+                        var pinExpr = "fromComp(thisComp.layer(\""+nullName+"\").toComp(thisComp.layer(\""+nullName+"\").anchorPoint));";
+                        pin.position.expression = pinExpr;
+                        }catch(e){}
+                    }  
+                }else{
+                    alert("This only works on layers with puppet pins.");
+                }
+                //else{
+                    /*
+                    var curProperty;
+                    try{
+                        curProperty = curLayer.property("position");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("anchorPoint");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("rotation");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("scale");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("opacity");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    */
+                //}
+            }else{
+                alert("This only works on footage layers.");
+            }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// generate parentable null for things with weird coordinate spaces
+function parentableNull(){  //start script
+    app.beginUndoGroup("Generate Parentable Null");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // Select layer to add expression to
+            if (curLayer.matchName == "ADBE AV Layer"){
+                var solid = theComp.layers.addNull();
+                solid.name = curLayer.name + "_ctl";
+                var expr = "var L = thisComp.layer(\"" + curLayer.name + "\");" + "\r" +
+                           "L.toComp(L.transform.anchorPoint);";
+                solid.property("position").expression = expr;
+                /*
+                if(curLayer.effect.puppet != null){
+                    var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
+                    var pinCount = wherePins.numProperties;
+                    for (var n = 1; n <= pinCount; n++){
+                        // Get position of puppet pin
+                        try{ 
+                        var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
+                        var nullName = pin.name + "_ctl";
+                        //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
+                        var solid = theComp.layers.addNull();
+                        solid.name = nullName;
+                        //solid.guideLayer = true;
+                        //solid.property("opacity").setValue(0);
+                        //alert(pin.position);
+                        //solid.property("position").setValue([100,100]);
+                        var pinExpr = "fromComp(thisComp.layer(\""+nullName+"\").toComp(thisComp.layer(\""+nullName+"\").anchorPoint));";
+                        pin.position.expression = pinExpr;
+                        }catch(e){}
+                    }  
+                }else{
+                    alert("This only works on layers with puppet pins.");
+                }
+                */
+                //else{
+                    /*
+                    var curProperty;
+                    try{
+                        curProperty = curLayer.property("position");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("anchorPoint");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("rotation");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("scale");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("opacity");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    */
+                //}
+            }else{
+                alert("This only works on footage layers.");
+            }
+            }
+        }
+    }
+
+    app.endUndoGroup();
+}  //end script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
