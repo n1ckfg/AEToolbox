@@ -47,7 +47,7 @@ win.but_01 = win.basicGroup.add('button', [8,15,152,43], 'Bake Keyframes');
 win.but_02 = win.basicGroup.add('button', [8,45,152,73], 'Nulls for Pins');
 //--
 win.but_03 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
-win.but_04 = win.advGroup.add('button', [8,45,152,73], 'Parentable Null');
+win.but_04 = win.advGroup.add('button', [8,45,152,73], 'Parentable Mocap Null');
 
 
 win.but_01.onClick = bakePinKeyframes;
