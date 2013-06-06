@@ -1,17 +1,4 @@
-﻿/*
-Step 1. Add a new puppet pin (after completing mocap rigging, to avoid errors).
-
-Step 2. Give the pin a position expression parenting it to a null "l_finger1_ctl":
-fromComp(thisComp.layer("l_finger1_ctl").toComp(thisComp.layer("l_finger1_ctl").anchorPoint));
-
-Step 3. Parent "l_finger1_ctl" to a master control null "l_fingers_ctl".
-
-Step 4. Apply an expression to "l_fingers_ctl" to link it to the mocap null. 
-L = thisComp.layer("l_hand");
-L.toComp(L.transform.anchorPoint);
-*/
-
-// AnimToolbox 0.1 
+﻿// AnimToolbox 0.1 
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -39,21 +26,24 @@ var win = (this_obj_ instanceof Panel)
 	var winGfx = win.graphics;
 	var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 
-//X start, Y start, X end, Y end
-win.basicGroup = win.add('panel', [4,4,165,93], 'Basic', {borderStyle: "etched"});
+//X start, Y start, X end, Y end ...Y increments of 30
+win.basicGroup = win.add('panel', [4,4,165,123], 'Basic', {borderStyle: "etched"});
 win.advGroup = win.add('panel', [174,4,335,93], 'Advanced', {borderStyle: "etched"});
 
 win.but_01 = win.basicGroup.add('button', [8,15,152,43], 'Bake Keyframes');
 win.but_02 = win.basicGroup.add('button', [8,45,152,73], 'Nulls for Pins');
+win.but_03 = win.basicGroup.add('button', [8,75,152,103], 'Make Loop');
 //--
-win.but_03 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
-win.but_04 = win.advGroup.add('button', [8,45,152,73], 'Parentable Mocap Null');
+win.but_04 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
+win.but_05 = win.advGroup.add('button', [8,45,152,73], 'Parentable Mocap Null');
 
 
 win.but_01.onClick = bakePinKeyframes;
 win.but_02.onClick = nullsForPins;
-win.but_03.onClick = lockRotation;
-win.but_04.onClick = parentableNull;
+win.but_03.onClick = makeLoop;
+//--
+win.but_04.onClick = lockRotation;
+win.but_05.onClick = parentableNull;
 
 return win
 }
@@ -63,6 +53,46 @@ w;
 } else {
 w.show();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// generate nulls for pins
+function makeLoop(){  //start script
+    app.beginUndoGroup("Make Time Remap Loop");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // Select layer to add expression to
+            if (curLayer.matchName == "ADBE AV Layer"){
+                curLayer.timeRemapEnabled = true;
+
+                var expr = "loop_out(\"cycle\");";
+                curLayer.timeRemap.expression = expr;
+
+            }else{
+                alert("This only works on footage layers.");
+            }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
