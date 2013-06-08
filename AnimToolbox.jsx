@@ -27,23 +27,27 @@ var win = (this_obj_ instanceof Panel)
 	var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 
 //X start, Y start, X end, Y end ...Y increments of 30
-win.basicGroup = win.add('panel', [4,4,165,123], 'Basic', {borderStyle: "etched"});
-win.advGroup = win.add('panel', [174,4,335,93], 'Advanced', {borderStyle: "etched"});
+win.basicGroup = win.add('panel', [4,4,165,153], 'Basic', {borderStyle: "etched"});
+win.advGroup = win.add('panel', [174,4,335,123], 'Advanced', {borderStyle: "etched"});
 
 win.but_01 = win.basicGroup.add('button', [8,15,152,43], 'Bake Keyframes');
-win.but_02 = win.basicGroup.add('button', [8,45,152,73], 'Nulls for Pins');
-win.but_03 = win.basicGroup.add('button', [8,75,152,103], 'Make Loop');
+win.but_03 = win.basicGroup.add('button', [8,45,152,73], 'Nulls for Pins');
+win.but_05 = win.basicGroup.add('button', [8,75,152,103], 'Make Loop');
+win.but_07 = win.basicGroup.add('button', [8,105,152,133], 'Onion Skin');
 //--
-win.but_04 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
-win.but_05 = win.advGroup.add('button', [8,45,152,73], 'Parentable Mocap Null');
+win.but_02 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
+win.but_04 = win.advGroup.add('button', [8,45,152,73], 'Parentable Mocap Null');
+win.but_06 = win.advGroup.add('button', [8,75,152,103], 'Handheld Camera');
 
 
 win.but_01.onClick = bakePinKeyframes;
-win.but_02.onClick = nullsForPins;
-win.but_03.onClick = makeLoop;
+win.but_03.onClick = nullsForPins;
+win.but_05.onClick = makeLoop;
+win.but_07.onClick = onionSkin;
 //--
-win.but_04.onClick = lockRotation;
-win.but_05.onClick = parentableNull;
+win.but_02.onClick = lockRotation;
+win.but_04.onClick = parentableNull;
+win.but_06.onClick = handheldCamera;
 
 return win
 }
@@ -56,7 +60,155 @@ w.show();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// generate nulls for pins
+// create an adjustment layer with controllable onion skinning
+function handheldCamera(){  //start script
+    app.beginUndoGroup("Make a \"Handheld\" Camera");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else {
+        var sW = theComp.width/2;
+        var sH = theComp.height/2; 
+        var compcam = theComp.layers.addCamera("Handheld Camera", [sW,sH]);
+        compcam.property("position").setValue([sW,sH,-1866.6667]);        
+        
+        /*
+        var ctlPos = theComp.layers.addNull();
+        var ctlPoi = theComp.layers.addNull();
+        ctlPos.name = "cam_pos";
+        ctlPoi.name = "cam_poi";
+        ctlPos.threeDLayer = true;
+        ctlPos.property("position").setValue([sW,sH,0]);
+        ctlPoi.property("position").setValue([sW,sH]);
+        */
+        
+        /*
+        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
+        solid.adjustmentLayer = true;
+        solid.locked = true;
+        var echo = solid.property("Effects").addProperty("Echo");
+        var slider = solid.property("Effects").addProperty("Slider Control");
+        slider.name = "Number of Frames";
+        slider.property("Slider").setValue(1);
+        
+        var prop1 = solid.effect("Echo")("Echo Time (seconds)");
+        var prop2 = solid.effect("Echo")("Number Of Echoes");
+        var prop3 = solid.effect("Echo")("Starting Intensity");
+        var prop4 = solid.effect("Echo")("Decay");
+        var prop5 = solid.effect("Echo")("Echo Operator");
+
+        prop1.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" + 
+                           "var d = thisComp.frameDuration;" + "\r" + 
+                           "var rd;" + "\r" + 
+                           "if(s>=0){" + "\r" + 
+                           "rd = -d;" + "\r" + 
+                           "}else if (s<0){" + "\r" + 
+                           "rd = d;" + "\r" + 
+                           "}";
+
+        prop2.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
+                           "var rs;" + "\r" +
+                           "if (s>0){" + "\r" +
+                           "rs = s;" + "\r" +
+                           "}else if (s==0){" + "\r" +
+                           "rs = 0;" + "\r" +
+                           "}else if (s<0){" + "\r" +
+                           "rs = -s;" + "\r" +
+                           "}" + "\r" +
+                           "rs;"
+        prop3.expression = "var val = 0.5;" + "\r" +
+                           "var offset = 0.175;" + "\r" +
+                           "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
+                           "var rtn;" + "\r" +
+                           "if(s<0) s = -s;" + "\r" +
+                           "if(s!=0){" + "\r" +
+                           "rtn = val + (offset/s);" + "\r" +
+                           "}else{" + "\r" +
+                           "rtn=1;" + "\r" +
+                           "}" + "\r" +
+                           "rtn;"
+        prop4.setValue(0.5);
+        prop5.setValue(7);
+        */
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// create an adjustment layer with controllable onion skinning
+function onionSkin(){  //start script
+    app.beginUndoGroup("Make Onion Skin Layer");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
+        solid.adjustmentLayer = true;
+        solid.locked = true;
+        var echo = solid.property("Effects").addProperty("Echo");
+        var slider = solid.property("Effects").addProperty("Slider Control");
+        slider.name = "Number of Frames";
+        slider.property("Slider").setValue(1);
+        
+        var prop1 = solid.effect("Echo")("Echo Time (seconds)");
+        var prop2 = solid.effect("Echo")("Number Of Echoes");
+        var prop3 = solid.effect("Echo")("Starting Intensity");
+        var prop4 = solid.effect("Echo")("Decay");
+        var prop5 = solid.effect("Echo")("Echo Operator");
+
+        prop1.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" + 
+                           "var d = thisComp.frameDuration;" + "\r" + 
+                           "var rd;" + "\r" + 
+                           "if(s>=0){" + "\r" + 
+                           "rd = -d;" + "\r" + 
+                           "}else if (s<0){" + "\r" + 
+                           "rd = d;" + "\r" + 
+                           "}";
+
+        prop2.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
+                           "var rs;" + "\r" +
+                           "if (s>0){" + "\r" +
+                           "rs = s;" + "\r" +
+                           "}else if (s==0){" + "\r" +
+                           "rs = 0;" + "\r" +
+                           "}else if (s<0){" + "\r" +
+                           "rs = -s;" + "\r" +
+                           "}" + "\r" +
+                           "rs;"
+        prop3.expression = "var val = 0.5;" + "\r" +
+                           "var offset = 0.175;" + "\r" +
+                           "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
+                           "var rtn;" + "\r" +
+                           "if(s<0) s = -s;" + "\r" +
+                           "if(s!=0){" + "\r" +
+                           "rtn = val + (offset/s);" + "\r" +
+                           "}else{" + "\r" +
+                           "rtn=1;" + "\r" +
+                           "}" + "\r" +
+                           "rtn;"
+        prop4.setValue(0.5);
+        prop5.setValue(7);
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// enable Time Remap and apply a loop script
 function makeLoop(){  //start script
     app.beginUndoGroup("Make Time Remap Loop");
 
@@ -141,31 +293,6 @@ function nullsForPins(){  //start script
                 }else{
                     alert("This only works on layers with puppet pins.");
                 }
-                //else{
-                    /*
-                    var curProperty;
-                    try{
-                        curProperty = curLayer.property("position");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("anchorPoint");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("rotation");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("scale");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("opacity");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    */
-                //}
             }else{
                 alert("This only works on footage layers.");
             }
@@ -206,55 +333,6 @@ function parentableNull(){  //start script
                 var expr = "var L = thisComp.layer(\"" + curLayer.name + "\");" + "\r" +
                            "L.toComp(L.transform.anchorPoint);";
                 solid.property("position").expression = expr;
-                /*
-                if(curLayer.effect.puppet != null){
-                    var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
-                    var pinCount = wherePins.numProperties;
-                    for (var n = 1; n <= pinCount; n++){
-                        // Get position of puppet pin
-                        try{ 
-                        var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
-                        var nullName = pin.name + "_ctl";
-                        //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
-                        var solid = theComp.layers.addNull();
-                        solid.name = nullName;
-                        //solid.guideLayer = true;
-                        //solid.property("opacity").setValue(0);
-                        //alert(pin.position);
-                        //solid.property("position").setValue([100,100]);
-                        var pinExpr = "fromComp(thisComp.layer(\""+nullName+"\").toComp(thisComp.layer(\""+nullName+"\").anchorPoint));";
-                        pin.position.expression = pinExpr;
-                        }catch(e){}
-                    }  
-                }else{
-                    alert("This only works on layers with puppet pins.");
-                }
-                */
-                //else{
-                    /*
-                    var curProperty;
-                    try{
-                        curProperty = curLayer.property("position");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("anchorPoint");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("rotation");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("scale");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    try{
-                        curProperty = curLayer.property("opacity");
-                        convertToKeyframes(curProperty);
-                    }catch(e){}
-                    */
-                //}
             }else{
                 alert("This only works on footage layers.");
             }
@@ -295,7 +373,7 @@ function create2DTemplate() { // KinectToPin Template Setup for UI Panels
 	mocap.guideLayer = true;
     mocap.threeDLayer = true;
 	//mocap.locked = true;
-	mocap.property("position").setValue([960,540]);
+	mocap.property("position").setValue([960,sH]);
     mocap.property("anchorPoint").setValue([0,0]);
 	mocap.property("opacity").setValue(0);
 	
@@ -388,7 +466,7 @@ function create3DTemplate() { // KinectToPin Template Setup for UI Panels
 	var mocap = myComp.layers.addSolid([0, 0, 0], "mocap", 640, 480, 1);
 	mocap.guideLayer = true;
     mocap.threeDLayer = true;
-	mocap.property("position").setValue([960,540]);  
+	mocap.property("position").setValue([960,sH]);  
 	mocap.property("opacity").setValue(0);
     mocap.property("anchorPoint").setValue([0,0]);
     mocap.label = 6;
@@ -439,8 +517,8 @@ function create3DTemplate() { // KinectToPin Template Setup for UI Panels
     
     /*
     //add control camera -- moved to own function
-    var compcam = myComp.layers.addCamera("KinectToPin Camera", [960,540]);    
-    compcam.property("position").setValue([960,540,-1500]);
+    var compcam = myComp.layers.addCamera("KinectToPin Camera", [960,sH]);    
+    compcam.property("position").setValue([960,sH,-1500]);
     */
     
     // Auto-scale Z on mocap layer
@@ -1074,8 +1152,8 @@ function customCamera() { //start script
             alert("Please establish a comp as the active item and run the script again");
         } else { 
             // otherwise, add control camera
-            var compcam = theComp.layers.addCamera("KinectToPin Camera", [960,540]);    
-            compcam.property("position").setValue([960,540,-1500]);
+            var compcam = theComp.layers.addCamera("KinectToPin Camera", [960,sH]);    
+            compcam.property("position").setValue([960,sH,-1500]);
             // ...then loop through each layer in the selected comp
             for (var i = 1; i <= theComp.numLayers; ++i){
                 // define the layer in the loop we're currently looking at
