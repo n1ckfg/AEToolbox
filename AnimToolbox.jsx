@@ -22,11 +22,13 @@ var win = (this_obj_ instanceof Panel)
 ? this_obj_
 : new Window('palette', 'Script Window',[760,345,1120,597]);
 
-	   	//Jeff Almasol's solution to fix text color
-	var winGfx = win.graphics;
-	var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
+//Jeff Almasol's solution to fix text color
+var winGfx = win.graphics;
+var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 
-//X start, Y start, X end, Y end ...Y increments of 30
+//-----------------------------------------------------
+//1. Draw buttons
+//buttons coordinates are X start, Y start, X end, Y end
 var butXstart = 8;
 var butXend = 152;
 var butYstart = 15;
@@ -38,36 +40,43 @@ var colXend = 165;
 var colYstart = 4;
 var colYendBase = 33;
 var colXinc = 170;
+
+//Basic button group
 var col1butCount = 4;
-var col2butCount = 1;
-var col3butCount = 3;
-
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
-win.charGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Character', {borderStyle: "etched"});
-win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
-
 win.basicGroup01 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
 win.basicGroup02 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Nulls for Pins');
 win.basicGroup03 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
 win.basicGroup04 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
 //--
+//Character button group
+var col2butCount = 3;
+win.charGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Character', {borderStyle: "etched"});
 win.charGroup01 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
+win.charGroup02 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
+win.charGroup03 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
 //--
+//Advanced button group
+var col3butCount = 3;
+win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup01 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
 win.advGroup02 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable K2P Null');
 win.advGroup03 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
-
-
+//-----------------------------------------------------
+//2. Link buttons to functions
 win.basicGroup01.onClick = bakePinKeyframes;
 win.basicGroup02.onClick = nullsForPins;
 win.basicGroup03.onClick = makeLoop;
 win.basicGroup04.onClick = onionSkin;
 //--
 win.charGroup01.onClick = charBlink;
+win.charGroup02.onClick = charJawSide;
+win.charGroup03.onClick = charJawFront;
 //--
 win.advGroup01.onClick = lockRotation;
 win.advGroup02.onClick = parentableNull;
 win.advGroup03.onClick = handheldCamera;
+//-----------------------------------------------------
 
 return win
 }
@@ -77,6 +86,202 @@ w;
 } else {
 w.show();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// create a jaw side controller
+function charJawSide(){  //start script
+    app.beginUndoGroup("Character Jaw Rig Side");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else {
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select a precomp and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // Select layer to add expression to
+            if (curLayer.matchName == "ADBE AV Layer"){
+                //first check if this is a footage layer
+                //next check if this is a comp.
+                var myLayer = theComp.selectedLayers[0];
+                if(myLayer.source.numLayers==null){
+                    //not a comp; send alert.
+                    alert("This only works on precomp layers.");
+                }else{
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //myLayer is indeed a precomp. OK to do stuff.
+                    var slider = myLayer.property("Effects").addProperty("Slider Control");
+                    slider.name = "jaw side control"
+                    var headNull = myLayer.source.layers.addNull();
+                    var upperJawNull = myLayer.source.layers.addNull();
+                    var lowerJawNull = myLayer.source.layers.addNull();
+                    headNull.name = "head placeholder";
+                    upperJawNull.name = "upper jaw placeholder";
+                    lowerJawNull.name = "lower jaw placeholder";
+                    //when asset replaces null, anchor point will be centered.
+                    headNull.transform.anchorPoint.setValue([50,50]);
+                    upperJawNull.transform.anchorPoint.setValue([50,50]);
+                    lowerJawNull.transform.anchorPoint.setValue([50,50]);
+                    headNull.property("Opacity").setValue(100);
+                    upperJawNull.property("Opacity").setValue(100);
+                    lowerJawNull.property("Opacity").setValue(100);
+                    //parenting jaws to head
+                    upperJawNull.parent = headNull;
+                    lowerJawNull.parent = headNull;
+                    //expressions
+                    //headNullExprPos;
+                    //headNullExprRot;
+                    headNullExprScale = "var x = transform.scale[0];" + "\r" +
+                                        "var y = transform.scale[1];" + "\r" +
+                                        "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                        "[x,y+(s/-4)];";
+                    //headNull.property("Position").expression = headNullExprPos;
+                    //headNull.property("Rotation").expression = headNullExprRot;
+                    headNull.property("Scale").expression = headNullExprScale;
+                    //--
+                    upperJawNullExprPos = "var x = transform.position[0];" + "\r" +
+                                          "var y = transform.position[1];" + "\r" +
+                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                          "var scaler = -0.2;" + "\r" +
+                                          "[x, y+(s*scaler)];";
+                    upperJawNullExprRot = "var r = transform.rotation;" + "\r" +
+                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                          "var scaler = 0.2;" + "\r" +
+                                          "r+(s*scaler);";
+                    //upperJawNullExprScale;
+                    upperJawNull.property("Position").expression = upperJawNullExprPos;
+                    upperJawNull.property("Rotation").expression = upperJawNullExprRot;
+                    //upperJawNull.property("Scale").expression = upperJawNullExprScale;
+                    //--
+                    lowerJawNullExprPos = "var x = transform.position[0];" + "\r" +
+                                          "var y = transform.position[1];" + "\r" +
+                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                          "var scaler = 2;" + "\r" +
+                                          "[x, y+(s*scaler)];";
+                    lowerJawNullExprRot = "var r = transform.rotation;" + "\r" +
+                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                          "var scaler = -1.0;" + "\r" +
+                                          "r+(s*scaler);";
+                    //lowerJawNullExprScale;                                        
+                    lowerJawNull.property("Position").expression = lowerJawNullExprPos;
+                    lowerJawNull.property("Rotation").expression = lowerJawNullExprRot;
+                    //lowerJawNull.property("Scale").expression = lowerJawNullExprScale;
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+            }else{
+                //not a footage layer; send alert.
+                alert("This only works on precomp layers.");
+            }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// create a jaw front controller
+function charJawFront(){  //start script
+    app.beginUndoGroup("Character Jaw Rig Front");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else {
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select a precomp and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // Select layer to add expression to
+            if (curLayer.matchName == "ADBE AV Layer"){
+                //first check if this is a footage layer
+                //next check if this is a comp.
+                var myLayer = theComp.selectedLayers[0];
+                if(myLayer.source.numLayers==null){
+                    //not a comp; send alert.
+                    alert("This only works on precomp layers.");
+                }else{
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //myLayer is indeed a precomp. OK to do stuff.
+                    var slider = myLayer.property("Effects").addProperty("Slider Control");
+                    slider.name = "jaw front control"
+                    var headNull = myLayer.source.layers.addNull();
+                    //var upperJawNull = myLayer.source.layers.addNull();
+                    var lowerJawNull = myLayer.source.layers.addNull();
+                    headNull.name = "head placeholder";
+                    //upperJawNull.name = "upper jaw placeholder";
+                    lowerJawNull.name = "lower jaw placeholder";
+                    //when asset replaces null, anchor point will be centered.
+                    headNull.transform.anchorPoint.setValue([50,50]);
+                    //upperJawNull.transform.anchorPoint.setValue([50,50]);
+                    lowerJawNull.transform.anchorPoint.setValue([50,50]);
+                    headNull.property("Opacity").setValue(100);
+                    //upperJawNull.property("Opacity").setValue(100);
+                    lowerJawNull.property("Opacity").setValue(100);
+                    //parenting jaws to head
+                    //upperJawNull.parent = headNull;
+                    lowerJawNull.parent = headNull;
+                    //expressions
+                    //headNullExprPos;
+                    //headNullExprRot;
+                    //headNullExprScale;
+                    //headNull.property("Position").expression = headNullExprPos;
+                    //headNull.property("Rotation").expression = headNullExprRot;
+                    //headNull.property("Scale").expression = headNullExprScale;
+                    //--
+                    //upperJawNullExprPos;
+                    //upperJawNullExprRot;
+                    //upperJawNullExprScale;
+                    //upperJawNull.property("Position").expression = upperJawNullExprPos;
+                    //upperJawNull.property("Rotation").expression = upperJawNullExprRot;
+                    //upperJawNull.property("Scale").expression = upperJawNullExprScale;
+                    //--
+                    lowerJawNullExprPos = "var scaler = 1.0;" + "\r" +
+                                          "var x = transform.position[0];" + "\r" +
+                                          "var y = transform.position[1];" + "\r" +
+                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                          "[x, y+(s*scaler)];";
+                    //lowerJawNullExprRot;
+                    lowerJawNullExprScale = "var scaler = 1.0;" + "\r" +
+                                            "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                            "var x = transform.scale[0];" + "\r" +
+                                            "var y = transform.scale[1];" + "\r" +
+                                            "[x,y+(s*scaler)];";                                        
+                    lowerJawNull.property("Position").expression = lowerJawNullExprPos;
+                    //lowerJawNull.property("Rotation").expression = lowerJawNullExprRot;
+                    lowerJawNull.property("Scale").expression = lowerJawNullExprScale;
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+            }else{
+                //not a footage layer; send alert.
+                alert("This only works on precomp layers.");
+            }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
