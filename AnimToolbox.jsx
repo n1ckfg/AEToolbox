@@ -1,4 +1,4 @@
-﻿// AnimToolbox 0.2
+﻿// AnimToolbox 0.3
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -27,27 +27,47 @@ var win = (this_obj_ instanceof Panel)
 	var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 
 //X start, Y start, X end, Y end ...Y increments of 30
-win.basicGroup = win.add('panel', [4,4,165,153], 'Basic', {borderStyle: "etched"});
-win.advGroup = win.add('panel', [174,4,335,123], 'Advanced', {borderStyle: "etched"});
-
-win.but_01 = win.basicGroup.add('button', [8,15,152,43], 'Bake Keyframes');
-win.but_03 = win.basicGroup.add('button', [8,45,152,73], 'Nulls for Pins');
-win.but_05 = win.basicGroup.add('button', [8,75,152,103], 'Make Loop');
-win.but_07 = win.basicGroup.add('button', [8,105,152,133], 'Onion Skin');
+var butXstart = 8;
+var butXend = 152;
+var butYstart = 15;
+var butYend = 43;
+var butYinc = 30;
 //--
-win.but_02 = win.advGroup.add('button', [8,15,152,43], 'Lock Y Rotation');
-win.but_04 = win.advGroup.add('button', [8,45,152,73], 'Parentable Mocap Null');
-win.but_06 = win.advGroup.add('button', [8,75,152,103], 'Handheld Camera');
+var colXstart = 4;
+var colXend = 165;
+var colYstart = 4;
+var colYendBase = 33;
+var colXinc = 170;
+var col1butCount = 4;
+var col2butCount = 1;
+var col3butCount = 3;
 
+win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
+win.charGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Character', {borderStyle: "etched"});
+win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 
-win.but_01.onClick = bakePinKeyframes;
-win.but_03.onClick = nullsForPins;
-win.but_05.onClick = makeLoop;
-win.but_07.onClick = onionSkin;
+win.basicGroup01 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
+win.basicGroup02 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Nulls for Pins');
+win.basicGroup03 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
+win.basicGroup04 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
 //--
-win.but_02.onClick = lockRotation;
-win.but_04.onClick = parentableNull;
-win.but_06.onClick = handheldCamera;
+win.charGroup01 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
+//--
+win.advGroup01 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
+win.advGroup02 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable Mocap Null');
+win.advGroup03 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
+
+
+win.basicGroup01.onClick = bakePinKeyframes;
+win.basicGroup02.onClick = nullsForPins;
+win.basicGroup03.onClick = makeLoop;
+win.basicGroup04.onClick = onionSkin;
+//--
+win.charGroup01.onClick = charBlink;
+//--
+win.advGroup01.onClick = lockRotation;
+win.advGroup02.onClick = parentableNull;
+win.advGroup03.onClick = handheldCamera;
 
 return win
 }
@@ -57,6 +77,60 @@ w;
 } else {
 w.show();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// create a blink controller
+function charBlink(){  //start script
+    app.beginUndoGroup("Character Blink Control");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else {
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select a precomp and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // Select layer to add expression to
+            if (curLayer.matchName == "ADBE AV Layer"){
+                //first check if this is a footage layer
+                //next check if this is a comp.
+                var myLayer = theComp.selectedLayers[0];
+                if(myLayer.source.numLayers==null){
+                    //not a comp; send alert.
+                    alert("This only works on precomp layers.");
+                }else{
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //myLayer is indeed a precomp. OK to do stuff.
+                    var checkbox = myLayer.property("Effects").addProperty("Checkbox Control");
+                    checkbox.name = "blink control"
+                    var blinker = myLayer.source.layers.addNull();
+                    blinker.name = "blink placeholder";
+                    //when blink asset replaces null, anchor point will be centered.
+                    blinker.transform.anchorPoint.setValue([50,50]);
+                    expr = "comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + checkbox.name + "\")(\"Checkbox\") * 100;";
+                    blinker.property("Opacity").expression = expr;
+                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                }
+            }else{
+                //not a footage layer; send alert.
+                alert("This only works on precomp layers.");
+            }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
