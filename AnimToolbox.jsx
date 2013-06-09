@@ -302,29 +302,32 @@ function nullsForPins(){  //start script
         for (var i = 0; i < theLayers.length; i++){
             // define the layer in the loop we're currently looking at
             var curLayer = theLayers[i];
-            // Select layer to add expression to
+            // condition 1: must be a footage layer
             if (curLayer.matchName == "ADBE AV Layer"){
-                if(curLayer.effect.puppet != null){
-                    var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
-                    var pinCount = wherePins.numProperties;
-                    for (var n = 1; n <= pinCount; n++){
-                        // Get position of puppet pin
-                        try{ 
-                        var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
-                        var nullName = pin.name + "_ctl";
-                        //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
-                        var solid = theComp.layers.addNull();
-                        solid.name = nullName;
-                        //solid.guideLayer = true;
-                        //solid.property("opacity").setValue(0);
-                        //alert(pin.position);
-                        //solid.property("position").setValue([100,100]);
-                        var pinExpr = "fromComp(thisComp.layer(\""+nullName+"\").toComp(thisComp.layer(\""+nullName+"\").anchorPoint));";
-                        pin.position.expression = pinExpr;
-                        }catch(e){}
-                    }  
+                //condition 2: must be a 2D layer
+                if(!curLayer.threeDLayer){
+                    //condition 3: must have puppet pins applied
+                    if(curLayer.effect.puppet != null){
+                        var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
+                        var pinCount = wherePins.numProperties;
+                        for (var n = 1; n <= pinCount; n++){
+                            // Get position of puppet pin
+                            try{ 
+                            var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
+                            //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
+                            var solid = theComp.layers.addNull();
+                            solid.name = pin.name + "_ctl";
+                            solid.property("position").setValue(pin.position.value);
+                            var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
+                            pin.position.expression = pinExpr;
+                            }catch(e){}
+                        }  
+                        curLayer.locked = true;
+                    }else{
+                        alert("This only works on layers with puppet pins.");
+                    }
                 }else{
-                    alert("This only works on layers with puppet pins.");
+                    alert("This only works properly on 2D layers.");
                 }
             }else{
                 alert("This only works on footage layers.");
