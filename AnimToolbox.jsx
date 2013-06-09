@@ -74,18 +74,23 @@ function handheldCamera(){  //start script
     } else {
         var sW = theComp.width/2;
         var sH = theComp.height/2; 
+
         var compcam = theComp.layers.addCamera("Handheld Camera", [sW,sH]);
         compcam.property("position").setValue([sW,sH,-1866.6667]);        
-        
-        /*
+
         var ctlPos = theComp.layers.addNull();
         var ctlPoi = theComp.layers.addNull();
         ctlPos.name = "cam_pos";
         ctlPoi.name = "cam_poi";
         ctlPos.threeDLayer = true;
-        ctlPos.property("position").setValue([sW,sH,0]);
-        ctlPoi.property("position").setValue([sW,sH]);
-        */
+
+        compcam.parent = ctlPos;
+        
+        var expr = "var x = thisComp.layer(\"cam_poi\").transform.position[0] - (thisComp.width/2);" + "\r" +
+                   "var y = thisComp.layer(\"cam_poi\").transform.position[1] - (thisComp.height/2);" + "\r" +
+                   "var z = 0;" + "\r" +
+                   "[x,y,z];";
+        compcam.property("Point of Interest").expression = expr;
         
         /*
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
@@ -156,7 +161,6 @@ function onionSkin(){  //start script
     } else { 
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
         solid.adjustmentLayer = true;
-        solid.locked = true;
         var echo = solid.property("Effects").addProperty("Echo");
         var slider = solid.property("Effects").addProperty("Slider Control");
         slider.name = "Number of Frames";
@@ -186,7 +190,7 @@ function onionSkin(){  //start script
                            "}else if (s<0){" + "\r" +
                            "rs = -s;" + "\r" +
                            "}" + "\r" +
-                           "rs;"
+                           "rs;";
         prop3.expression = "var val = 0.5;" + "\r" +
                            "var offset = 0.175;" + "\r" +
                            "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
@@ -197,9 +201,11 @@ function onionSkin(){  //start script
                            "}else{" + "\r" +
                            "rtn=1;" + "\r" +
                            "}" + "\r" +
-                           "rtn;"
+                           "rtn;";
         prop4.setValue(0.5);
         prop5.setValue(7);
+
+        solid.locked = true;
     }
  
     app.endUndoGroup();
