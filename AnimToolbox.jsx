@@ -1,4 +1,4 @@
-﻿// AnimToolbox 0.1 
+﻿// AnimToolbox 0.2
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -92,54 +92,7 @@ function handheldCamera(){  //start script
                    "[x,y,z];";
         compcam.property("Point of Interest").expression = expr;
         
-        /*
-        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
-        solid.adjustmentLayer = true;
-        solid.locked = true;
-        var echo = solid.property("Effects").addProperty("Echo");
-        var slider = solid.property("Effects").addProperty("Slider Control");
-        slider.name = "Number of Frames";
-        slider.property("Slider").setValue(1);
-        
-        var prop1 = solid.effect("Echo")("Echo Time (seconds)");
-        var prop2 = solid.effect("Echo")("Number Of Echoes");
-        var prop3 = solid.effect("Echo")("Starting Intensity");
-        var prop4 = solid.effect("Echo")("Decay");
-        var prop5 = solid.effect("Echo")("Echo Operator");
-
-        prop1.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" + 
-                           "var d = thisComp.frameDuration;" + "\r" + 
-                           "var rd;" + "\r" + 
-                           "if(s>=0){" + "\r" + 
-                           "rd = -d;" + "\r" + 
-                           "}else if (s<0){" + "\r" + 
-                           "rd = d;" + "\r" + 
-                           "}";
-
-        prop2.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
-                           "var rs;" + "\r" +
-                           "if (s>0){" + "\r" +
-                           "rs = s;" + "\r" +
-                           "}else if (s==0){" + "\r" +
-                           "rs = 0;" + "\r" +
-                           "}else if (s<0){" + "\r" +
-                           "rs = -s;" + "\r" +
-                           "}" + "\r" +
-                           "rs;"
-        prop3.expression = "var val = 0.5;" + "\r" +
-                           "var offset = 0.175;" + "\r" +
-                           "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
-                           "var rtn;" + "\r" +
-                           "if(s<0) s = -s;" + "\r" +
-                           "if(s!=0){" + "\r" +
-                           "rtn = val + (offset/s);" + "\r" +
-                           "}else{" + "\r" +
-                           "rtn=1;" + "\r" +
-                           "}" + "\r" +
-                           "rtn;"
-        prop4.setValue(0.5);
-        prop5.setValue(7);
-        */
+        compcam.locked = true;
     }
  
     app.endUndoGroup();
