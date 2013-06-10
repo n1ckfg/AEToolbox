@@ -358,19 +358,34 @@ function handheldCamera(){  //start script
         compcam.property("position").setValue([sW,sH,-1866.6667]);        
 
         var ctlPos = theComp.layers.addNull();
-        var ctlPoi = theComp.layers.addNull();
         ctlPos.name = "cam_pos";
-        ctlPoi.name = "cam_poi";
         ctlPos.threeDLayer = true;
+        //--
+        var ctlPoi = theComp.layers.addNull();
+        ctlPoi.name = "cam_poi";
+        ctlPoi.property("Scale").setValue([75,75]);
+        //--
+        var ctlFoc = theComp.layers.addNull();
+        ctlFoc.name = "cam_foc";
+        ctlFoc.threeDLayer = true;
+        ctlFoc.property("Scale").setValue([50,50]);
 
         compcam.parent = ctlPos;
         
-        var expr = "var x = thisComp.layer(\"cam_poi\").transform.position[0] - (thisComp.width/2);" + "\r" +
+        var expr1 = "var x = thisComp.layer(\"cam_poi\").transform.position[0] - (thisComp.width/2);" + "\r" +
                    "var y = thisComp.layer(\"cam_poi\").transform.position[1] - (thisComp.height/2);" + "\r" +
                    "var z = 0;" + "\r" +
                    "[x,y,z];";
-        compcam.property("Point of Interest").expression = expr;
-        
+        compcam.property("Point of Interest").expression = expr1;
+
+        var expr2 = "var target = thisComp.layer(\"" + ctlFoc.name + "\");" + "\r" +
+                    "var v1 = target.toWorld(target.anchorPoint) - toWorld([0,0,0]);" + "\r" +
+                    "var v2 = toWorldVec([0,0,1]);" + "\r" +
+                    "dot(v1,v2);";
+        compcam.property("Focus Distance").expression = expr2;
+        compcam.property("Camera Options").property("Depth of Field").setValue(1);
+        compcam.property("Camera Options").property("Aperture").setValue(50);
+        compcam.property("Camera Options").property("Blur Level").setValue(200);
         compcam.locked = true;
     }
  
