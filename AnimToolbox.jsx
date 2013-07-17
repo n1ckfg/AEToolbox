@@ -37,46 +37,48 @@ var colYendBase = 33;
 var colXinc = 170;
 
 //Basic button group
-var col1butCount = 7;
+var col1butCount = 8;
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
-win.basicGroup01 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
-win.basicGroup02 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Nulls for Pins');
-win.basicGroup03 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
-win.basicGroup04 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
-win.basicGroup05 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Angle/Velocity');
-win.basicGroup06 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Sine Wave');
-win.basicGroup07 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
+win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
+win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Nulls for Pins');
+win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
+win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
+win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Angle/Velocity');
+win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Sine Wave');
+win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
+win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Locator Null');
 //--
 //Character button group
 var col2butCount = 3;
 win.charGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Character', {borderStyle: "etched"});
-win.charGroup01 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
-win.charGroup02 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
-win.charGroup03 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
+win.charGroup0 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
+win.charGroup1 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
+win.charGroup2 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
 //--
 //Advanced button group
 var col3butCount = 3;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
-win.advGroup01 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
-win.advGroup02 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable K2P Null');
-win.advGroup03 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
+win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
+win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable K2P Null');
+win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
 //-----------------------------------------------------
 //2. Link buttons to functions
-win.basicGroup01.onClick = bakePinKeyframes;
-win.basicGroup02.onClick = nullsForPins;
-win.basicGroup03.onClick = makeLoop;
-win.basicGroup04.onClick = onionSkin;
-win.basicGroup05.onClick = angleVelocity;
-win.basicGroup06.onClick = sineWave;
-win.basicGroup07.onClick = threeDmoSketch;
+win.basicGroup0.onClick = bakePinKeyframes;
+win.basicGroup1.onClick = nullsForPins;
+win.basicGroup2.onClick = makeLoop;
+win.basicGroup3.onClick = onionSkin;
+win.basicGroup4.onClick = angleVelocity;
+win.basicGroup5.onClick = sineWave;
+win.basicGroup6.onClick = threeDmoSketch;
+win.basicGroup7.onClick = locatorNull;
 //--
-win.charGroup01.onClick = charBlink;
-win.charGroup02.onClick = charJawSide;
-win.charGroup03.onClick = charJawFront;
+win.charGroup0.onClick = charBlink;
+win.charGroup1.onClick = charJawSide;
+win.charGroup2.onClick = charJawFront;
 //--
-win.advGroup01.onClick = lockRotation;
-win.advGroup02.onClick = parentableNull;
-win.advGroup03.onClick = handheldCamera;
+win.advGroup0.onClick = lockRotation;
+win.advGroup1.onClick = parentableNull;
+win.advGroup2.onClick = handheldCamera;
 //-----------------------------------------------------
 
 return win
@@ -87,6 +89,46 @@ w;
 } else {
 w.show();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 14.  Type: process for any number of layers or properties
+function locatorNull(){  //start script
+    app.beginUndoGroup("Create Locator Nulls for Selected Layers");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            // otherwise, loop through each selected layer in the selected comp
+            for (var i = 0; i < theLayers.length; i++){
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                var p = curLayer.property("position").value;
+                var solid = theComp.layers.addNull();
+                solid.name = curLayer.name + "_loc";
+
+                if(curLayer.threeDLayer){
+                    solid.threeDLayer = true;
+                    //solid.property("position").setValue([p[0],p[1],p[2]]); 
+                }else{
+                    //solid.property("position").setValue([p[0],p[1]]); 
+                }
+                solid.property("position").setValue(p); 
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
 
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -685,7 +727,8 @@ function nullsForPins(){  //start script
                                 var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
                                 pin.position.expression = pinExpr;
                             }catch(e){}
-                        }  
+                        }
+                        curLayer.property("Effects").property("Puppet").property("On Transparent").setValue(1);                          
                         curLayer.locked = true;
                     }else{
                         alert("This only works on layers with puppet pins.");
