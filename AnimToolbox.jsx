@@ -1,4 +1,4 @@
-﻿// AnimToolbox 0.4
+﻿// AnimToolbox 0.5
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -661,13 +661,29 @@ function nullsForPins(){  //start script
                         for (var n = 1; n <= pinCount; n++){
                             // Get position of puppet pin
                             try{ 
-                            var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
-                            //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
-                            var solid = theComp.layers.addNull();
-                            solid.name = pin.name + "_ctl";
-                            solid.property("position").setValue(pin.position.value);
-                            var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
-                            pin.position.expression = pinExpr;
+                                var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
+                                //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
+                                var solid = theComp.layers.addNull();
+                                solid.name = pin.name + "_ctl";
+                                //~~~~~
+                                //scaled from layer coords to world coords
+                                var p = pin.position.value;
+                                var posCalc = solid.property("Effects").addProperty("Point Control")("Point");
+                                posCalcExpr = "var p = ["+p[0]+","+p[1]+"];" + "\r" +
+                                              //close, but not exact
+                                              //"var x = " + (p[0]/curLayer.width)*theComp.width+ ";" + "\r" +
+                                              //"var y = " + (p[1]/curLayer.height)*theComp.height + ";" + "\r" +
+                                              //"[x,y];";
+                                              "var target = thisComp.layer(\"" + curLayer.name + "\");" + "\r" +
+                                              "target.toComp(p);"
+                                              
+                                posCalc.expression= posCalcExpr;
+                                alert(posCalc.value);
+                                solid.property("position").setValue(posCalc.value);
+                                solid.property("Effects")("Point Control").remove();
+                                //~~~~~~
+                                var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
+                                pin.position.expression = pinExpr;
                             }catch(e){}
                         }  
                         curLayer.locked = true;
