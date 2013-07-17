@@ -678,7 +678,7 @@ function nullsForPins(){  //start script
                                               "target.toComp(p);"
                                               
                                 posCalc.expression= posCalcExpr;
-                                alert(posCalc.value);
+                                //alert(posCalc.value);
                                 solid.property("position").setValue(posCalc.value);
                                 solid.property("Effects")("Point Control").remove();
                                 //~~~~~~
