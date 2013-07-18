@@ -188,13 +188,53 @@ function sineWave(){  //start script
                 ampSlider.name = "amp";
                 var freqSlider = curLayer.property("Effects").addProperty("Slider Control");
                 freqSlider.name = "freq";
-
-                var expr = "var x = transform.position[0];" + "\r" +
-                           "var y = transform.position[1];" + "\r" + 
-                           "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
-                           "var freq = effect(\"freq\")(\"Slider\");" + "\r" +
-                           "var s = amp * Math.sin(freq*time);" + "\r" +
-                           "[x,y+s];";
+                //~~
+                var xAxis = curLayer.property("Effects").addProperty("Checkbox Control");
+                xAxis.name = "x axis";
+                xAxis.property("Checkbox").setValue(0);
+                var yAxis = curLayer.property("Effects").addProperty("Checkbox Control");
+                yAxis.name = "y axis";
+                yAxis.property("Checkbox").setValue(1);
+                var zAxis = curLayer.property("Effects").addProperty("Checkbox Control");
+                zAxis.name = "z axis";
+                zAxis.property("Checkbox").setValue(0);
+                //~~
+                var xOffset = curLayer.property("Effects").addProperty("Slider Control");
+                xOffset.name = "x offset";
+                var yOffset = curLayer.property("Effects").addProperty("Slider Control");
+                yOffset.name = "y offset";
+                var zOffset = curLayer.property("Effects").addProperty("Slider Control");
+                zOffset.name = "z offset";
+                //~~
+                var expr = "";
+                //if(curLayer.threeDLayer){
+                expr = "var x = transform.position[0];" + "\r" +
+                       "var y = transform.position[1];" + "\r" + 
+                       "var z = transform.position[1];" + "\r" + 
+                       "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
+                       "var freq = effect(\"freq\")(\"Slider\");" + "\r" +
+                       "var ox = effect(\"x offset\")(\"Slider\");" + "\r" +
+                       "var oy = effect(\"y offset\")(\"Slider\");" + "\r" + 
+                       "var oz = effect(\"z offset\")(\"Slider\");" + "\r" + 
+                       "var sx = amp * Math.sin(freq*(time+ox));" + "\r" +
+                       "var sy = amp * Math.sin(freq*(time+oy));" + "\r" +
+                       "var sz = amp * Math.sin(freq*(time+oz));" + "\r" +
+                       "if(effect(\"x axis\")(\"Checkbox\")==1) x += sx;" + "\r" +
+                       "if(effect(\"y axis\")(\"Checkbox\")==1) y += sy;" + "\r" +
+                       "if(effect(\"z axis\")(\"Checkbox\")==1) z += sz;" + "\r" +
+                       "[x,y,z];";
+                /*
+                }else{
+                expr = "var x = transform.position[0];" + "\r" +
+                       "var y = transform.position[1];" + "\r" + 
+                       "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
+                       "var freq = effect(\"freq\")(\"Slider\");" + "\r" +
+                       "var s = amp * Math.sin(freq*time);" + "\r" +
+                       "if(effect(\"x axis\")(\"Checkbox\")==1) x += s;" + "\r" +
+                       "if(effect(\"y axis\")(\"Checkbox\")==1) y += s;" + "\r" +
+                       "[x,y];";
+                }
+                */
 
                 curLayer.property("Position").expression = expr;
 
