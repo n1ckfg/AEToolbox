@@ -44,7 +44,7 @@ win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),
 win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
 win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
 win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Angle/Velocity');
-win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Sine Wave');
+win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Move to Position');
 win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
 win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Locator Null');
 //--
@@ -56,11 +56,12 @@ win.charGroup1 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*1),bu
 win.charGroup2 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
 //--
 //Advanced button group
-var col3butCount = 3;
+var col3butCount = 4;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
 win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable K2P Null');
 win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
+win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
 //-----------------------------------------------------
 //2. Link buttons to functions
 win.basicGroup0.onClick = bakePinKeyframes;
@@ -68,7 +69,7 @@ win.basicGroup1.onClick = nullsForPins;
 win.basicGroup2.onClick = makeLoop;
 win.basicGroup3.onClick = onionSkin;
 win.basicGroup4.onClick = angleVelocity;
-win.basicGroup5.onClick = sineWave;
+win.basicGroup5.onClick = moveToPos;
 win.basicGroup6.onClick = threeDmoSketch;
 win.basicGroup7.onClick = locatorNull;
 //--
@@ -79,6 +80,7 @@ win.charGroup2.onClick = charJawFront;
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = parentableNull;
 win.advGroup2.onClick = handheldCamera;
+win.advGroup3.onClick = sineWave;
 //-----------------------------------------------------
 
 return win
@@ -91,6 +93,37 @@ w.show();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 15.  Type: process for any number of layers or properties
+function moveToPos(){  //start script
+    app.beginUndoGroup("Create Locator Nulls for Selected Layers");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length<=1){
+            alert("Please select at least two layers and run the script again.");
+        }else{
+            // otherwise, loop through each selected layer in the selected comp
+            for (var i = 0; i < theLayers.length-1; i++){
+                var lastLayer = theLayers[theLayers.length-1];
+                var p = lastLayer.property("position").value;
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                curLayer.property("position").setValue(p); 
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
 
 // 14.  Type: process for any number of layers or properties
 function locatorNull(){  //start script
@@ -106,7 +139,8 @@ function locatorNull(){  //start script
     } else { 
         var theLayers = theComp.selectedLayers;
         if(theLayers.length==0){
-            alert("Please select some layers and run the script again.");
+            //alert("Please select some layers and run the script again.");
+            theComp.layers.addNull();
         }else{
             // otherwise, loop through each selected layer in the selected comp
             for (var i = 0; i < theLayers.length; i++){
