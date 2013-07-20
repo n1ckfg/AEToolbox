@@ -257,9 +257,15 @@ function sineWave(){  //start script
                 //expr += "var x = x2 + transform.position[0];" + "\r" +
                 //        "var y = y2 + transform.position[1];" + "\r" + 
                 expr += "var x = x2;" + "\r" +
-                        "var y = y2;" + "\r" + 
-                        "var z = transform.position[1];" + "\r" + 
-                        "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
+                        "var y = y2;" + "\r"; 
+
+                if(curLayer.threeDLayer){
+                        expr += "var z = transform.position[2];" + "\r";
+                    }else{
+                        expr += "var z = 0;" + "\r";
+                    }
+
+                expr += "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
                         "var freq = effect(\"freq\")(\"Slider\");" + "\r" +
                         "var ox = effect(\"x offset\")(\"Slider\");" + "\r" +
                         "var oy = effect(\"y offset\")(\"Slider\");" + "\r" + 
