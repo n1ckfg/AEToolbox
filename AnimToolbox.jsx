@@ -37,16 +37,15 @@ var colYendBase = 33;
 var colXinc = 170;
 
 //Basic button group
-var col1butCount = 8;
+var col1butCount = 7;
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
 win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
 win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Nulls for Pins');
 win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
 win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
-win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Angle/Velocity');
-win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Move to Position');
-win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
-win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Locator Null');
+win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Move to Position');
+win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], '3D MoSketch');
+win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Locator Null');
 //--
 //Character button group
 var col2butCount = 3;
@@ -68,10 +67,9 @@ win.basicGroup0.onClick = bakePinKeyframes;
 win.basicGroup1.onClick = nullsForPins;
 win.basicGroup2.onClick = makeLoop;
 win.basicGroup3.onClick = onionSkin;
-win.basicGroup4.onClick = angleVelocity;
-win.basicGroup5.onClick = moveToPos;
-win.basicGroup6.onClick = threeDmoSketch;
-win.basicGroup7.onClick = locatorNull;
+win.basicGroup4.onClick = moveToPos;
+win.basicGroup5.onClick = threeDmoSketch;
+win.basicGroup6.onClick = locatorNull;
 //--
 win.charGroup0.onClick = charBlink;
 win.charGroup1.onClick = charJawSide;
@@ -94,7 +92,7 @@ w.show();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 15.  Type: process for any number of layers or properties
+// 14.  Type: process for any number of layers or properties
 function moveToPos(){  //start script
     app.beginUndoGroup("Create Locator Nulls for Selected Layers");
 
@@ -125,7 +123,7 @@ function moveToPos(){  //start script
 }  //end script
 
 
-// 14.  Type: process for any number of layers or properties
+// 13.  Type: process for any number of layers or properties
 function locatorNull(){  //start script
     app.beginUndoGroup("Create Locator Nulls for Selected Layers");
 
@@ -167,7 +165,7 @@ function locatorNull(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 13.  process for any number of layers--creates a Z slider for 2D Motion Sketch
+// 12.  process for any number of layers--creates a Z slider for 2D Motion Sketch
 function threeDmoSketch(){  //start script
     app.beginUndoGroup("Prep for 3D Motion Sketch");
 
@@ -196,7 +194,7 @@ function threeDmoSketch(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 12.  process for any number of layers--applies sine wave controllers
+// 11.  process for any number of layers--applies sine wave controllers
 function sineWave(){  //start script
     app.beginUndoGroup("Apply Sine Wave Controls");
 
@@ -218,6 +216,20 @@ function sineWave(){  //start script
             var curLayer = theLayers[i];
             // Select layer to add expression to
             //if (curLayer.matchName == "ADBE AV Layer"){
+                var angleSlider = curLayer.property("Effects").addProperty("Angle Control");
+                angleSlider.name = "angle";
+                var velSlider = curLayer.property("Effects").addProperty("Slider Control");
+                velSlider.name = "velocity";
+
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                var expr = "var a = degreesToRadians((effect(\"angle\")(\"Angle\"))-90);" + "\r" +
+                           "var x1 = Math.cos(a);" + "\r" +
+                           "var y1 = Math.sin(a);" + "\r" +
+                           "var v = effect(\"velocity\")(\"Slider\")*(1/thisComp.frameDuration);" + "\r" +
+                           "var x2 = transform.position[0] + (time - inPoint) * v * x1;" + "\r" +
+                           "var y2 = transform.position[1] + (time - inPoint) * v * y1;" + "\r";
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
                 var ampSlider = curLayer.property("Effects").addProperty("Slider Control");
                 ampSlider.name = "amp";
                 var freqSlider = curLayer.property("Effects").addProperty("Slider Control");
@@ -240,23 +252,25 @@ function sineWave(){  //start script
                 var zOffset = curLayer.property("Effects").addProperty("Slider Control");
                 zOffset.name = "z offset";
                 //~~
-                var expr = "";
+                //var expr = "";
                 //if(curLayer.threeDLayer){
-                expr = "var x = transform.position[0];" + "\r" +
-                       "var y = transform.position[1];" + "\r" + 
-                       "var z = transform.position[1];" + "\r" + 
-                       "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
-                       "var freq = effect(\"freq\")(\"Slider\");" + "\r" +
-                       "var ox = effect(\"x offset\")(\"Slider\");" + "\r" +
-                       "var oy = effect(\"y offset\")(\"Slider\");" + "\r" + 
-                       "var oz = effect(\"z offset\")(\"Slider\");" + "\r" + 
-                       "var sx = amp * Math.sin(freq*(time+ox));" + "\r" +
-                       "var sy = amp * Math.sin(freq*(time+oy));" + "\r" +
-                       "var sz = amp * Math.sin(freq*(time+oz));" + "\r" +
-                       "if(effect(\"x axis\")(\"Checkbox\")==1) x += sx;" + "\r" +
-                       "if(effect(\"y axis\")(\"Checkbox\")==1) y += sy;" + "\r" +
-                       "if(effect(\"z axis\")(\"Checkbox\")==1) z += sz;" + "\r" +
-                       "[x,y,z];";
+                //expr += "var x = x2 + transform.position[0];" + "\r" +
+                //        "var y = y2 + transform.position[1];" + "\r" + 
+                expr += "var x = x2;" + "\r" +
+                        "var y = y2;" + "\r" + 
+                        "var z = transform.position[1];" + "\r" + 
+                        "var amp = effect(\"amp\")(\"Slider\");" + "\r" +
+                        "var freq = effect(\"freq\")(\"Slider\");" + "\r" +
+                        "var ox = effect(\"x offset\")(\"Slider\");" + "\r" +
+                        "var oy = effect(\"y offset\")(\"Slider\");" + "\r" + 
+                        "var oz = effect(\"z offset\")(\"Slider\");" + "\r" + 
+                        "var sx = amp * Math.sin(freq*(time+ox));" + "\r" +
+                        "var sy = amp * Math.sin(freq*(time+oy));" + "\r" +
+                        "var sz = amp * Math.sin(freq*(time+oz));" + "\r" +
+                        "if(effect(\"x axis\")(\"Checkbox\")==1) x += sx;" + "\r" +
+                        "if(effect(\"y axis\")(\"Checkbox\")==1) y += sy;" + "\r" +
+                        "if(effect(\"z axis\")(\"Checkbox\")==1) z += sz;" + "\r" +
+                        "[x,y,z];";
                 /*
                 }else{
                 expr = "var x = transform.position[0];" + "\r" +
@@ -269,55 +283,6 @@ function sineWave(){  //start script
                        "[x,y];";
                 }
                 */
-
-                curLayer.property("Position").expression = expr;
-
-            //}else{
-            //    alert("This only works on footage layers.");
-            //}
-            }
-        }
-    }
- 
-    app.endUndoGroup();
-}  //end script
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// 11.  process for any number of layers--sets angle and velocity of movement
-function angleVelocity(){  //start script
-    app.beginUndoGroup("Apply Angle and Velocity Controls");
-
-    //if(parseFloat(app.version) >= 10.5){
-    var theComp = app.project.activeItem; //only selected
-
-    // check if comp is selected
-    if (theComp == null || !(theComp instanceof CompItem)){
-        // if no comp selected, display an alert
-        alert("Please establish a comp as the active item and run the script again.");
-    } else { 
-        var theLayers = theComp.selectedLayers;
-        if(theLayers.length==0){
-            alert("Please select some layers and run the script again.");
-        }else{
-        // otherwise, loop through each selected layer in the selected comp
-        for (var i = 0; i < theLayers.length; i++){
-            // define the layer in the loop we're currently looking at
-            var curLayer = theLayers[i];
-            // Select layer to add expression to
-            //if (curLayer.matchName == "ADBE AV Layer"){
-                var angleSlider = curLayer.property("Effects").addProperty("Angle Control");
-                angleSlider.name = "Angle Control";
-                var velSlider = curLayer.property("Effects").addProperty("Slider Control");
-                velSlider.name = "Velocity Control";
-
-                var expr = "angle=degreesToRadians((effect(\"Angle Control\")(\"Angle\"))-90);" + "\r" +
-                           "var x1 = Math.cos(angle);" + "\r" +
-                           "var y1 = Math.sin(angle);" + "\r" +
-                           "var v = effect(\"Velocity Control\")(\"Slider\");" + "\r" +
-                           "var x2 = x1*(position[0] + (time - inPoint) * v);" + "\r" +
-                           "var y2 = y1*(position[1] + (time - inPoint) * v);" + "\r" +
-                           "value + [x2,y2];";
 
                 curLayer.property("Position").expression = expr;
 
