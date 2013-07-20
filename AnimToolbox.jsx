@@ -1,4 +1,4 @@
-﻿// AnimToolbox 0.5
+﻿// AnimToolbox 0.6
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -94,7 +94,7 @@ w.show();
 
 // 14.  Type: process for any number of layers or properties
 function moveToPos(){  //start script
-    app.beginUndoGroup("Create Locator Nulls for Selected Layers");
+    app.beginUndoGroup("Move to Last Selected Layer's Position");
 
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
@@ -790,7 +790,7 @@ function nullsForPins(){  //start script
 
 // 3.  Type: special for K2P--generate null for things with weird coordinate spaces
 function parentableNull(){  //start script
-    app.beginUndoGroup("Create Parentable Null");
+    app.beginUndoGroup("Create K2P Parentable Null");
 
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
