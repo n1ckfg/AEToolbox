@@ -1,4 +1,4 @@
-﻿// AnimToolbox 0.6
+﻿// AnimToolbox 0.8
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
