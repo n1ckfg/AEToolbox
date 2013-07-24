@@ -39,13 +39,13 @@ var colXinc = 170;
 //Basic button group
 var col1butCount = 7;
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
-win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
-win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Nulls for Pins');
-win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Make Loop');
-win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Onion Skin');
-win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Move to Position');
-win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], '3D MoSketch');
-win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Locator Null');
+win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
+win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Locator Null');
+win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Move to Position');
+win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Bake Keyframes');
+win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Make Loop');
+win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Onion Skin');
+win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
 //--
 //Character button group
 var col2butCount = 3;
@@ -63,13 +63,13 @@ win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butX
 win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
 //-----------------------------------------------------
 //2. Link buttons to functions
-win.basicGroup0.onClick = bakePinKeyframes;
-win.basicGroup1.onClick = nullsForPins;
-win.basicGroup2.onClick = makeLoop;
-win.basicGroup3.onClick = onionSkin;
-win.basicGroup4.onClick = moveToPos;
-win.basicGroup5.onClick = threeDmoSketch;
-win.basicGroup6.onClick = locatorNull;
+win.basicGroup0.onClick = nullsForPins;
+win.basicGroup1.onClick = locatorNull;
+win.basicGroup2.onClick = moveToPos;
+win.basicGroup3.onClick = bakePinKeyframes;
+win.basicGroup4.onClick = makeLoop;
+win.basicGroup5.onClick = onionSkin;
+win.basicGroup6.onClick = threeDmoSketch;
 //--
 win.charGroup0.onClick = charBlink;
 win.charGroup1.onClick = charJawSide;
@@ -114,7 +114,15 @@ function moveToPos(){  //start script
                 var p = lastLayer.property("position").value;
                 // define the layer in the loop we're currently looking at
                 var curLayer = theLayers[i];
+                var mama;
+                if(curLayer.parent){
+                    mama = curLayer.parent;
+                    curLayer.parent = null;
+                }
                 curLayer.property("position").setValue(p); 
+                try{
+                    curLayer.parent = mama;
+                }catch(err){ }
             }
         }
     }
@@ -144,17 +152,21 @@ function locatorNull(){  //start script
             for (var i = 0; i < theLayers.length; i++){
                 // define the layer in the loop we're currently looking at
                 var curLayer = theLayers[i];
+                var mama;
+                if(curLayer.parent){
+                    mama = curLayer.parent;
+                    curLayer.parent = null;
+                }
                 var p = curLayer.property("position").value;
                 var solid = theComp.layers.addNull();
                 solid.name = curLayer.name + "_loc";
 
-                if(curLayer.threeDLayer){
-                    solid.threeDLayer = true;
-                    //solid.property("position").setValue([p[0],p[1],p[2]]); 
-                }else{
-                    //solid.property("position").setValue([p[0],p[1]]); 
-                }
-                solid.property("position").setValue(p); 
+                if(curLayer.threeDLayer) solid.threeDLayer = true;
+
+                solid.property("position").setValue(p);
+                try{
+                    curLayer.parent = mama;
+                }catch(err){ }
             }
         }
     }
@@ -183,9 +195,14 @@ function threeDmoSketch(){  //start script
         var zSlider = moNull.property("Effects").addProperty("Slider Control");
         zSlider.name = "z axis";
         
+        var offset = moNull.property("Effects").addProperty("3D Point Control");
+        offset.property("3D Point").setValue([0,0,0]);
+        offset.name = "offset";
+
         var expr = "var p = transform.position;" + "\r" +
                    "var z = effect(\"z axis\")(\"Slider\");" + "\r" +
-                   "[p[0],p[1],z];";
+                   "var o = effect(\"offset\")(\"3D Point\");" + "\r" +
+                   "[p[0]+o[0],p[1]+o[1],z+o[2]];";
         moNull.property("Position").expression = expr;
     }
  
@@ -678,7 +695,7 @@ function onionSkin(){  //start script
 
 // 5.  process for any number of layers--enables time remap and applies a loop script
 function makeLoop(){  //start script
-    app.beginUndoGroup("Apply Time Remap Loop");
+    app.beginUndoGroup("Apply Loop Expression");
 
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
@@ -697,15 +714,43 @@ function makeLoop(){  //start script
             // define the layer in the loop we're currently looking at
             var curLayer = theLayers[i];
             // Select layer to add expression to
-            if (curLayer.matchName == "ADBE AV Layer"){
-                curLayer.timeRemapEnabled = true;
-
-                var expr = "loop_out(\"cycle\");";
-                curLayer.timeRemap.expression = expr;
-
-            }else{
-                alert("This only works on footage layers.");
-            }
+                var curProperties = curLayer.selectedProperties;
+                if(curProperties.length==0){
+                    //alert("Please select some properties and run the script again.");
+                    //*** Running this on a selected layer does a time remap... ***
+                    if (curLayer.matchName == "ADBE AV Layer"){
+                        curLayer.timeRemapEnabled = true;
+                        var expr = "loop_out(\"cycle\");";
+                        curLayer.timeRemap.expression = expr;
+                        //~~~~
+                        //now we have to move the end keyframe one frame sooner--by default you get a glitch.
+                        var tr = curLayer.property("Time Remap");
+                        var trEndTime = tr.keyTime(2); 
+                        var trEndVal = tr.keyValue(2);
+                        //alert("key time: " + trEndTime + "   key value: " + trEndVal);
+                        tr.removeKey(2);                
+                        tr.setValueAtTime(trEndTime-theComp.frameDuration,trEndVal-theComp.frameDuration); //minus one frame
+                        tr.setValueAtTime(trEndTime,0); //force loop at end.
+                        //~~~~
+                    }else{
+                        alert("This only works on footage layers.");
+                    }                    
+                }else{
+                    //*** Running this on selected properties cycles keyframes ***
+                    for(var j = 0; j<curProperties.length; j++){
+                        var doIt = false;
+                        try{
+                            if(curProperties[j].numKeys>0) doIt=true;
+                        }catch(err){ }
+                        if(doIt){
+                            var expr = "loop_out(\"cycle\");";
+                            curProperties[j].expression = expr;
+                        }else{
+                            alert("Can't apply this expression to a property with no keyframes.")
+                        }
+                    }
+                    //alert(curProperties);
+                }                            
             }
         }
     }
@@ -755,19 +800,7 @@ function nullsForPins(){  //start script
                                 //~~~~~
                                 //scaled from layer coords to world coords
                                 var p = pin.position.value;
-                                var posCalc = solid.property("Effects").addProperty("Point Control")("Point");
-                                posCalcExpr = "var p = ["+p[0]+","+p[1]+"];" + "\r" +
-                                              //close, but not exact
-                                              //"var x = " + (p[0]/curLayer.width)*theComp.width+ ";" + "\r" +
-                                              //"var y = " + (p[1]/curLayer.height)*theComp.height + ";" + "\r" +
-                                              //"[x,y];";
-                                              "var target = thisComp.layer(\"" + curLayer.name + "\");" + "\r" +
-                                              "target.toComp(p);"
-                                              
-                                posCalc.expression= posCalcExpr;
-                                //alert(posCalc.value);
-                                solid.property("position").setValue(posCalc.value);
-                                solid.property("Effects")("Point Control").remove();
+                                solid.property("position").setValue(harvestPoint(p, curLayer, solid, "toComp"));
                                 //~~~~~~
                                 var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
                                 pin.position.expression = pinExpr;
@@ -937,15 +970,58 @@ function bakePinKeyframes(){  //start script
     app.endUndoGroup();
 }  //end script
 
-    function convertToKeyframes(theProperty){
-        if (theProperty.canSetExpression && theProperty.expressionEnabled){
-            theProperty.selected = true;
-            app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes")); 
-            theProperty.selected = false;
-        }
-    }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//COMMON FUNCTIONS
+
+function harvestPoint(inputVal, sourceLayer, destLayer, spaceTransform){
+    var outputVal;
+    if(inputVal.length==2){
+        try{
+            var posCalc = destLayer.property("Effects").addProperty("Point Control")("Point");
+            var posCalcExpr = "var p = ["+inputVal[0]+","+inputVal[1]+"];" + "\r" +
+                              "var target = thisComp.layer(\"" + sourceLayer.name + "\");" + "\r";
+            if(spaceTransform=="toComp") posCalcExpr += "target.toComp(p);";
+            if(spaceTransform=="fromComp") posCalcExpr += "target.fromComp(p);";
+            if(spaceTransform=="toWorld") posCalcExpr += "target.toWorld(p);";
+            if(spaceTransform=="fromWorld") posCalcExpr += "target.fromWorld(p);";
+            posCalc.expression= posCalcExpr;
+            outputVal = posCalc.value;
+            //destLayer.property("position").setValue(posCalc.value);
+            destLayer.property("Effects")("Point Control").remove();
+            return outputVal;
+        }catch(err){ 
+            alert("Error harvesting 2D point data.")
+        }
+    }else if(inputVal.length==3){
+        try{
+            var posCalc = destLayer.property("Effects").addProperty("3D Point Control")("3D Point");
+            var posCalcExpr = "var p = ["+inputVal[0]+","+inputVal[1]+","+inputVal[2]+"];" + "\r" +
+                              "var target = thisComp.layer(\"" + sourceLayer.name + "\");" + "\r";
+            if(spaceTransform=="toComp") posCalcExpr += "target.toComp(p);";
+            if(spaceTransform=="fromComp") posCalcExpr += "target.fromComp(p);";
+            if(spaceTransform=="toWorld") posCalcExpr += "target.toWorld(p);";
+            if(spaceTransform=="fromWorld") posCalcExpr += "target.fromWorld(p);";
+            posCalc.expression= posCalcExpr;
+            outputVal = posCalc.value;
+            //destLayer.property("position").setValue(posCalc.value);
+            destLayer.property("Effects")("3D Point Control").remove();
+            return outputVal;
+        }catch(err){ 
+            alert("Error harvesting 3D point data.")
+        }
+    }else{
+        alert("harvestPoint() requires a 2D or 3D point as input.");
+    }
+}
+
+function convertToKeyframes(theProperty){
+    if (theProperty.canSetExpression && theProperty.expressionEnabled){
+        theProperty.selected = true;
+        app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes")); 
+        theProperty.selected = false;
+    }
+}
 
 }
 
