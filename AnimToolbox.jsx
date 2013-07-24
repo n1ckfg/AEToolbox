@@ -111,17 +111,27 @@ function moveToPos(){  //start script
             // otherwise, loop through each selected layer in the selected comp
             for (var i = 0; i < theLayers.length-1; i++){
                 var lastLayer = theLayers[theLayers.length-1];
-                var p = lastLayer.property("position").value;
                 // define the layer in the loop we're currently looking at
                 var curLayer = theLayers[i];
-                var mama;
+                var mama; //holds parent if we need to temporary disable it
+                var papa;
                 if(curLayer.parent){
                     mama = curLayer.parent;
                     curLayer.parent = null;
                 }
-                curLayer.property("position").setValue(p); 
+                if(lastLayer.parent){
+                    papa = lastLayer.parent;
+                    lastLayer.parent = null;
+                }
+                //~~~~
+                var p = lastLayer.property("position").value;
+                curLayer.property("position").setValue(p);
+                //~~~~
                 try{
                     curLayer.parent = mama;
+                }catch(err){ }
+                try{
+                    lastLayer.parent = papa;
                 }catch(err){ }
             }
         }
