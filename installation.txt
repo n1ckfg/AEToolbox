@@ -1,4 +1,4 @@
-To install, drop the AnimToolbox.jsx file into your After Effects ScriptUI Panels directory.  
+To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels directory.  
 
 By default, this is:
 
@@ -8,4 +8,4 @@ Mac:
 Windows:
 C:\Program Files\YOUR AFTER EFFECTS VERSION\Scripts\ScriptUI Panels\
 
-After restarting After Effects, you can access the AnimToolbox panel from the Window menu, just like your other panels.
+After restarting After Effects, you can access the AEToolbox panel from the Window menu, just like your other panels.

@@ -1,4 +1,4 @@
-The AnimToolbox UI panel was developed with support from:
+The AEToolbox UI panel was developed with support from:
    Canada Council on the Arts
    Eyebeam Art + Technology Center
 

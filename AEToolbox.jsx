@@ -1,4 +1,4 @@
-﻿// AnimToolbox 0.8
+﻿// AEToolbox 0.8
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -10,7 +10,7 @@
 
 {
 
-// AnimToolbox Panel Setup
+// AEToolbox Panel Setup
 
 function buildUI(this_obj_) {
 var win = (this_obj_ instanceof Panel)
