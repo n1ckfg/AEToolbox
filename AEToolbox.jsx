@@ -48,11 +48,12 @@ win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),
 win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
 //--
 //Character button group
-var col2butCount = 3;
+var col2butCount = 4;
 win.charGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Character', {borderStyle: "etched"});
 win.charGroup0 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
 win.charGroup1 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
 win.charGroup2 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
+win.charGroup3 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
 //--
 //Advanced button group
 var col3butCount = 4;
@@ -74,6 +75,7 @@ win.basicGroup6.onClick = threeDmoSketch;
 win.charGroup0.onClick = charBlink;
 win.charGroup1.onClick = charJawSide;
 win.charGroup2.onClick = charJawFront;
+win.charGroup3.onClick = charSnake;
 //--
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = parentableNull;
@@ -89,6 +91,96 @@ w;
 } else {
 w.show();
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 15.  Type: process for any number of layers or properties
+function charSnake(){  //start script
+    app.beginUndoGroup("Create Nulls for Pins");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+        // otherwise, loop through each selected layer in the selected comp
+        for (var i = 0; i < theLayers.length; i++){
+            // define the layer in the loop we're currently looking at
+            var curLayer = theLayers[i];
+            // condition 1: must be a footage layer
+            if (curLayer.matchName == "ADBE AV Layer"){
+                //condition 2: must be a 2D layer
+                if(!curLayer.threeDLayer){
+                    //condition 3: must have puppet pins applied
+                    if(curLayer.effect.puppet != null){
+                        var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
+                        var pinCount = wherePins.numProperties;
+
+                        var solid = theComp.layers.addNull();
+                        solid.name = "head_ctl";
+                        var speedSlider = solid.property("Effects").addProperty("Slider Control");
+                        speedSlider.name = "speed";
+
+                        for (var n = 1; n <= pinCount; n++){
+                            var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
+
+                            if(pin.name=="head" || pin.name=="Puppet Pin 1"){
+                                if(pin.name=="Puppet Pin 1") pin.name="head";
+                                //~~~~~
+                                //scaled from layer coords to world coords
+                                var p = pin.position.value;
+                                solid.property("position").setValue(harvestPoint(p, curLayer, solid, "toComp"));
+                                //~~~~~~
+                                var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
+                                pin.position.expression = pinExpr;
+                            }
+                        }
+                        
+                        for (var o = 1; o <= pinCount; o++){
+                            // Get position of puppet pin
+                            var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(o);
+                            //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
+                            if(pin.name=="head" || pin.name=="Puppet Pin 1"){
+                                //
+                            }else{
+                                var pinExpr = "var delayFrames = thisComp.layer(\"head_ctl\").effect(\"speed\")(\"Slider\");" + "\r" +
+                                               "var p = effect(\"Puppet\").arap.mesh(\"Mesh 1\").deform(\"head\").position;" + "\r" +
+                                               "var idx = parseInt(thisProperty.propertyGroup(1).name.split(\" \")[2],10)-1;" + "\r" +
+                                               "var delay = idx*framesToTime(delayFrames);" + "\r" +
+                                               "p.valueAtTime(time-delay)";
+
+                                pin.position.expression = pinExpr;
+                            }
+                        }
+                        
+
+                        try{
+                            curLayer.property("Effects").property("Puppet").property("On Transparent").setValue(1);                          
+                            curLayer.locked = true;
+                        }catch(e){}
+                    }else{
+                        alert("This only works on layers with puppet pins.");
+                    }
+                }else{
+                    alert("This only works properly on 2D layers.");
+                }
+            }else{
+                alert("This only works on footage layers.");
+            }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
