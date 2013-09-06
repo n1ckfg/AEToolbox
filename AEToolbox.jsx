@@ -37,7 +37,7 @@ var colYendBase = 33;
 var colXinc = 170;
 
 //Basic button group
-var col1butCount = 7;
+var col1butCount = 6;
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
 win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
 win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Locator Null');
@@ -45,23 +45,25 @@ win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),
 win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Bake Keyframes');
 win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Make Loop');
 win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Onion Skin');
-win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
 //--
 //Character button group
-var col2butCount = 4;
-win.charGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Character', {borderStyle: "etched"});
-win.charGroup0 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
-win.charGroup1 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
-win.charGroup2 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
-win.charGroup3 = win.charGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
+var col2butCount = 5;
+win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
+win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
+win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
+win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
+win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
+win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
 //--
 //Advanced button group
-var col3butCount = 4;
+var col3butCount = 6;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
 win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable K2P Null');
 win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
 win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
+win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Auto Z Rotation');
+win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], '3D MoSketch');
 //-----------------------------------------------------
 //2. Link buttons to functions
 win.basicGroup0.onClick = nullsForPins;
@@ -70,17 +72,19 @@ win.basicGroup2.onClick = moveToPos;
 win.basicGroup3.onClick = bakePinKeyframes;
 win.basicGroup4.onClick = makeLoop;
 win.basicGroup5.onClick = onionSkin;
-win.basicGroup6.onClick = threeDmoSketch;
 //--
-win.charGroup0.onClick = charBlink;
-win.charGroup1.onClick = charJawSide;
-win.charGroup2.onClick = charJawFront;
-win.charGroup3.onClick = charSnake;
+win.rigGroup0.onClick = charBlink;
+win.rigGroup1.onClick = charJawSide;
+win.rigGroup2.onClick = charJawFront;
+win.rigGroup3.onClick = charSnake;
+win.rigGroup4.onClick = charBeam;
 //--
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = parentableNull;
 win.advGroup2.onClick = handheldCamera;
 win.advGroup3.onClick = sineWave;
+win.advGroup4.onClick = autoOrientZ;
+win.advGroup5.onClick = threeDmoSketch;
 //-----------------------------------------------------
 
 return win
@@ -90,6 +94,122 @@ if (w.toString() == "[object Panel]") {
 w;
 } else {
 w.show();
+}
+
+// 17. One-shot--create a complex bunch of objects and scripts.
+function charBeam(){  //start script
+    app.beginUndoGroup("Create a Beam Rig");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else {
+        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Beam Solid", theComp.width, theComp.height, 1);
+        solid.locked = true;
+        var beam_baseSize = solid.property("Effects").addProperty("Slider Control");
+        beam_baseSize.name = "Base Size";
+        beam_baseSize.property("Slider").setValue(8);
+        var beam_maxSize = solid.property("Effects").addProperty("Slider Control");
+        beam_maxSize.name = "Max Size";
+        beam_maxSize.property("Slider").setValue(1000);
+        var beam_minSize = solid.property("Effects").addProperty("Slider Control");
+        beam_minSize.name = "Min Size";
+        beam_minSize.property("Slider").setValue(1);
+
+        var beam = solid.property("Effects").addProperty("Beam");
+        beam.property("3D Perspective").setValue(0);
+        beam.property("Length").setValue(1);
+
+        var beamStart = theComp.layers.addNull();
+        beamStart.name = "beam_start";
+        beamStart.threeDLayer = true;
+        beamStart.transform.position.setValue([(theComp.width/2)-200,theComp.height/2,0]);
+
+        var beamEnd = theComp.layers.addNull();
+        beamEnd.name = "beam_end";
+        beamEnd.threeDLayer = true;
+        beamEnd.transform.position.setValue([(theComp.width/2)+200,theComp.height/2,0]);
+
+
+        var expr1 = "fromComp(thisComp.layer(\"beam_start\").toComp(thisComp.layer(\"beam_start\").anchorPoint));";
+        beam.property("Starting Point").expression = expr1;
+        
+        var expr2 = "fromComp(thisComp.layer(\"beam_end\").toComp(thisComp.layer(\"beam_end\").anchorPoint));";
+        beam.property("Ending Point").expression = expr2;
+
+        var expr3 = "var L = \"beam_start\";" + "\r" + 
+                    "var s = thisComp.layer(\"Beam Solid\").effect(\"Base Size\")(\"Slider\");" + "\r" + 
+                    "var sMax = thisComp.layer(\"Beam Solid\").effect(\"Max Size\")(\"Slider\");" + "\r" + 
+                    "var sMin = thisComp.layer(\"Beam Solid\").effect(\"Min Size\")(\"Slider\");" + "\r" + 
+                    "var p = thisComp.layer(L).transform.position;" + "\r" + 
+                    "var ss = s + (-p[2]);" + "\r" + 
+                    "if(ss<sMin) ss = sMin;" + "\r" + 
+                    "if(ss>sMax) ss = sMax;" + "\r" + 
+                    "ss;";
+        beam.property("Starting Thickness").expression = expr3;
+
+        var expr4 = "var L = \"beam_end\";" + "\r" + 
+                    "var s = thisComp.layer(\"Beam Solid\").effect(\"Base Size\")(\"Slider\");" + "\r" + 
+                    "var sMax = thisComp.layer(\"Beam Solid\").effect(\"Max Size\")(\"Slider\");" + "\r" + 
+                    "var sMin = thisComp.layer(\"Beam Solid\").effect(\"Min Size\")(\"Slider\");" + "\r" + 
+                    "var p = thisComp.layer(L).transform.position;" + "\r" + 
+                    "var ss = s + (-p[2]);" + "\r" + 
+                    "if(ss<sMin) ss = sMin;" + "\r" + 
+                    "if(ss>sMax) ss = sMax;" + "\r" + 
+                    "ss;";
+        beam.property("Ending Thickness").expression = expr4;
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+// 16.  Type: apply process to any number of layers
+function autoOrientZ(){
+    //Based on script by Jered Cuenco, http://mindfury.com/
+    app.beginUndoGroup("Apply Auto-Orient Z");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
+        alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            for (var i = 0; i < theLayers.length; i++){  // otherwise, loop through each selected layer in the selected comp
+                var curLayer = theLayers[i];  // define the layer in the loop we're currently looking at
+
+                var easeSlider = curLayer.property("Effects").addProperty("Slider Control");
+                easeSlider.name = "corner ease";
+                easeSlider.property("Slider").setValue(3);
+
+                //if (curLayer.matchName == "ADBE AV Layer"){
+                var expr = "var cornerEase = effect(\"corner ease\")(\"Slider\");" + "\r" + 
+                           "var pre = position.valueAtTime(time-thisComp.frameDuration*cornerEase);" + "\r" + 
+                           "var post = position.valueAtTime(time+thisComp.frameDuration*cornerEase);" + "\r" + 
+                           "var delta = post - pre;" + "\r" + 
+                           "if(delta[0]==0 && delta[1]==0){" + "\r" + 
+                           "  // if no change in vector, maintain current heading" + "\r" + 
+                           "  rotation;" + "\r" + 
+                           "}else{" + "\r" + 
+                           "  // use the vector direction to orient. Flip Y to account for cartesian Y being up and AE Y being down" + "\r" + 
+                           "  radiansToDegrees(Math.atan2(delta[0],-delta[1]));" + "\r" + 
+                           "}";
+                if(curLayer.threeDLayer){
+                    curLayer.transform.zRotation.expression = expr;
+                }else{
+                    curLayer.transform.rotation.expression = expr;
+                }
+                //}
+            }
+        }
+    }   
 }
 
 
