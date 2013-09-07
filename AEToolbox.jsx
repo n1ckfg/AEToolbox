@@ -47,13 +47,14 @@ win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),
 win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Onion Skin');
 //--
 //Character button group
-var col2butCount = 5;
+var col2butCount = 6;
 win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
 win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
 win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
 win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
 win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
 win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
+win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particular Rig');
 //--
 //Advanced button group
 var col3butCount = 6;
@@ -78,6 +79,7 @@ win.rigGroup1.onClick = charJawSide;
 win.rigGroup2.onClick = charJawFront;
 win.rigGroup3.onClick = charSnake;
 win.rigGroup4.onClick = charBeam;
+win.rigGroup5.onClick = charParticular;
 //--
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = parentableNull;
@@ -95,6 +97,44 @@ w;
 } else {
 w.show();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 18. One-shot--create a complex bunch of objects and scripts.
+function charParticular(){  //start script
+    app.beginUndoGroup("Create a Particular Rig");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else {
+        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Particular Solid", theComp.width, theComp.height, 1);
+        solid.locked = true;
+
+        var particular = solid.property("Effects").addProperty("Particular");
+
+        var particular_ctl = theComp.layers.addNull();
+        particular_ctl.name = "particular_ctl";
+        particular_ctl.threeDLayer = true;
+
+        var expr1 = "L = thisComp.layer(\"" + particular_ctl.name + "\");" + "\r" + 
+                    "L.toWorld(L.anchorPoint);"
+        particular.property("Position XY").expression = expr1;
+        
+        var expr2 = "L = thisComp.layer(\"" + particular_ctl.name + "\");" + "\r" + 
+                    "L.toWorld(L.anchorPoint)[2];"
+
+        particular.property("Position Z").expression = expr2;
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 17. One-shot--create a complex bunch of objects and scripts.
 function charBeam(){  //start script
@@ -167,6 +207,8 @@ function charBeam(){  //start script
     app.endUndoGroup();
 }  //end script
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 // 16.  Type: apply process to any number of layers
 function autoOrientZ(){
     //Based on script by Jered Cuenco, http://mindfury.com/
@@ -211,7 +253,6 @@ function autoOrientZ(){
         }
     }   
 }
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
