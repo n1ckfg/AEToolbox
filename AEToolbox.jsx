@@ -54,7 +54,7 @@ win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butX
 win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
 win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
 win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
-win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particular Rig');
+win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
 //--
 //Advanced button group
 var col3butCount = 6;
@@ -79,7 +79,7 @@ win.rigGroup1.onClick = charJawSide;
 win.rigGroup2.onClick = charJawFront;
 win.rigGroup3.onClick = charSnake;
 win.rigGroup4.onClick = charBeam;
-win.rigGroup5.onClick = charParticular;
+win.rigGroup5.onClick = charParticle;
 //--
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = parentableNull;
@@ -101,8 +101,8 @@ w.show();
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 18. One-shot--create a complex bunch of objects and scripts.
-function charParticular(){  //start script
-    app.beginUndoGroup("Create a Particular Rig");
+function charParticle(){  //start script
+    app.beginUndoGroup("Create a Particle Rig");
 
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
@@ -112,27 +112,60 @@ function charParticular(){  //start script
         // if no comp selected, display an alert
         alert("Please establish a comp as the active item and run the script again.");
     } else {
-        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Particular Solid", theComp.width, theComp.height, 1);
+        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Particle Solid", theComp.width, theComp.height, 1);
         solid.locked = true;
 
-        var particular = solid.property("Effects").addProperty("Particular");
+        var particle_ctl = theComp.layers.addNull();
+        particle_ctl.name = "particle_ctl";
+        particle_ctl.threeDLayer = true;
 
-        var particular_ctl = theComp.layers.addNull();
-        particular_ctl.name = "particular_ctl";
-        particular_ctl.threeDLayer = true;
+        try{
+            var particle = solid.property("Effects").addProperty("Particular");
 
-        var expr1 = "L = thisComp.layer(\"" + particular_ctl.name + "\");" + "\r" + 
-                    "L.toWorld(L.anchorPoint);"
-        particular.property("Position XY").expression = expr1;
-        
-        var expr2 = "L = thisComp.layer(\"" + particular_ctl.name + "\");" + "\r" + 
-                    "L.toWorld(L.anchorPoint)[2];"
+            var expr1 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
+                        "L.toWorld(L.anchorPoint);"
 
-        particular.property("Position Z").expression = expr2;
+            particle.property("Position XY").expression = expr1;
+
+            var expr2 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
+                        "L.toWorld(L.anchorPoint)[2];"
+
+            particle.property("Position Z").expression = expr2;
+        }catch(err){
+            alert("This requires Trapcode Particular.");
+            /*
+            var particle = solid.property("Effects").addProperty("CC Particle World");
+
+            var expr1 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
+                        "L.toWorld(L.anchorPoint)[0] - (thisComp.width/2);"
+
+            particle.property("Position X").expression = expr1;
+
+            var expr2 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
+                        "L.toWorld(L.anchorPoint)[1] - (thisComp.height/2);"
+
+            particle.property("Position Y").expression = expr2;
+
+            var expr3 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
+                        "L.toWorld(L.anchorPoint)[2];"
+
+            particle.property("Position Z").expression = expr3;
+            */            
+        }
     }
  
     app.endUndoGroup();
 }  //end script
+
+function kill(target){
+    var items = app.project.items;
+
+    for (var i = items.length; i >= 1; i--){
+        if (items[i]==target || items[i].name==target.name || items[i].name==target || items[i]==target.name){
+            items[i].remove();
+        }
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
