@@ -157,16 +157,6 @@ function charParticle(){  //start script
     app.endUndoGroup();
 }  //end script
 
-function kill(target){
-    var items = app.project.items;
-
-    for (var i = items.length; i >= 1; i--){
-        if (items[i]==target || items[i].name==target.name || items[i].name==target || items[i]==target.name){
-            items[i].remove();
-        }
-    }
-}
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 17. One-shot--create a complex bunch of objects and scripts.
@@ -427,6 +417,7 @@ function moveToPos(){  //start script
     app.endUndoGroup();
 }  //end script
 
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 13.  Type: process for any number of layers or properties
 function locatorNull(){  //start script
@@ -470,7 +461,6 @@ function locatorNull(){  //start script
  
     app.endUndoGroup();
 }  //end script
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -811,7 +801,6 @@ function charJawFront(){  //start script
     app.endUndoGroup();
 }  //end script
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 8. Type: Create layers inside an existing precomp.
@@ -987,7 +976,6 @@ function onionSkin(){  //start script
     app.endUndoGroup();
 }  //end script
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 5.  process for any number of layers--enables time remap and applies a loop script
@@ -1055,8 +1043,6 @@ function makeLoop(){  //start script
     app.endUndoGroup();
 }  //end script
 
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 4.  Type: process for any number of layers or properties
@@ -1120,7 +1106,6 @@ function nullsForPins(){  //start script
  
     app.endUndoGroup();
 }  //end script
-
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -1216,7 +1201,9 @@ function bakePinKeyframes(){  //start script
             // define the layer in the loop we're currently looking at
             var curLayer = theLayers[i];
             // Select layer to add expression to
+            //if (curLayer.matchName == "ADBE AV Layer" || curLayer.matchName == "ADBE Camera Layer"){
             if (curLayer.matchName == "ADBE AV Layer"){
+
                 if(curLayer.effect.puppet != null){
                     var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
                     var pinCount = wherePins.numProperties;
@@ -1250,10 +1237,20 @@ function bakePinKeyframes(){  //start script
                         curProperty = curLayer.property("opacity");
                         convertToKeyframes(curProperty);
                     }catch(e){}
+                    //~~
+                    try{
+                        curProperty = curLayer.property("pointOfInterest");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
+                    try{
+                        curProperty = curLayer.property("focusDistance");
+                        convertToKeyframes(curProperty);
+                    }catch(e){}
                 //}
-            }else{
-                alert("This currently only works on footage layers.")
-            }
+                }else{
+                    //alert("This currently only works on footage or camera layers.");
+                    alert("This currently only works on footage layers.");
+                }
             }
         }
     }
@@ -1267,9 +1264,18 @@ function bakePinKeyframes(){  //start script
     app.endUndoGroup();
 }  //end script
 
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //COMMON FUNCTIONS
+
+function kill(target){
+    var items = app.project.items;
+
+    for (var i = items.length; i >= 1; i--){
+        if (items[i]==target || items[i].name==target.name || items[i].name==target || items[i]==target.name){
+            items[i].remove();
+        }
+    }
+}
 
 function harvestPoint(inputVal, sourceLayer, destLayer, spaceTransform){
     var outputVal;
