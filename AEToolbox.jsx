@@ -1079,7 +1079,8 @@ function nullsForPins(){  //start script
                                 var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
                                 //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
                                 var solid = theComp.layers.addNull();
-                                solid.name = pin.name + "_ctl";
+                                //solid.name = pin.name + "_ctl";
+                                solid.name = curLayer.name + "_" + pin.name;
                                 //~~~~~
                                 //scaled from layer coords to world coords
                                 var p = pin.position.value;
