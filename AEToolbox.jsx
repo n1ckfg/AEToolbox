@@ -312,7 +312,7 @@ function charSnake(){  //start script
                         solid.name = "head_ctl";
                         var speedSlider = solid.property("Effects").addProperty("Slider Control");
                         speedSlider.name = "speed";
-                        speedSlider.property("Slider").setValue(4);
+                        speedSlider.property("Slider").setValue(10);
 
                         for (var n = 1; n <= pinCount; n++){
                             var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
