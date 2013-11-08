@@ -1,4 +1,4 @@
-﻿// AEToolbox 0.9
+﻿// AEToolbox 1.1
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -47,7 +47,7 @@ win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),
 win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Onion Skin');
 //--
 //Character button group
-var col2butCount = 6;
+var col2butCount = 7;
 win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
 win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
 win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
@@ -55,6 +55,7 @@ win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butX
 win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
 win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
 win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
+win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Parent Chain');
 //--
 //Advanced button group
 var col3butCount = 6;
@@ -80,6 +81,7 @@ win.rigGroup2.onClick = charJawFront;
 win.rigGroup3.onClick = charSnake;
 win.rigGroup4.onClick = charBeam;
 win.rigGroup5.onClick = charParticle;
+win.rigGroup6.onClick = parentChain;
 //--
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = parentableNull;
@@ -96,6 +98,38 @@ if (w.toString() == "[object Panel]") {
 w;
 } else {
 w.show();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 19.  Type: apply process to any number of layers
+function parentChain(){
+    //Based on script by Jered Cuenco, http://mindfury.com/
+    app.beginUndoGroup("Parent Chain of Layers");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
+        alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            for (var i = 0; i < theLayers.length; i++){  // otherwise, loop through each selected layer in the selected comp
+                //var curLayer = theLayers[i];  // define the layer in the loop we're currently looking at
+                if(i==0){
+                    for (var j = 0; j < theLayers.length; j++){
+                        if(theLayers[i].parent==theLayers[j]) theLayers[i].parent=null;
+                    }
+                }else{
+                    theLayers[i].parent = null;
+                    theLayers[i].parent = theLayers[i-1];
+                }
+            }
+        }
+    }   
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -19,6 +19,7 @@ Jaw Rig Front (comp selection): Rigs a jaw layer inside the comp for audio contr
 Snake Rig (layer selection): Rigs a puppet-pin layer for automated snake-like movement.
 Beam Rig (no selection): Creates a 3D laser effect with start and end nulls.
 Particle Rig (no selection): Creates a null controller for Particular particles.
+Parent Chain (layer selection): Parent a chain of layers one to another.
 
 * ADVANCED
 Lock Y Rotation (layer selection): Forces a layer to always face the camera.
