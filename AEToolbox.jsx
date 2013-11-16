@@ -37,14 +37,15 @@ var colYendBase = 33;
 var colXinc = 170;
 
 //Basic button group
-var col1butCount = 6;
+var col1butCount = 7;
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
 win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
-win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Locator Null');
-win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Move to Position');
-win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Bake Keyframes');
-win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Make Loop');
-win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Onion Skin');
+win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
+win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Locator Null');
+win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
+win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Bake Keyframes');
+win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Make Loop');
+win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Onion Skin');
 //--
 //Character button group
 var col2butCount = 7;
@@ -55,25 +56,25 @@ win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butX
 win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
 win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
 win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
-win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Parent Chain');
+win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
 //--
 //Advanced button group
-var col3butCount = 6;
+var col3butCount = 5;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
-win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parentable Null');
-win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Handheld Camera');
-win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
-win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Auto Z Rotation');
-win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], '3D MoSketch');
+win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
+win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
+win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
+win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
 //-----------------------------------------------------
 //2. Link buttons to functions
 win.basicGroup0.onClick = nullsForPins;
-win.basicGroup1.onClick = locatorNull;
-win.basicGroup2.onClick = moveToPos;
-win.basicGroup3.onClick = bakePinKeyframes;
-win.basicGroup4.onClick = makeLoop;
-win.basicGroup5.onClick = onionSkin;
+win.basicGroup1.onClick = parentChain;
+win.basicGroup2.onClick = locatorNull;
+win.basicGroup3.onClick = moveToPos;
+win.basicGroup4.onClick = bakePinKeyframes;
+win.basicGroup5.onClick = makeLoop;
+win.basicGroup6.onClick = onionSkin;
 //--
 win.rigGroup0.onClick = charBlink;
 win.rigGroup1.onClick = charJawSide;
@@ -81,14 +82,13 @@ win.rigGroup2.onClick = charJawFront;
 win.rigGroup3.onClick = charSnake;
 win.rigGroup4.onClick = charBeam;
 win.rigGroup5.onClick = charParticle;
-win.rigGroup6.onClick = parentChain;
+win.rigGroup6.onClick = handheldCamera;
 //--
 win.advGroup0.onClick = lockRotation;
-win.advGroup1.onClick = parentableNull;
-win.advGroup2.onClick = handheldCamera;
-win.advGroup3.onClick = sineWave;
-win.advGroup4.onClick = autoOrientZ;
-win.advGroup5.onClick = threeDmoSketch;
+win.advGroup1.onClick = autoOrientZ;
+win.advGroup2.onClick = parentableNull;
+win.advGroup3.onClick = threeDmoSketch;
+win.advGroup4.onClick = sineWave;
 //-----------------------------------------------------
 
 return win

@@ -1,3 +1,7 @@
+AEToolbox UI panel
+Copyright (c) 2013 Nick Fox-Gieg & Victoria Nece
+http://kinecttopin.com
+
 To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels directory.  
 
 By default, this is:
