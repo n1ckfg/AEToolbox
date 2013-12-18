@@ -132,6 +132,13 @@ function crossfader(){
 
                 curLayer2.startTime = -1 * (curLayer1.outPoint-curLayer1.inPoint);
                 curLayer1.startTime = curLayer2.outPoint-curLayer2.inPoint;
+
+                curLayer1.selected=true;
+                curLayer2.selected=true;
+                theLayers[i].selected=true;
+
+                //why doesn't this work?
+                //theComp.layers.precompose(theComp.selectedLayers[0], "Precomp Fade", true);
             }
         }
     }   
