@@ -37,7 +37,7 @@ var colYendBase = 33;
 var colXinc = 170;
 
 //Basic button group
-var col1butCount = 7;
+var col1butCount = 8;
 win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
 win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
 win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
@@ -45,7 +45,8 @@ win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),
 win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
 win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Bake Keyframes');
 win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Make Loop');
-win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Onion Skin');
+win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Crossfade');
+win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Onion Skin');
 //--
 //Character button group
 var col2butCount = 7;
@@ -74,7 +75,8 @@ win.basicGroup2.onClick = locatorNull;
 win.basicGroup3.onClick = moveToPos;
 win.basicGroup4.onClick = bakePinKeyframes;
 win.basicGroup5.onClick = makeLoop;
-win.basicGroup6.onClick = onionSkin;
+win.basicGroup6.onClick = crossfader;
+win.basicGroup7.onClick = onionSkin;
 //--
 win.rigGroup0.onClick = charBlink;
 win.rigGroup1.onClick = charJawSide;
@@ -89,7 +91,7 @@ win.advGroup1.onClick = autoOrientZ;
 win.advGroup2.onClick = parentableNull;
 win.advGroup3.onClick = threeDmoSketch;
 win.advGroup4.onClick = sineWave;
-//-----------------------------------------------------
+//-----------------------------------------------------app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
 
 return win
 }
@@ -98,6 +100,41 @@ if (w.toString() == "[object Panel]") {
 w;
 } else {
 w.show();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 20.  Type: apply process to any number of layers
+function crossfader(){
+    //Based on script by Jered Cuenco, http://mindfury.com/
+    app.beginUndoGroup("Crossfade Layers");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
+        alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            for (var i = 0; i < theLayers.length; i++){  // otherwise, loop through each selected layer in the selected comp
+                app.executeCommand(app.findMenuCommandId("Duplicate"));
+                var curLayer1 = theComp.selectedLayers[0];
+                app.executeCommand(app.findMenuCommandId("Split Layer"));
+                var curLayer2 = theComp.selectedLayers[0];
+
+                curLayer1.property("Opacity").setValueAtTime(curLayer1.inPoint,0);
+                curLayer1.property("Opacity").setValueAtTime(curLayer1.outPoint,100);
+                curLayer2.property("Opacity").setValueAtTime(curLayer2.inPoint,100);
+                curLayer2.property("Opacity").setValueAtTime(curLayer2.outPoint,0);
+
+                curLayer2.startTime = -1 * (curLayer1.outPoint-curLayer1.inPoint);
+                curLayer1.startTime = curLayer2.outPoint-curLayer2.inPoint;
+            }
+        }
+    }   
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
