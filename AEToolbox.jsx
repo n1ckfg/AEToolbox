@@ -135,6 +135,7 @@ function stereoDispMap(){
             effect.property("Use For Horizontal Displacement").setValue(5); //luma
             effect.property("Max Horizontal Displacement").setValue(-ioDistance); //io distance
             effect.property("Use For Vertical Displacement").setValue(11); //off
+            effect.property("Max Vertical Displacement").setValue(0); //off
             effect.property("Edge Behavior").setValue(1); //on
 
             var newComp = theComp.duplicate();
