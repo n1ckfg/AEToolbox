@@ -60,13 +60,14 @@ win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butX
 win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
 //--
 //Advanced button group
-var col3butCount = 5;
+var col3butCount = 6;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
 win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
 win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
 win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
 win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
+win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Split s3D Pair');
 //-----------------------------------------------------
 //2. Link buttons to functions
 win.basicGroup0.onClick = nullsForPins;
@@ -91,6 +92,7 @@ win.advGroup1.onClick = autoOrientZ;
 win.advGroup2.onClick = parentableNull;
 win.advGroup3.onClick = threeDmoSketch;
 win.advGroup4.onClick = sineWave;
+win.advGroup5.onClick = splitPair;
 //-----------------------------------------------------app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
 
 return win
@@ -103,6 +105,51 @@ w.show();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 21.  Type: apply process to any number of layers
+function splitPair(){
+    app.beginUndoGroup("Split s3D Pair");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
+        alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
+    } else { 
+        var newComp1 = theComp.duplicate();
+        newComp1.name = theComp.name + " L";
+        var theLayers1 = newComp1.layers;
+        
+        while(theLayers1.length > 0){  // otherwise, loop through each selected layer in the selected comp
+            var curLayer = theLayers1[1];  // define the layer in the loop we're currently looking at        
+            curLayer.remove();
+        }
+
+        var newComp1target = theLayers1.add(theComp);
+        newComp1.width = newComp1.width/2;
+        //var p1 = newComp1target.transform.position.value;
+        //newComp1target.transform.position.setValue([0,p1[1]]);
+
+        //~~~~~~~~~~~~~~~~~
+
+        var newComp2 = theComp.duplicate();
+        newComp2.name = theComp.name + " R";
+        var theLayers2 = newComp2.layers;
+        
+        while(theLayers2.length > 0){  // otherwise, loop through each selected layer in the selected comp
+            var curLayer = theLayers2[1];  // define the layer in the loop we're currently looking at        
+            curLayer.remove();
+        }
+
+        var newComp2target = theLayers2.add(theComp);
+        newComp2.width = newComp2.width/2;
+        var p2 = newComp2target.transform.position.value;
+        newComp2target.transform.position.setValue([0,p2[1]]);
+
+    }   
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 
 // 20.  Type: apply process to any number of layers
 function crossfader(){
