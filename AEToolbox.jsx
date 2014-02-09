@@ -110,7 +110,7 @@ w.show();
 
 // 22.  Type: apply process to a whole comp
 function stereoDispMap(){
-    var ioDistance = 5.0;
+    var ioDistance = 6.0;
 
     app.beginUndoGroup("s3D Displacement Map");
 
@@ -121,11 +121,19 @@ function stereoDispMap(){
     } else { 
         var theLayers = theComp.selectedLayers;
 
-        if(theLayers.length==0 || theLayers.length > 1){
-            alert("Please select only one layer and run the script again.");
+        if(theLayers.length==0 || theLayers.length > 2){
+            alert("Please select one or two layers and run the script again.");
         }else{
             var oldLayer = theLayers[0];
-            var newLayer = oldLayer.duplicate();
+
+            //if one layer selected, duplicated that layer and make it a precomp.
+            //if two layers selected, put the second layer in the precomp.
+            var newLayer;
+            if(theLayers.length==1){
+                newLayer = oldLayer.duplicate();
+            }else if(theLayers.length==2){
+                newLayer = theLayers[1];
+            }
             var newPrecomp = theComp.layers.precompose([newLayer.index], "Precomp DispMap", true);
             newPrecomp.layers[1].property("Effects").addProperty("Levels");
             theComp.layer("Precomp DispMap").enabled = false;
@@ -139,6 +147,8 @@ function stereoDispMap(){
             effect.property("Edge Behavior").setValue(1); //on
 
             var newComp = theComp.duplicate();
+            var stereoComp = theComp.duplicate();
+            stereoComp.name = theComp.name + " s3D Pair"
             newComp.name = theComp.name + " R";
             theComp.name = theComp.name + " L";
 
@@ -148,10 +158,32 @@ function stereoDispMap(){
                     targetNum = i+2;
                 }
             }
-            var newLayer2 = newComp.layers[targetNum];
-            var effect2 = newLayer2.property("Effects").property("Displacement Map");
-            effect2.property("Max Horizontal Displacement").setValue(ioDistance);
+            var newLayer2;
+            try{
+                newLayer2 = newComp.layers[targetNum];
+                var effect2 = newLayer2.property("Effects").property("Displacement Map");
+                effect2.property("Max Horizontal Displacement").setValue(ioDistance);
+            }catch(err){
+                alert("Displacement map must be selected last and be immediately above target layer." + "\r" + "You'll need to change displacement settings manually.")
+            }
+            
+            //~~~~~~~~~~~~~
+            //delete everything in stereoComp
+            var theLayers1 = stereoComp.layers;
+        
+            while(theLayers1.length > 0){  // otherwise, loop through each selected layer in the selected comp
+                var curLayer = theLayers1[1];  // define the layer in the loop we're currently looking at        
+                curLayer.remove();
+            }
 
+            var stereoL = theLayers1.add(theComp);
+            var stereoR = theLayers1.add(newComp);
+            stereoL.transform.scale.setValue([50,100]);
+            stereoR.transform.scale.setValue([50,100]);
+            var pL = stereoL.transform.position.value;
+            var pR = stereoR.transform.position.value;
+            stereoL.transform.position.setValue([(stereoComp.width*0.25),pL[1]]);
+            stereoR.transform.position.setValue([(stereoComp.width*0.75),pR[1]]);
         }
     }   
 }
