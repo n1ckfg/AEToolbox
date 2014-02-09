@@ -3,7 +3,7 @@ The AEToolbox UI panel was developed with support from:
    Eyebeam Art + Technology Center
    Ontario Arts Council / Chalmers Family Fund
 
-Copyright (c) 2013 Nick Fox-Gieg & Victoria Nece
+Copyright (c) 2014 Nick Fox-Gieg & Victoria Nece
 http://kinecttopin.com
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

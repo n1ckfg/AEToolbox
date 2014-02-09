@@ -1,5 +1,5 @@
 AEToolbox UI panel
-Copyright (c) 2013 Nick Fox-Gieg & Victoria Nece
+Copyright (c) 2014 Nick Fox-Gieg & Victoria Nece
 http://kinecttopin.com
 
 FEATURES:
@@ -32,3 +32,7 @@ III.  ADVANCED
 3. Parentable Null (layer selection): Creates a null with expressions that solve certain parenting problems. 
 4. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
 5. 3D MoSketch (no selection): Creates a null with 3D controls for use with Motion Sketch.
+6. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.
+7. s3D Dispmap...
+     (one layer selected): Creates an s3D pair from the selected layer, using it as a displacement map.
+     (two layers selected): Creates an s3D pair from the first layer, using the second layer for displacement.
