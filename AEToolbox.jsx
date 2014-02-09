@@ -60,7 +60,7 @@ win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butX
 win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
 //--
 //Advanced button group
-var col3butCount = 6;
+var col3butCount = 7;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
 win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
@@ -68,6 +68,7 @@ win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butX
 win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
 win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
 win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Split s3D Pair');
+win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 's3D Dispmap');
 //-----------------------------------------------------
 //2. Link buttons to functions
 win.basicGroup0.onClick = nullsForPins;
@@ -92,7 +93,8 @@ win.advGroup1.onClick = autoOrientZ;
 win.advGroup2.onClick = parentableNull;
 win.advGroup3.onClick = threeDmoSketch;
 win.advGroup4.onClick = sineWave;
-win.advGroup5.onClick = splitPair;
+win.advGroup5.onClick = splitStereoPair;
+win.advGroup6.onClick = stereoDispMap;
 //-----------------------------------------------------app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
 
 return win
@@ -106,8 +108,57 @@ w.show();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 21.  Type: apply process to any number of layers
-function splitPair(){
+// 22.  Type: apply process to a whole comp
+function stereoDispMap(){
+    var ioDistance = 5.0;
+
+    app.beginUndoGroup("s3D Displacement Map");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
+        alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if(theLayers.length==0 || theLayers.length > 1){
+            alert("Please select only one layer and run the script again.");
+        }else{
+            var oldLayer = theLayers[0];
+            var newLayer = oldLayer.duplicate();
+            var newPrecomp = theComp.layers.precompose([newLayer.index], "Precomp DispMap", true);
+            newPrecomp.layers[1].property("Effects").addProperty("Levels");
+            theComp.layer("Precomp DispMap").enabled = false;
+            theComp.layer("Precomp DispMap").audioEnabled = false;
+            var effect = oldLayer.property("Effects").addProperty("Displacement Map");
+            effect.property("Displacement Map Layer").setValue(effect.property("Displacement Map Layer").value-1); //target
+            effect.property("Use For Horizontal Displacement").setValue(5); //luma
+            effect.property("Max Horizontal Displacement").setValue(-ioDistance); //io distance
+            effect.property("Use For Vertical Displacement").setValue(11); //off
+            effect.property("Edge Behavior").setValue(1); //on
+
+            var newComp = theComp.duplicate();
+            newComp.name = theComp.name + " R";
+            theComp.name = theComp.name + " L";
+
+            var targetNum = 0;
+            for(var i=0;i<newComp.layers.length;i++){
+                if(newComp.layers[i+1].name=="Precomp DispMap"){
+                    targetNum = i+2;
+                }
+            }
+            var newLayer2 = newComp.layers[targetNum];
+            var effect2 = newLayer2.property("Effects").property("Displacement Map");
+            effect2.property("Max Horizontal Displacement").setValue(ioDistance);
+
+        }
+    }   
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 21.  Type: apply process to a whole comp
+function splitStereoPair(){
     app.beginUndoGroup("Split s3D Pair");
 
     var theComp = app.project.activeItem;
@@ -145,6 +196,7 @@ function splitPair(){
         var p2 = newComp2target.transform.position.value;
         newComp2target.transform.position.setValue([0,p2[1]]);
 
+        theComp.name = "Precomp s3D Pair";
     }   
 }
 
