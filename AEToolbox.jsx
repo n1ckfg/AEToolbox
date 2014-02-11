@@ -138,13 +138,16 @@ function stereoDispMap(){
             newPrecomp.layers[1].property("Effects").addProperty("Levels");
             theComp.layer("Precomp DispMap").enabled = false;
             theComp.layer("Precomp DispMap").audioEnabled = false;
+            oldLayer = oldLayer.duplicate(); //make an extra copy to fill in gaps caused by displacement
+            oldLayer.audioEnabled = false; //turn off audio on copy
             var effect = oldLayer.property("Effects").addProperty("Displacement Map");
             effect.property("Displacement Map Layer").setValue(effect.property("Displacement Map Layer").value-1); //target
             effect.property("Use For Horizontal Displacement").setValue(5); //luma
             effect.property("Max Horizontal Displacement").setValue(-ioDistance); //io distance
             effect.property("Use For Vertical Displacement").setValue(11); //off
             effect.property("Max Vertical Displacement").setValue(0); //off
-            effect.property("Edge Behavior").setValue(1); //on
+            //effect.property("Edge Behavior").setValue(1); //on
+            effect.property("Edge Behavior").setValue(0); //off
 
             var newComp = theComp.duplicate();
             var stereoComp = theComp.duplicate();
@@ -178,6 +181,7 @@ function stereoDispMap(){
 
             var stereoL = theLayers1.add(theComp);
             var stereoR = theLayers1.add(newComp);
+            stereoR.audioEnabled = false;
             stereoL.transform.scale.setValue([50,100]);
             stereoR.transform.scale.setValue([50,100]);
             var pL = stereoL.transform.position.value;
