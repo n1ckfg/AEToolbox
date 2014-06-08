@@ -95,7 +95,35 @@ win.advGroup3.onClick = threeDmoSketch;
 win.advGroup4.onClick = sineWave;
 win.advGroup5.onClick = splitStereoPair;
 win.advGroup6.onClick = stereoDispMap;
-//-----------------------------------------------------app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
+
+//Tooltips
+win.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
+win.basicGroup1.helpTip = "Parent a chain of layers one to another."; //parentChain;
+win.basicGroup2.helpTip = "Creates a new null at the location of each selected layer."; //locatorNull;
+win.basicGroup3.helpTip = "Moves all layers to the location of the last selected layer."; //moveToPos;
+win.basicGroup4.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
+win.basicGroup5.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
+win.basicGroup6.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
+win.basicGroup7.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
+//--
+win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
+win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control of rotation."; //charJawSide;
+win.rigGroup2.helpTip = "Rigs a jaw layer inside the comp for audio control of position."; //charJawFront;
+win.rigGroup3.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
+win.rigGroup4.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
+win.rigGroup5.helpTip = "Creates a null controller for Particular particles."; //charParticle;
+win.rigGroup6.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+//--
+win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
+win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
+win.advGroup2.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
+win.advGroup3.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
+win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
+win.advGroup5.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
+win.advGroup6.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+
+//-----------------------------------------------------
+//app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
 
 return win
 }
