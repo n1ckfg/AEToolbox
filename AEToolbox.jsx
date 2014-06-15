@@ -25,7 +25,7 @@ var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 //1. Draw buttons
 //buttons coordinates are X start, Y start, X end, Y end
 var butXstart = 8;
-var butXend = 152;
+var butXend = 149;//152;
 var butYstart = 15;
 var butYend = 43;
 var butYinc = 30;
