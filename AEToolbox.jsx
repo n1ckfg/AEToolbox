@@ -60,7 +60,7 @@ win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butX
 win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
 //--
 //Advanced button group
-var col3butCount = 7;
+var col3butCount = 8;
 win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
 win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
 win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
@@ -68,7 +68,8 @@ win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butX
 win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
 win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
 win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Split s3D Pair');
-win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 's3D Dispmap');
+win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Merge s3D Pair');
+win.advGroup7 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 's3D Dispmap');
 //-----------------------------------------------------
 //2. Link buttons to functions
 win.basicGroup0.onClick = nullsForPins;
@@ -94,7 +95,8 @@ win.advGroup2.onClick = parentableNull;
 win.advGroup3.onClick = threeDmoSketch;
 win.advGroup4.onClick = sineWave;
 win.advGroup5.onClick = splitStereoPair;
-win.advGroup6.onClick = stereoDispMap;
+win.advGroup6.onClick = mergeStereoPair;
+win.advGroup7.onClick = stereoDispMap;
 
 //Tooltips
 win.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
@@ -120,7 +122,8 @@ win.advGroup2.helpTip = "Creates a null with expressions that solve certain pare
 win.advGroup3.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
 win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
 win.advGroup5.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
-win.advGroup6.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+win.advGroup6.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
+win.advGroup7.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
 
 //-----------------------------------------------------
 //app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
@@ -132,6 +135,41 @@ if (w.toString() == "[object Panel]") {
 w;
 } else {
 w.show();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 23.  Type: apply process to a whole comp
+function mergeStereoPair(){
+    app.beginUndoGroup("Merge Stereo pair");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
+        alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if(theLayers.length != 2){
+            alert("Please select exactly two layers and run the script again.");
+        }else{
+            var leftLayer = theLayers[0];
+            var rightLayer = theLayers[1];
+
+            leftLayer.name += " L";
+            rightLayer.name += " R";
+            theComp.name += " s3D Pair"
+            
+            rightLayer.audioEnabled = false;
+            leftLayer.transform.scale.setValue([50,100]);
+            rightLayer.transform.scale.setValue([50,100]);
+            var pL = leftLayer.transform.position.value;
+            var pR = rightLayer.transform.position.value;
+            leftLayer.transform.position.setValue([(theComp.width*0.25),pL[1]]);
+            rightLayer.transform.position.setValue([(theComp.width*0.75),pR[1]]);
+            
+        }
+    }   
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -34,6 +34,7 @@ III.  ADVANCED
 4. 3D MoSketch (no selection): Creates a null with 3D controls for use with Motion Sketch.
 5. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
 6. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.
-7. s3D Dispmap...
+7. Merge s3D Pair (layer selection): Merges two left and right comps into a stereo 3D pair comp.
+8. s3D Dispmap...
      (one layer selected): Creates an s3D pair from the selected layer, using it as a displacement map.
      (two layers selected): Creates an s3D pair from the first layer, using the second layer for displacement.
