@@ -158,11 +158,23 @@ function mergeStereoPair(){
 
             leftLayer.name += " L";
             rightLayer.name += " R";
-            theComp.name += " s3D Pair"
+            //theComp.name += " s3D Pair"
             
             rightLayer.audioEnabled = false;
-            leftLayer.transform.scale.setValue([50,100]);
-            rightLayer.transform.scale.setValue([50,100]);
+
+            var sL = leftLayer.transform.scale.value;
+            var sR = rightLayer.transform.scale.value;
+
+            sL[0] = ((theComp.width/2) / leftLayer.width) * 100;
+            sL[1] = (theComp.height / leftLayer.height) * 100;
+            sR[0] = ((theComp.width/2) / rightLayer.width) * 100;
+            sR[1] = (theComp.height / rightLayer.height) * 100;         
+
+            leftLayer.transform.scale.setValue([sL[0],sL[1]]);
+            rightLayer.transform.scale.setValue([sR[0],sR[1]]);
+            //leftLayer.transform.scale.setValue([50,100]);
+            //rightLayer.transform.scale.setValue([50,100]);            
+
             var pL = leftLayer.transform.position.value;
             var pR = rightLayer.transform.position.value;
             leftLayer.transform.position.setValue([(theComp.width*0.25),pL[1]]);
