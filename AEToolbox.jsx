@@ -143,6 +143,8 @@ w.show();
 function mergeStereoPair(){
     app.beginUndoGroup("Merge Stereo pair");
 
+    var sideBySide = confirm("Use side-by-side stereo?");
+
     var theComp = app.project.activeItem;
 
     if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
@@ -165,10 +167,17 @@ function mergeStereoPair(){
             var sL = leftLayer.transform.scale.value;
             var sR = rightLayer.transform.scale.value;
 
-            sL[0] = ((theComp.width/2) / leftLayer.width) * 100;
-            sL[1] = (theComp.height / leftLayer.height) * 100;
-            sR[0] = ((theComp.width/2) / rightLayer.width) * 100;
-            sR[1] = (theComp.height / rightLayer.height) * 100;         
+            if(sideBySide){
+                sL[0] = ((theComp.width/2) / leftLayer.width) * 100;
+                sL[1] = (theComp.height / leftLayer.height) * 100;
+                sR[0] = ((theComp.width/2) / rightLayer.width) * 100;
+                sR[1] = (theComp.height / rightLayer.height) * 100;
+            }else{
+                sL[0] = (theComp.width / leftLayer.width) * 100;
+                sL[1] = ((theComp.height/2) / leftLayer.height) * 100;
+                sR[0] = (theComp.width / rightLayer.width) * 100;
+                sR[1] = ((theComp.height/2) / rightLayer.height) * 100;                
+            }         
 
             leftLayer.transform.scale.setValue([sL[0],sL[1]]);
             rightLayer.transform.scale.setValue([sR[0],sR[1]]);
@@ -177,8 +186,21 @@ function mergeStereoPair(){
 
             var pL = leftLayer.transform.position.value;
             var pR = rightLayer.transform.position.value;
-            leftLayer.transform.position.setValue([(theComp.width*0.25),pL[1]]);
-            rightLayer.transform.position.setValue([(theComp.width*0.75),pR[1]]);
+
+            if(sideBySide){
+                pL[0] = theComp.width*0.25;
+                pL[1] = theComp.height*0.5;
+                pR[0] = theComp.width*0.75;
+                pR[1] = theComp.height*0.5;
+            }else{
+                pL[0] = theComp.width*0.5;
+                pL[1] = theComp.height*0.25;
+                pR[0] = theComp.width*0.5;
+                pR[1] = theComp.height*0.75;
+            }
+
+            leftLayer.transform.position.setValue([pL[0],pL[1]]);
+            rightLayer.transform.position.setValue([pR[0],pR[1]]);
             
         }
     }   
@@ -191,6 +213,8 @@ function stereoDispMap(){
     var ioDistance = 6.0;
 
     app.beginUndoGroup("s3D Displacement Map");
+
+    var sideBySide = confirm("Use side-by-side stereo?");
 
     var theComp = app.project.activeItem;
 
@@ -260,12 +284,25 @@ function stereoDispMap(){
             var stereoL = theLayers1.add(theComp);
             var stereoR = theLayers1.add(newComp);
             stereoR.audioEnabled = false;
-            stereoL.transform.scale.setValue([50,100]);
-            stereoR.transform.scale.setValue([50,100]);
-            var pL = stereoL.transform.position.value;
-            var pR = stereoR.transform.position.value;
-            stereoL.transform.position.setValue([(stereoComp.width*0.25),pL[1]]);
-            stereoR.transform.position.setValue([(stereoComp.width*0.75),pR[1]]);
+
+            if(sideBySide){
+                stereoL.transform.scale.setValue([50,100]);
+                stereoR.transform.scale.setValue([50,100]);
+            }else{
+                stereoL.transform.scale.setValue([100,50]);
+                stereoR.transform.scale.setValue([100,50]);                
+            }
+            
+            //var pL = stereoL.transform.position.value;
+            //var pR = stereoR.transform.position.value;
+
+            if(sideBySide){
+                stereoL.transform.position.setValue([(stereoComp.width*0.25),(stereoComp.height*0.5)]);
+                stereoR.transform.position.setValue([(stereoComp.width*0.75),(stereoComp.height*0.5)]);
+            }else{
+                stereoL.transform.position.setValue([(stereoComp.width*0.5),(stereoComp.height*0.25)]);
+                stereoR.transform.position.setValue([(stereoComp.width*0.5),(stereoComp.height*0.75)]);
+            }   
         }
     }   
 }
@@ -275,6 +312,8 @@ function stereoDispMap(){
 // 21.  Type: apply process to a whole comp
 function splitStereoPair(){
     app.beginUndoGroup("Split s3D Pair");
+
+    var sideBySide = confirm("Use side-by-side stereo?");
 
     var theComp = app.project.activeItem;
 
@@ -291,7 +330,11 @@ function splitStereoPair(){
         }
 
         var newComp1target = theLayers1.add(theComp);
-        newComp1.width = newComp1.width/2;
+        if(sideBySide){
+            newComp1.width = newComp1.width/2;
+        }else{
+            newComp1.height = newComp1.height/2;
+        }
         //var p1 = newComp1target.transform.position.value;
         //newComp1target.transform.position.setValue([0,p1[1]]);
 
@@ -307,9 +350,20 @@ function splitStereoPair(){
         }
 
         var newComp2target = theLayers2.add(theComp);
-        newComp2.width = newComp2.width/2;
+        
+        if(sideBySide){
+            newComp2.width = newComp2.width/2;
+        }else{
+            newComp2.height = newComp2.height/2;
+        }
+        
         var p2 = newComp2target.transform.position.value;
-        newComp2target.transform.position.setValue([0,p2[1]]);
+        
+        if(sideBySide){
+            newComp2target.transform.position.setValue([0,p2[1]]);
+        }else{
+            newComp2target.transform.position.setValue([p2[0],0]);
+        }
 
         theComp.name = "Precomp s3D Pair";
     }   
@@ -1468,7 +1522,7 @@ function lockRotation(){
                 //}
             }
         }
-    }	
+    }   
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -1620,4 +1674,3 @@ function convertToKeyframes(theProperty){
 }
 
 }
-
