@@ -26,6 +26,7 @@ II.  RIGGING
 5. Beam Rig (no selection): Creates a 3D laser effect with start and end nulls.
 6. Particle Rig (no selection): Creates a null controller for Particular particles.
 7. Camera Rig (no selection): Creates a camera rigged for point-of-interest and DoF control. 
+8. Graph Audio (layer selection): Converts audio to keyframes and enables the graph view.
 
 III.  ADVANCED
 1. Lock Y Rotation (layer selection): Forces a layer to always face the camera.

@@ -49,7 +49,7 @@ win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),
 win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Onion Skin');
 //--
 //Character button group
-var col2butCount = 7;
+var col2butCount = 8;
 win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
 win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
 win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
@@ -58,6 +58,7 @@ win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butX
 win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
 win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
 win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
+win.rigGroup7 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Graph Audio');
 //--
 //Advanced button group
 var col3butCount = 8;
@@ -88,6 +89,7 @@ win.rigGroup3.onClick = charSnake;
 win.rigGroup4.onClick = charBeam;
 win.rigGroup5.onClick = charParticle;
 win.rigGroup6.onClick = handheldCamera;
+win.rigGroup7.onClick = graphAudio;
 //--
 win.advGroup0.onClick = lockRotation;
 win.advGroup1.onClick = autoOrientZ;
@@ -115,6 +117,7 @@ win.rigGroup3.helpTip = "Rigs a puppet-pin layer for automated snake-like moveme
 win.rigGroup4.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
 win.rigGroup5.helpTip = "Creates a null controller for Particular particles."; //charParticle;
 win.rigGroup6.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+win.rigGroup7.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
 //--
 win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
 win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
@@ -139,7 +142,60 @@ w.show();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 23.  Type: apply process to a whole comp
+// 24.  Type: apply process to any number of layers
+function graphAudio(){  //start script
+    app.beginUndoGroup("Graph Audio");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if(theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    }else{ 
+        var theLayers = theComp.selectedLayers;
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            // otherwise, loop through each selected layer in the selected comp
+            for(var i = 0; i < theLayers.length; i++){
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                // Select layer to add expression to
+                //if (curLayer.matchName == "ADBE AV Layer" || curLayer.matchName == "ADBE Camera Layer"){
+                if(curLayer.matchName == "ADBE AV Layer" && curLayer.hasAudio){
+                    //try{
+                        convertAudioToKeyframes(curLayer);
+                        var allLayers = theComp.layers;
+                        var aud = allLayers[1];
+                        aud.name = curLayer.name + " Audio Amplitude";
+                        var theProperty = aud.effect("Both Channels")("Slider");
+                        theProperty.selected = true;
+                        //app.executeCommand(app.findMenuCommandId("Show Graph Editor Set"));
+                        //theProperty.selected = false;
+                    //}catch(e){ }
+                //}
+                }else{
+                    //alert("This currently only works on footage or camera layers.");
+                    alert("This only works on layers with audio.");
+                }
+            }
+        }
+    }
+
+    /*
+    } else {
+             alert("Sorry, this feature only works with CS5.5 and higher.");
+     }
+     */
+ 
+    app.endUndoGroup();
+}  //end script
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 23.  Type: apply process to two layers
 function mergeStereoPair(){
     app.beginUndoGroup("Merge Stereo pair");
 
@@ -1671,6 +1727,12 @@ function convertToKeyframes(theProperty){
         app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes")); 
         theProperty.selected = false;
     }
+}
+
+function convertAudioToKeyframes(target){
+    target.selected = true;
+    app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
+    target.selected = false; 
 }
 
 }
