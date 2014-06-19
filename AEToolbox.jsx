@@ -199,8 +199,6 @@ function graphAudio(){  //start script
 function mergeStereoPair(){
     app.beginUndoGroup("Merge Stereo pair");
 
-    var sideBySide = confirm("Use side-by-side stereo?");
-
     var theComp = app.project.activeItem;
 
     if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
@@ -211,6 +209,9 @@ function mergeStereoPair(){
         if(theLayers.length != 2){
             alert("Please select exactly two layers and run the script again.");
         }else{
+
+            var sideBySide = confirm("Use side-by-side stereo?");
+
             var leftLayer = theLayers[0];
             var rightLayer = theLayers[1];
 
@@ -270,8 +271,6 @@ function stereoDispMap(){
 
     app.beginUndoGroup("s3D Displacement Map");
 
-    var sideBySide = confirm("Use side-by-side stereo?");
-
     var theComp = app.project.activeItem;
 
     if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
@@ -282,6 +281,9 @@ function stereoDispMap(){
         if(theLayers.length==0 || theLayers.length > 2){
             alert("Please select one or two layers and run the script again.");
         }else{
+
+            var sideBySide = confirm("Use side-by-side stereo?");
+
             var oldLayer = theLayers[0];
 
             //if one layer selected, duplicated that layer and make it a precomp.
@@ -369,13 +371,14 @@ function stereoDispMap(){
 function splitStereoPair(){
     app.beginUndoGroup("Split s3D Pair");
 
-    var sideBySide = confirm("Use side-by-side stereo?");
-
     var theComp = app.project.activeItem;
 
     if (theComp == null || !(theComp instanceof CompItem)){  // check if comp is selected
         alert("Please establish a comp as the active item and run the script again");  // if no comp selected, display an alert
     } else { 
+
+        var sideBySide = confirm("Use side-by-side stereo?");
+
         var newComp1 = theComp.duplicate();
         newComp1.name = theComp.name + " L";
         var theLayers1 = newComp1.layers;
