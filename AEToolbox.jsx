@@ -13,131 +13,153 @@
 // AEToolbox Panel Setup
 
 function buildUI(this_obj_) {
-var win = (this_obj_ instanceof Panel)
-? this_obj_
-: new Window('palette', 'Script Window',[760,345,1120,597]);
+    var win = (this_obj_ instanceof Panel) ? this_obj_ : new Window('palette', 'Script Window',[760,345,1120,597]);
 
-//Jeff Almasol's solution to fix text color
-var winGfx = win.graphics;
-var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
+    //Jeff Almasol's solution to fix text color
+    var winGfx = win.graphics;
+    var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 
-//-----------------------------------------------------
-//1. Draw buttons
-//buttons coordinates are X start, Y start, X end, Y end
-var butXstart = 8;
-var butXend = 149;//152;
-var butYstart = 15;
-var butYend = 43;
-var butYinc = 30;
-//--
-var colXstart = 4;
-var colXend = 165;
-var colYstart = 4;
-var colYendBase = 33;
-var colXinc = 170;
+    //-----------------------------------------------------
+    //1. Draw buttons
+    //buttons coordinates are X start, Y start, X end, Y end
+    var butYoffset = 10; //8;
+    var butYoffsetCap = 4;
+    //--
+    var butXstart = 8;
+    var butXend = 149;//152;
+    var butYstart = 15 + butYoffset;
+    var butYend = 43 + butYoffset;
+    var butYinc = 30;
+    //--
+    var colXstart = 4;
+    var colXend = 165;
+    var colYstart = 4 + butYoffset; //4;
+    var colYendBase = 33;
+    var colXinc = 170;
 
-//Basic button group
-var col1butCount = 8;
-win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)], 'Basic', {borderStyle: "etched"});
-win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
-win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
-win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Locator Null');
-win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
-win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Bake Keyframes');
-win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Make Loop');
-win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Crossfade');
-win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Onion Skin');
-//--
-//Character button group
-var col2butCount = 8;
-win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
-win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
-win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
-win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
-win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
-win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
-win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
-win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
-win.rigGroup7 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Graph Audio');
-//--
-//Advanced button group
-var col3butCount = 8;
-win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
-win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
-win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
-win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
-win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
-win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
-win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Split s3D Pair');
-win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Merge s3D Pair');
-win.advGroup7 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 's3D Dispmap');
-//-----------------------------------------------------
-//2. Link buttons to functions
-win.basicGroup0.onClick = nullsForPins;
-win.basicGroup1.onClick = parentChain;
-win.basicGroup2.onClick = locatorNull;
-win.basicGroup3.onClick = moveToPos;
-win.basicGroup4.onClick = bakePinKeyframes;
-win.basicGroup5.onClick = makeLoop;
-win.basicGroup6.onClick = crossfader;
-win.basicGroup7.onClick = onionSkin;
-//--
-win.rigGroup0.onClick = charBlink;
-win.rigGroup1.onClick = charJawSide;
-win.rigGroup2.onClick = charJawFront;
-win.rigGroup3.onClick = charSnake;
-win.rigGroup4.onClick = charBeam;
-win.rigGroup5.onClick = charParticle;
-win.rigGroup6.onClick = handheldCamera;
-win.rigGroup7.onClick = graphAudio;
-//--
-win.advGroup0.onClick = lockRotation;
-win.advGroup1.onClick = autoOrientZ;
-win.advGroup2.onClick = parentableNull;
-win.advGroup3.onClick = threeDmoSketch;
-win.advGroup4.onClick = sineWave;
-win.advGroup5.onClick = splitStereoPair;
-win.advGroup6.onClick = mergeStereoPair;
-win.advGroup7.onClick = stereoDispMap;
+    //Basic button group
+    var col1butCount = 8;
+    win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
+    win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
+    win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Locator Null');
+    win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
+    win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Bake Keyframes');
+    win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Make Loop');
+    win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Crossfade');
+    win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Onion Skin');
+    //--
+    //Character button group
+    var col2butCount = 8;
+    //win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
+    win.rigGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
+    win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
+    win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
+    win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
+    win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
+    win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
+    win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
+    win.rigGroup7 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Graph Audio');
+    //--
+    //Advanced button group
+    var col3butCount = 8;
+    //win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
+    win.advGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
+    win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
+    win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
+    win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
+    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
+    win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Split s3D Pair');
+    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Merge s3D Pair');
+    win.advGroup7 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 's3D Dispmap');
+    //-----------------------------------------------------
+    //2. Link buttons to functions
+    win.basicGroup0.onClick = nullsForPins;
+    win.basicGroup1.onClick = parentChain;
+    win.basicGroup2.onClick = locatorNull;
+    win.basicGroup3.onClick = moveToPos;
+    win.basicGroup4.onClick = bakePinKeyframes;
+    win.basicGroup5.onClick = makeLoop;
+    win.basicGroup6.onClick = crossfader;
+    win.basicGroup7.onClick = onionSkin;
+    //--
+    win.rigGroup0.onClick = charBlink;
+    win.rigGroup1.onClick = charJawSide;
+    win.rigGroup2.onClick = charJawFront;
+    win.rigGroup3.onClick = charSnake;
+    win.rigGroup4.onClick = charBeam;
+    win.rigGroup5.onClick = charParticle;
+    win.rigGroup6.onClick = handheldCamera;
+    win.rigGroup7.onClick = graphAudio;
+    //--
+    win.advGroup0.onClick = lockRotation;
+    win.advGroup1.onClick = autoOrientZ;
+    win.advGroup2.onClick = parentableNull;
+    win.advGroup3.onClick = threeDmoSketch;
+    win.advGroup4.onClick = sineWave;
+    win.advGroup5.onClick = splitStereoPair;
+    win.advGroup6.onClick = mergeStereoPair;
+    win.advGroup7.onClick = stereoDispMap;
 
-//Tooltips
-win.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
-win.basicGroup1.helpTip = "Parent a chain of layers one to another."; //parentChain;
-win.basicGroup2.helpTip = "Creates a new null at the location of each selected layer."; //locatorNull;
-win.basicGroup3.helpTip = "Moves all layers to the location of the last selected layer."; //moveToPos;
-win.basicGroup4.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
-win.basicGroup5.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
-win.basicGroup6.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
-win.basicGroup7.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
-//--
-win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
-win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control of rotation."; //charJawSide;
-win.rigGroup2.helpTip = "Rigs a jaw layer inside the comp for audio control of position."; //charJawFront;
-win.rigGroup3.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
-win.rigGroup4.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
-win.rigGroup5.helpTip = "Creates a null controller for Particular particles."; //charParticle;
-win.rigGroup6.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
-win.rigGroup7.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
-//--
-win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
-win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
-win.advGroup2.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
-win.advGroup3.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
-win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
-win.advGroup5.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
-win.advGroup6.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
-win.advGroup7.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+    //Tooltips
+    win.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
+    win.basicGroup1.helpTip = "Parent a chain of layers one to another."; //parentChain;
+    win.basicGroup2.helpTip = "Creates a new null at the location of each selected layer."; //locatorNull;
+    win.basicGroup3.helpTip = "Moves all layers to the location of the last selected layer."; //moveToPos;
+    win.basicGroup4.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
+    win.basicGroup5.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
+    win.basicGroup6.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
+    win.basicGroup7.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
+    //--
+    win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
+    win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control of rotation."; //charJawSide;
+    win.rigGroup2.helpTip = "Rigs a jaw layer inside the comp for audio control of position."; //charJawFront;
+    win.rigGroup3.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
+    win.rigGroup4.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
+    win.rigGroup5.helpTip = "Creates a null controller for Particular particles."; //charParticle;
+    win.rigGroup6.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+    win.rigGroup7.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
+    //--
+    win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
+    win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
+    win.advGroup2.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
+    win.advGroup3.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
+    win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
+    win.advGroup5.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
+    win.advGroup6.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
+    win.advGroup7.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
 
-//-----------------------------------------------------
-//app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
+    //-----------------------------------------------------
 
-return win
+    var selector = win.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],["Basic","Rigging","Advanced"]);
+    selector.onChange = function() {
+        if (selector.selection == 0){
+            win.basicGroup.visible = true;
+            win.rigGroup.visible = false;
+            win.advGroup.visible = false;
+        }else if (selector.selection == 1){
+            win.basicGroup.visible = false;
+            win.rigGroup.visible = true;
+            win.advGroup.visible = false;
+        }else if (selector.selection == 2){
+            win.basicGroup.visible = false;
+            win.rigGroup.visible = false;
+            win.advGroup.visible = true;
+        }        
+    }
+    selector.selection = 0;
+
+    return win
 }
+
 var w = buildUI(this);
+
 if (w.toString() == "[object Panel]") {
-w;
+    w;
 } else {
-w.show();
+    w.show();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
