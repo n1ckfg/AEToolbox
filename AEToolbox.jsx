@@ -184,13 +184,14 @@ function depthFill(){  //start script
         if(theLayers.length==0){
             alert("Please select some layers and run the script again.");
         }else{
+            /*
             // otherwise, loop through each selected layer in the selected comp
             var hasCamera = false;
             var compcam;
 
             for(var j = 1; j < allLayers.length; j++){
                 // define the layer in the loop we're currently looking at
-                var curLayer = allLayers[j];
+                var curLayer = allLayers[i];
                 // Select layer to add expression to
                 if (curLayer.matchName == "ADBE Camera Layer") hasCamera = true;
             }
@@ -200,6 +201,7 @@ function depthFill(){  //start script
                 compcam = theComp.layers.addCamera("Camera 1", [theComp.width/2,theComp.height/2]);    
                 //compcam.property("position").setValue([960,540,-1500]);                
             }
+            */
             //~~
 
             for(var i = 0; i < theLayers.length; i++){
