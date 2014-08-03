@@ -54,12 +54,12 @@ function buildUI(this_obj_) {
     //win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
     win.rigGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
-    win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig Side');
-    win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Jaw Rig Front');
-    win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Snake Rig');
-    win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Beam Rig');
-    win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Particle Rig');
-    win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Camera Rig');
+    win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig');
+    win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Snake Rig');
+    win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Beam Rig');
+    win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Particle Rig');
+    win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Camera Rig');
+    win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
     win.rigGroup7 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Graph Audio');
     //--
     //Advanced button group
@@ -69,11 +69,11 @@ function buildUI(this_obj_) {
     win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
     win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
     win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
-    win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], '3D MoSketch');
-    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
-    win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Split s3D Pair');
-    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Merge s3D Pair');
-    win.advGroup7 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 's3D Dispmap');
+    win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
+    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Split s3D Pair');
+    win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Merge s3D Pair');
+    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 's3D Dispmap');
+    win.advGroup7 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Depth Fill');
     //-----------------------------------------------------
     //2. Link buttons to functions
     win.basicGroup0.onClick = nullsForPins;
@@ -86,22 +86,22 @@ function buildUI(this_obj_) {
     win.basicGroup7.onClick = onionSkin;
     //--
     win.rigGroup0.onClick = charBlink;
-    win.rigGroup1.onClick = charJawSide;
-    win.rigGroup2.onClick = charJawFront;
-    win.rigGroup3.onClick = charSnake;
-    win.rigGroup4.onClick = charBeam;
-    win.rigGroup5.onClick = charParticle;
-    win.rigGroup6.onClick = handheldCamera;
+    win.rigGroup1.onClick = charJaw;
+    win.rigGroup2.onClick = charSnake;
+    win.rigGroup3.onClick = charBeam;
+    win.rigGroup4.onClick = charParticle;
+    win.rigGroup5.onClick = handheldCamera;
+    win.rigGroup6.onClick = threeDmoSketch;
     win.rigGroup7.onClick = graphAudio;
     //--
     win.advGroup0.onClick = lockRotation;
     win.advGroup1.onClick = autoOrientZ;
     win.advGroup2.onClick = parentableNull;
-    win.advGroup3.onClick = threeDmoSketch;
-    win.advGroup4.onClick = sineWave;
-    win.advGroup5.onClick = splitStereoPair;
-    win.advGroup6.onClick = mergeStereoPair;
-    win.advGroup7.onClick = stereoDispMap;
+    win.advGroup3.onClick = sineWave;
+    win.advGroup4.onClick = splitStereoPair;
+    win.advGroup5.onClick = mergeStereoPair;
+    win.advGroup6.onClick = stereoDispMap;
+    win.advGroup7.onClick = depthFill;
 
     //Tooltips
     win.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
@@ -114,22 +114,22 @@ function buildUI(this_obj_) {
     win.basicGroup7.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
     //--
     win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
-    win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control of rotation."; //charJawSide;
-    win.rigGroup2.helpTip = "Rigs a jaw layer inside the comp for audio control of position."; //charJawFront;
-    win.rigGroup3.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
-    win.rigGroup4.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
-    win.rigGroup5.helpTip = "Creates a null controller for Particular particles."; //charParticle;
-    win.rigGroup6.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+    win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
+    win.rigGroup2.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
+    win.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
+    win.rigGroup4.helpTip = "Creates a null controller for Particular particles."; //charParticle;
+    win.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+    win.advGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     win.rigGroup7.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
     //--
     win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
     win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
     win.advGroup2.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
-    win.advGroup3.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
-    win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
-    win.advGroup5.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
-    win.advGroup6.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
-    win.advGroup7.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+    win.advGroup3.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
+    win.advGroup4.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
+    win.advGroup5.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
+    win.advGroup6.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+    win.advGroup7.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
 
     //-----------------------------------------------------
 
@@ -165,6 +165,81 @@ if (w.toString() == "[object Panel]") {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 24.  Type: apply process to any number of layers
+function depthFill(){  //start script
+    app.beginUndoGroup("Depth Fill");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if(theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    }else{ 
+        var theLayers = theComp.selectedLayers;
+        
+        
+        var allLayers = theComp.layers;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            // otherwise, loop through each selected layer in the selected comp
+            var hasCamera = false;
+            var compcam;
+
+            for(var j = 1; j < allLayers.length; j++){
+                // define the layer in the loop we're currently looking at
+                var curLayer = allLayers[j];
+                // Select layer to add expression to
+                if (curLayer.matchName == "ADBE Camera Layer") hasCamera = true;
+            }
+
+            if (!hasCamera) {
+                // otherwise, add control camera
+                compcam = theComp.layers.addCamera("Camera 1", [theComp.width/2,theComp.height/2]);    
+                //compcam.property("position").setValue([960,540,-1500]);                
+            }
+            //~~
+
+            for(var i = 0; i < theLayers.length; i++){
+                // ...then loop through each layer in the selected comp
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+
+                if(curLayer.matchName != "ADBE Camera Layer"){
+                
+                    var effect = curLayer.property("Effects").addProperty("Fill");
+
+                    // Select layer to add expression to
+                    var scaleexpression = "try{g1 = (toWorld(anchorPoint) - thisComp.activeCamera.toWorld([0,0,0]));\r" +
+                                              "g2 = thisComp.activeCamera.toWorldVec([0,0,1]);\r" +
+                                              "find = dot(g1,g2);\r" + 
+                                              "value/(find/2000);\r" +
+                                              "}catch(err){ value }";
+                    effect.property("Color").expression = scaleexpression;
+                    effect.property("Color").setValue([1,1,1]);
+                         
+                } else {
+                    alert("This doesn't work on camera layers.");
+                }
+            }
+        }
+    }
+    /*
+    } else {
+             alert("Sorry, this feature only works with CS5.5 and higher.");
+     }
+     */
+ 
+    app.endUndoGroup();
+}  //end script
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 23.  Type: apply process to any number of layers
 function graphAudio(){  //start script
     app.beginUndoGroup("Graph Audio");
 
@@ -217,7 +292,7 @@ function graphAudio(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 23.  Type: apply process to two layers
+// 22.  Type: apply process to two layers
 function mergeStereoPair(){
     app.beginUndoGroup("Merge Stereo pair");
 
@@ -287,7 +362,7 @@ function mergeStereoPair(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 22.  Type: apply process to a whole comp
+// 21.  Type: apply process to a whole comp
 function stereoDispMap(){
     var ioDistance = 6.0;
 
@@ -389,7 +464,7 @@ function stereoDispMap(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 21.  Type: apply process to a whole comp
+// 20.  Type: apply process to a whole comp
 function splitStereoPair(){
     app.beginUndoGroup("Split s3D Pair");
 
@@ -453,7 +528,7 @@ function splitStereoPair(){
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-// 20.  Type: apply process to any number of layers
+// 19.  Type: apply process to any number of layers
 function crossfader(){
     //Based on script by Jered Cuenco, http://mindfury.com/
     app.beginUndoGroup("Crossfade Layers");
@@ -495,7 +570,7 @@ function crossfader(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 19.  Type: apply process to any number of layers
+// 18.  Type: apply process to any number of layers
 function parentChain(){
     //Based on script by Jered Cuenco, http://mindfury.com/
     app.beginUndoGroup("Parent Chain of Layers");
@@ -527,7 +602,7 @@ function parentChain(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 18. One-shot--create a complex bunch of objects and scripts.
+// 17. One-shot--create a complex bunch of objects and scripts.
 function charParticle(){  //start script
     app.beginUndoGroup("Create a Particle Rig");
 
@@ -586,7 +661,7 @@ function charParticle(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 17. One-shot--create a complex bunch of objects and scripts.
+// 16. One-shot--create a complex bunch of objects and scripts.
 function charBeam(){  //start script
     app.beginUndoGroup("Create a Beam Rig");
 
@@ -659,7 +734,7 @@ function charBeam(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 16.  Type: apply process to any number of layers
+// 15.  Type: apply process to any number of layers
 function autoOrientZ(){
     //Based on script by Jered Cuenco, http://mindfury.com/
     app.beginUndoGroup("Apply Auto-Orient Z");
@@ -706,9 +781,9 @@ function autoOrientZ(){
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 15.  Type: process for any number of layers or properties
+// 14.  Type: process for any number of layers or properties
 function charSnake(){  //start script
-    app.beginUndoGroup("Create Nulls for Pins");
+    app.beginUndoGroup("Snake Rig");
 
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
@@ -796,7 +871,7 @@ function charSnake(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 14.  Type: process for any number of layers or properties
+// 13.  Type: process for any number of layers or properties
 function moveToPos(){  //start script
     app.beginUndoGroup("Move to Last Selected Layer's Position");
 
@@ -846,7 +921,7 @@ function moveToPos(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 13.  Type: process for any number of layers or properties
+// 12.  Type: process for any number of layers or properties
 function locatorNull(){  //start script
     app.beginUndoGroup("Create Locator Nulls for Selected Layers");
 
@@ -891,7 +966,7 @@ function locatorNull(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 12.  process for any number of layers--creates a Z slider for 2D Motion Sketch
+// 11.  process for any number of layers--creates a Z slider for 2D Motion Sketch
 function threeDmoSketch(){  //start script
     app.beginUndoGroup("Prep for 3D Motion Sketch");
 
@@ -925,7 +1000,7 @@ function threeDmoSketch(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 11.  process for any number of layers--applies sine wave controllers
+// 10.  process for any number of layers--applies sine wave controllers
 function sineWave(){  //start script
     app.beginUndoGroup("Apply Sine Wave Controls");
 
@@ -1035,197 +1110,199 @@ function sineWave(){  //start script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-// 10. Type: create controllers inside existing comp
-function charJawSide(){  //start script
-    app.beginUndoGroup("Create Character Jaw Rig Side");
+// 9. Type: create controllers inside existing comp
+function charJaw(){  //start script
 
-    //if(parseFloat(app.version) >= 10.5){
-    var theComp = app.project.activeItem; //only selected
+    var sideView = confirm("Is this a side view?");
 
-    // check if comp is selected
-    if (theComp == null || !(theComp instanceof CompItem)){
-        // if no comp selected, display an alert
-        alert("Please establish a comp as the active item and run the script again.");
-    } else {
-        var theLayers = theComp.selectedLayers;
-        if(theLayers.length==0){
-            alert("Please select a precomp and run the script again.");
-        }else{
-        // otherwise, loop through each selected layer in the selected comp
-        for (var i = 0; i < theLayers.length; i++){
-            // define the layer in the loop we're currently looking at
-            var curLayer = theLayers[i];
-            // Select layer to add expression to
-            if (curLayer.matchName == "ADBE AV Layer"){
-                //first check if this is a footage layer
-                //next check if this is a comp.
-                var myLayer = theComp.selectedLayers[0];
-                if(myLayer.source.numLayers==null){
-                    //not a comp; send alert.
-                    alert("This only works on precomp layers.");
-                }else{
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //myLayer is indeed a precomp. OK to do stuff.
-                    var slider = myLayer.property("Effects").addProperty("Slider Control");
-                    slider.name = "jaw side control"
-                    var headNull = myLayer.source.layers.addNull();
-                    var upperJawNull = myLayer.source.layers.addNull();
-                    var lowerJawNull = myLayer.source.layers.addNull();
-                    headNull.name = "head placeholder";
-                    upperJawNull.name = "upper jaw placeholder";
-                    lowerJawNull.name = "lower jaw placeholder";
-                    //when asset replaces null, anchor point will be centered.
-                    headNull.transform.anchorPoint.setValue([50,50]);
-                    upperJawNull.transform.anchorPoint.setValue([50,50]);
-                    lowerJawNull.transform.anchorPoint.setValue([50,50]);
-                    headNull.property("Opacity").setValue(100);
-                    upperJawNull.property("Opacity").setValue(100);
-                    lowerJawNull.property("Opacity").setValue(100);
-                    //parenting jaws to head
-                    upperJawNull.parent = headNull;
-                    lowerJawNull.parent = headNull;
-                    //expressions
-                    //headNullExprPos;
-                    //headNullExprRot;
-                    headNullExprScale = "var x = transform.scale[0];" + "\r" +
-                                        "var y = transform.scale[1];" + "\r" +
-                                        "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                        "[x,y+(s/-4)];";
-                    //headNull.property("Position").expression = headNullExprPos;
-                    //headNull.property("Rotation").expression = headNullExprRot;
-                    headNull.property("Scale").expression = headNullExprScale;
-                    //--
-                    upperJawNullExprPos = "var x = transform.position[0];" + "\r" +
-                                          "var y = transform.position[1];" + "\r" +
-                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                          "var scaler = -0.2;" + "\r" +
-                                          "[x, y+(s*scaler)];";
-                    upperJawNullExprRot = "var r = transform.rotation;" + "\r" +
-                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                          "var scaler = 0.2;" + "\r" +
-                                          "r+(s*scaler);";
-                    //upperJawNullExprScale;
-                    upperJawNull.property("Position").expression = upperJawNullExprPos;
-                    upperJawNull.property("Rotation").expression = upperJawNullExprRot;
-                    //upperJawNull.property("Scale").expression = upperJawNullExprScale;
-                    //--
-                    lowerJawNullExprPos = "var x = transform.position[0];" + "\r" +
-                                          "var y = transform.position[1];" + "\r" +
-                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                          "var scaler = 2;" + "\r" +
-                                          "[x, y+(s*scaler)];";
-                    lowerJawNullExprRot = "var r = transform.rotation;" + "\r" +
-                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                          "var scaler = -1.0;" + "\r" +
-                                          "r+(s*scaler);";
-                    //lowerJawNullExprScale;                                        
-                    lowerJawNull.property("Position").expression = lowerJawNullExprPos;
-                    lowerJawNull.property("Rotation").expression = lowerJawNullExprRot;
-                    //lowerJawNull.property("Scale").expression = lowerJawNullExprScale;
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                }
+    if(sideView){
+        app.beginUndoGroup("Create Character Jaw Rig Side");
+
+        //if(parseFloat(app.version) >= 10.5){
+        var theComp = app.project.activeItem; //only selected
+
+        // check if comp is selected
+        if (theComp == null || !(theComp instanceof CompItem)){
+            // if no comp selected, display an alert
+            alert("Please establish a comp as the active item and run the script again.");
+        } else {
+            var theLayers = theComp.selectedLayers;
+            if(theLayers.length==0){
+                alert("Please select a precomp and run the script again.");
             }else{
-                //not a footage layer; send alert.
-                alert("This only works on precomp layers.");
-            }
-            }
-        }
-    }
- 
-    app.endUndoGroup();
-}  //end script
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// 9. Type: create controllers inside existing precomp
-function charJawFront(){  //start script
-    app.beginUndoGroup("Create Character Jaw Rig Front");
-
-    //if(parseFloat(app.version) >= 10.5){
-    var theComp = app.project.activeItem; //only selected
-
-    // check if comp is selected
-    if (theComp == null || !(theComp instanceof CompItem)){
-        // if no comp selected, display an alert
-        alert("Please establish a comp as the active item and run the script again.");
-    } else {
-        var theLayers = theComp.selectedLayers;
-        if(theLayers.length==0){
-            alert("Please select a precomp and run the script again.");
-        }else{
-        // otherwise, loop through each selected layer in the selected comp
-        for (var i = 0; i < theLayers.length; i++){
-            // define the layer in the loop we're currently looking at
-            var curLayer = theLayers[i];
-            // Select layer to add expression to
-            if (curLayer.matchName == "ADBE AV Layer"){
-                //first check if this is a footage layer
-                //next check if this is a comp.
-                var myLayer = theComp.selectedLayers[0];
-                if(myLayer.source.numLayers==null){
-                    //not a comp; send alert.
-                    alert("This only works on precomp layers.");
-                }else{
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-                    //myLayer is indeed a precomp. OK to do stuff.
-                    var slider = myLayer.property("Effects").addProperty("Slider Control");
-                    slider.name = "jaw front control"
-                    var headNull = myLayer.source.layers.addNull();
-                    //var upperJawNull = myLayer.source.layers.addNull();
-                    var lowerJawNull = myLayer.source.layers.addNull();
-                    headNull.name = "head placeholder";
-                    //upperJawNull.name = "upper jaw placeholder";
-                    lowerJawNull.name = "lower jaw placeholder";
-                    //when asset replaces null, anchor point will be centered.
-                    headNull.transform.anchorPoint.setValue([50,50]);
-                    //upperJawNull.transform.anchorPoint.setValue([50,50]);
-                    lowerJawNull.transform.anchorPoint.setValue([50,50]);
-                    headNull.property("Opacity").setValue(100);
-                    //upperJawNull.property("Opacity").setValue(100);
-                    lowerJawNull.property("Opacity").setValue(100);
-                    //parenting jaws to head
-                    //upperJawNull.parent = headNull;
-                    lowerJawNull.parent = headNull;
-                    //expressions
-                    //headNullExprPos;
-                    //headNullExprRot;
-                    //headNullExprScale;
-                    //headNull.property("Position").expression = headNullExprPos;
-                    //headNull.property("Rotation").expression = headNullExprRot;
-                    //headNull.property("Scale").expression = headNullExprScale;
-                    //--
-                    //upperJawNullExprPos;
-                    //upperJawNullExprRot;
-                    //upperJawNullExprScale;
-                    //upperJawNull.property("Position").expression = upperJawNullExprPos;
-                    //upperJawNull.property("Rotation").expression = upperJawNullExprRot;
-                    //upperJawNull.property("Scale").expression = upperJawNullExprScale;
-                    //--
-                    lowerJawNullExprPos = "var scaler = 1.0;" + "\r" +
-                                          "var x = transform.position[0];" + "\r" +
-                                          "var y = transform.position[1];" + "\r" +
-                                          "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                          "[x, y+(s*scaler)];";
-                    //lowerJawNullExprRot;
-                    lowerJawNullExprScale = "var scaler = 1.0;" + "\r" +
-                                            "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
-                                            "var x = transform.scale[0];" + "\r" +
+            // otherwise, loop through each selected layer in the selected comp
+            for (var i = 0; i < theLayers.length; i++){
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                // Select layer to add expression to
+                if (curLayer.matchName == "ADBE AV Layer"){
+                    //first check if this is a footage layer
+                    //next check if this is a comp.
+                    var myLayer = theComp.selectedLayers[0];
+                    if(myLayer.source.numLayers==null){
+                        //not a comp; send alert.
+                        alert("This only works on precomp layers.");
+                    }else{
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        //myLayer is indeed a precomp. OK to do stuff.
+                        var slider = myLayer.property("Effects").addProperty("Slider Control");
+                        slider.name = "jaw side control"
+                        var headNull = myLayer.source.layers.addNull();
+                        var upperJawNull = myLayer.source.layers.addNull();
+                        var lowerJawNull = myLayer.source.layers.addNull();
+                        headNull.name = "head placeholder";
+                        upperJawNull.name = "upper jaw placeholder";
+                        lowerJawNull.name = "lower jaw placeholder";
+                        //when asset replaces null, anchor point will be centered.
+                        headNull.transform.anchorPoint.setValue([50,50]);
+                        upperJawNull.transform.anchorPoint.setValue([50,50]);
+                        lowerJawNull.transform.anchorPoint.setValue([50,50]);
+                        headNull.property("Opacity").setValue(100);
+                        upperJawNull.property("Opacity").setValue(100);
+                        lowerJawNull.property("Opacity").setValue(100);
+                        //parenting jaws to head
+                        upperJawNull.parent = headNull;
+                        lowerJawNull.parent = headNull;
+                        //expressions
+                        //headNullExprPos;
+                        //headNullExprRot;
+                        headNullExprScale = "var x = transform.scale[0];" + "\r" +
                                             "var y = transform.scale[1];" + "\r" +
-                                            "[x,y+(s*scaler)];";                                        
-                    lowerJawNull.property("Position").expression = lowerJawNullExprPos;
-                    //lowerJawNull.property("Rotation").expression = lowerJawNullExprRot;
-                    lowerJawNull.property("Scale").expression = lowerJawNullExprScale;
-                    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                            "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                            "[x,y+(s/-4)];";
+                        //headNull.property("Position").expression = headNullExprPos;
+                        //headNull.property("Rotation").expression = headNullExprRot;
+                        headNull.property("Scale").expression = headNullExprScale;
+                        //--
+                        upperJawNullExprPos = "var x = transform.position[0];" + "\r" +
+                                              "var y = transform.position[1];" + "\r" +
+                                              "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                              "var scaler = -0.2;" + "\r" +
+                                              "[x, y+(s*scaler)];";
+                        upperJawNullExprRot = "var r = transform.rotation;" + "\r" +
+                                              "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                              "var scaler = 0.2;" + "\r" +
+                                              "r+(s*scaler);";
+                        //upperJawNullExprScale;
+                        upperJawNull.property("Position").expression = upperJawNullExprPos;
+                        upperJawNull.property("Rotation").expression = upperJawNullExprRot;
+                        //upperJawNull.property("Scale").expression = upperJawNullExprScale;
+                        //--
+                        lowerJawNullExprPos = "var x = transform.position[0];" + "\r" +
+                                              "var y = transform.position[1];" + "\r" +
+                                              "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                              "var scaler = 2;" + "\r" +
+                                              "[x, y+(s*scaler)];";
+                        lowerJawNullExprRot = "var r = transform.rotation;" + "\r" +
+                                              "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                              "var scaler = -1.0;" + "\r" +
+                                              "r+(s*scaler);";
+                        //lowerJawNullExprScale;                                        
+                        lowerJawNull.property("Position").expression = lowerJawNullExprPos;
+                        lowerJawNull.property("Rotation").expression = lowerJawNullExprRot;
+                        //lowerJawNull.property("Scale").expression = lowerJawNullExprScale;
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    }
+                }else{
+                    //not a footage layer; send alert.
+                    alert("This only works on precomp layers.");
                 }
-            }else{
-                //not a footage layer; send alert.
-                alert("This only works on precomp layers.");
-            }
+                }
             }
         }
+     
+        app.endUndoGroup();
+
+    } else {
+
+        app.beginUndoGroup("Create Character Jaw Rig Front");
+
+        //if(parseFloat(app.version) >= 10.5){
+        var theComp = app.project.activeItem; //only selected
+
+        // check if comp is selected
+        if (theComp == null || !(theComp instanceof CompItem)){
+            // if no comp selected, display an alert
+            alert("Please establish a comp as the active item and run the script again.");
+        } else {
+            var theLayers = theComp.selectedLayers;
+            if(theLayers.length==0){
+                alert("Please select a precomp and run the script again.");
+            }else{
+            // otherwise, loop through each selected layer in the selected comp
+            for (var i = 0; i < theLayers.length; i++){
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                // Select layer to add expression to
+                if (curLayer.matchName == "ADBE AV Layer"){
+                    //first check if this is a footage layer
+                    //next check if this is a comp.
+                    var myLayer = theComp.selectedLayers[0];
+                    if(myLayer.source.numLayers==null){
+                        //not a comp; send alert.
+                        alert("This only works on precomp layers.");
+                    }else{
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                        //myLayer is indeed a precomp. OK to do stuff.
+                        var slider = myLayer.property("Effects").addProperty("Slider Control");
+                        slider.name = "jaw front control"
+                        var headNull = myLayer.source.layers.addNull();
+                        //var upperJawNull = myLayer.source.layers.addNull();
+                        var lowerJawNull = myLayer.source.layers.addNull();
+                        headNull.name = "head placeholder";
+                        //upperJawNull.name = "upper jaw placeholder";
+                        lowerJawNull.name = "lower jaw placeholder";
+                        //when asset replaces null, anchor point will be centered.
+                        headNull.transform.anchorPoint.setValue([50,50]);
+                        //upperJawNull.transform.anchorPoint.setValue([50,50]);
+                        lowerJawNull.transform.anchorPoint.setValue([50,50]);
+                        headNull.property("Opacity").setValue(100);
+                        //upperJawNull.property("Opacity").setValue(100);
+                        lowerJawNull.property("Opacity").setValue(100);
+                        //parenting jaws to head
+                        //upperJawNull.parent = headNull;
+                        lowerJawNull.parent = headNull;
+                        //expressions
+                        //headNullExprPos;
+                        //headNullExprRot;
+                        //headNullExprScale;
+                        //headNull.property("Position").expression = headNullExprPos;
+                        //headNull.property("Rotation").expression = headNullExprRot;
+                        //headNull.property("Scale").expression = headNullExprScale;
+                        //--
+                        //upperJawNullExprPos;
+                        //upperJawNullExprRot;
+                        //upperJawNullExprScale;
+                        //upperJawNull.property("Position").expression = upperJawNullExprPos;
+                        //upperJawNull.property("Rotation").expression = upperJawNullExprRot;
+                        //upperJawNull.property("Scale").expression = upperJawNullExprScale;
+                        //--
+                        lowerJawNullExprPos = "var scaler = 1.0;" + "\r" +
+                                              "var x = transform.position[0];" + "\r" +
+                                              "var y = transform.position[1];" + "\r" +
+                                              "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                              "[x, y+(s*scaler)];";
+                        //lowerJawNullExprRot;
+                        lowerJawNullExprScale = "var scaler = 1.0;" + "\r" +
+                                                "var s = comp(\"" + theComp.name + "\").layer(\"" + myLayer.name + "\").effect(\"" + slider.name + "\")(\"Slider\");" + "\r" +
+                                                "var x = transform.scale[0];" + "\r" +
+                                                "var y = transform.scale[1];" + "\r" +
+                                                "[x,y+(s*scaler)];";                                        
+                        lowerJawNull.property("Position").expression = lowerJawNullExprPos;
+                        //lowerJawNull.property("Rotation").expression = lowerJawNullExprRot;
+                        lowerJawNull.property("Scale").expression = lowerJawNullExprScale;
+                        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    }
+                }else{
+                    //not a footage layer; send alert.
+                    alert("This only works on precomp layers.");
+                }
+                }
+            }
+        }
+     
+        app.endUndoGroup();
     }
- 
-    app.endUndoGroup();
 }  //end script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
