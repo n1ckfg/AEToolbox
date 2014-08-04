@@ -184,6 +184,13 @@ function depthFill(){  //start script
         if(theLayers.length==0){
             alert("Please select some layers and run the script again.");
         }else{
+            //var depth_ctl = theComp.layers.addNull();
+            //depth_ctl.name = "depth_ctl";
+            //var effect = depth_ctl.property("Effects").addProperty("Slider Control");
+            //var effect = depth_ctl.property("Effects").addProperty("Slider Control");
+            //effect.property("Slider").setValue(2000);
+            //effect.name = "Depth Offset";
+
             /*
             // otherwise, loop through each selected layer in the selected comp
             var hasCamera = false;
@@ -210,17 +217,25 @@ function depthFill(){  //start script
                 var curLayer = theLayers[i];
 
                 if(curLayer.matchName != "ADBE Camera Layer"){
-                
-                    var effect = curLayer.property("Effects").addProperty("Fill");
+                    var effect1 = curLayer.property("Effects").addProperty("Slider Control");
+                    effect1.name = "Depth Offset";
+                    effect1.property("Slider").setValue(2000);
+
+                    var effect2 = curLayer.property("Effects").addProperty("Fill");
 
                     // Select layer to add expression to
-                    var scaleexpression = "try{g1 = (toWorld(anchorPoint) - thisComp.activeCamera.toWorld([0,0,0]));\r" +
-                                              "g2 = thisComp.activeCamera.toWorldVec([0,0,1]);\r" +
-                                              "find = dot(g1,g2);\r" + 
-                                              "value/(find/2000);\r" +
-                                              "}catch(err){ value }";
-                    effect.property("Color").expression = scaleexpression;
-                    effect.property("Color").setValue([1,1,1]);
+                    //var scaleexpression = "var s = thisComp.layer(\"depth_ctl\").effect(\"Slider Control\")(\"Slider\");\r" +
+                    var scaleexpression = "var s = effect(\"Depth Offset\")(\"Slider\");\r" +
+                                          "try {\r" +
+                                          "  var g1 = (toWorld(anchorPoint) - thisComp.activeCamera.toWorld([0,0,0]));\r" +
+                                          "  var g2 = thisComp.activeCamera.toWorldVec([0,0,1]);\r" +
+                                          "  var find = dot(g1,g2);\r" + 
+                                          "  value/(find/s);\r" +
+                                          "} catch(err) {\r" +
+                                          "  value;\r" +
+                                          "}";
+                    effect2.property("Color").expression = scaleexpression;
+                    effect2.property("Color").setValue([1,1,1]);
                          
                 } else {
                     alert("This doesn't work on camera layers.");
