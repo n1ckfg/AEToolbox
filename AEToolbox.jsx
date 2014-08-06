@@ -1,4 +1,4 @@
-﻿// AEToolbox 1.1
+﻿// AEToolbox 1.16
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -20,8 +20,8 @@ function buildUI(this_obj_) {
     var darkColorBrush = winGfx.newPen(winGfx.BrushType.SOLID_COLOR, [0,0,0], 1);
 
     //-----------------------------------------------------
-    //1. Draw buttons
-    //buttons coordinates are X start, Y start, X end, Y end
+    // 1. Draw buttons
+    // buttons coordinates are X start, Y start, X end, Y end
     var butYoffset = 10; //8;
     var butYoffsetCap = 4;
     //--
@@ -37,8 +37,8 @@ function buildUI(this_obj_) {
     var colYendBase = 33;
     var colXinc = 170;
 
-    //Basic button group
-    var col1butCount = 8;
+    // Basic group
+    var col1butCount = 7;
     win.basicGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.basicGroup0 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
     win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
@@ -46,11 +46,10 @@ function buildUI(this_obj_) {
     win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
     win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Bake Keyframes');
     win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Make Loop');
-    win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Crossfade');
-    win.basicGroup7 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Onion Skin');
+    win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Graph Audio');
     //--
-    //Character button group
-    var col2butCount = 8;
+    // Rigging group
+    var col2butCount = 7;
     //win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
     win.rigGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
@@ -60,21 +59,38 @@ function buildUI(this_obj_) {
     win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Particle Rig');
     win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Camera Rig');
     win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
-    win.rigGroup7 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Graph Audio');
     //--
-    //Advanced button group
-    var col3butCount = 8;
+    // Advanced group
+    var col3butCount = 5;
     //win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
     win.advGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
     win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
     win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
     win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
-    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Split s3D Pair');
-    win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Merge s3D Pair');
-    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 's3D Dispmap');
-    win.advGroup7 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], 'Depth Fill');
+    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Crossfade');
+
     //-----------------------------------------------------
+    //--
+    // Stereo group
+    var col3butCount = 4;
+    //win.stereoGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
+    win.stereoGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    win.stereoGroup0 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Split s3D Pair');
+    win.stereoGroup1 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Merge s3D Pair');
+    win.stereoGroup2 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 's3D Dispmap');
+    win.stereoGroup3 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Depth Fill');
+    //-----------------------------------------------------
+    //--
+    // Overlay group
+    var col3butCount = 2;
+    //win.overGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
+    win.overGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    win.overGroup0 = win.overGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Onion Skin');
+    win.overGroup1 = win.overGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Skeleton View');
+
+    //-----------------------------------------------------
+
     //2. Link buttons to functions
     win.basicGroup0.onClick = nullsForPins;
     win.basicGroup1.onClick = parentChain;
@@ -82,8 +98,7 @@ function buildUI(this_obj_) {
     win.basicGroup3.onClick = moveToPos;
     win.basicGroup4.onClick = bakePinKeyframes;
     win.basicGroup5.onClick = makeLoop;
-    win.basicGroup6.onClick = crossfader;
-    win.basicGroup7.onClick = onionSkin;
+    win.basicGroup6.onClick = graphAudio;
     //--
     win.rigGroup0.onClick = charBlink;
     win.rigGroup1.onClick = charJaw;
@@ -92,16 +107,21 @@ function buildUI(this_obj_) {
     win.rigGroup4.onClick = charParticle;
     win.rigGroup5.onClick = handheldCamera;
     win.rigGroup6.onClick = threeDmoSketch;
-    win.rigGroup7.onClick = graphAudio;
     //--
     win.advGroup0.onClick = lockRotation;
     win.advGroup1.onClick = autoOrientZ;
     win.advGroup2.onClick = parentableNull;
     win.advGroup3.onClick = sineWave;
-    win.advGroup4.onClick = splitStereoPair;
-    win.advGroup5.onClick = mergeStereoPair;
-    win.advGroup6.onClick = stereoDispMap;
-    win.advGroup7.onClick = depthFill;
+    win.advGroup4.onClick = crossfader;
+    //--
+    win.stereoGroup0.onClick = splitStereoPair;
+    win.stereoGroup1.onClick = mergeStereoPair;
+    win.stereoGroup2.onClick = stereoDispMap;
+    win.stereoGroup3.onClick = depthFill;
+    //--
+    win.overGroup0.onClick = onionSkin;
+    win.overGroup1.onClick = skeleView;
+
 
     //Tooltips
     win.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
@@ -110,44 +130,66 @@ function buildUI(this_obj_) {
     win.basicGroup3.helpTip = "Moves all layers to the location of the last selected layer."; //moveToPos;
     win.basicGroup4.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
     win.basicGroup5.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
-    win.basicGroup6.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
-    win.basicGroup7.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
-    //--
+    win.basicGroup6.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
+    //--    
     win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
     win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
     win.rigGroup2.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
     win.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
     win.rigGroup4.helpTip = "Creates a null controller for Particular particles."; //charParticle;
     win.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
-    win.advGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
-    win.rigGroup7.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
+    win.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     //--
     win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
     win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
     win.advGroup2.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
     win.advGroup3.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
-    win.advGroup4.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
-    win.advGroup5.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
-    win.advGroup6.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
-    win.advGroup7.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
+    win.advGroup4.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
+    //--
+    win.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
+    win.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
+    win.stereoGroup2.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+    win.stereoGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
+    //--
+    win.overGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
+    win.overGroup1.helpTip = "View connections between parent and child layers."; //onionSkin;
+    
 
     //-----------------------------------------------------
 
-    var selector = win.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],["Basic","Rigging","Advanced"]);
+    var selector = win.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],["Basic","Rigging","Advanced","Stereo","Overlay"]);
     selector.onChange = function() {
         if (selector.selection == 0){
             win.basicGroup.visible = true;
             win.rigGroup.visible = false;
             win.advGroup.visible = false;
+            win.stereoGroup.visible = false;
+            win.overGroup.visible = false;
         }else if (selector.selection == 1){
             win.basicGroup.visible = false;
             win.rigGroup.visible = true;
             win.advGroup.visible = false;
+            win.stereoGroup.visible = false;
+            win.overGroup.visible = false;
         }else if (selector.selection == 2){
             win.basicGroup.visible = false;
             win.rigGroup.visible = false;
             win.advGroup.visible = true;
-        }        
+            win.stereoGroup.visible = false;
+            win.overGroup.visible = false;
+        }else if (selector.selection == 3){
+            win.basicGroup.visible = false;
+            win.rigGroup.visible = false;
+            win.advGroup.visible = false;
+            win.stereoGroup.visible = true;
+            win.overGroup.visible = false;
+        }else if (selector.selection == 4){
+            win.basicGroup.visible = false;
+            win.rigGroup.visible = false;
+            win.advGroup.visible = false;
+            win.stereoGroup.visible = false;
+            win.overGroup.visible = true;
+        }          
     }
     selector.selection = 0;
 
@@ -161,6 +203,78 @@ if (w.toString() == "[object Panel]") {
 } else {
     w.show();
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 25.  Type: apply process to any number of layers
+function skeleView(){  //start script
+    app.beginUndoGroup("Skeleton View");
+
+    //if(parseFloat(app.version) >= 10.5){
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if(theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    }else{ 
+        var theLayers = theComp.selectedLayers;
+        var allLayers = theComp.layers;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+            var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Skeleton View", theComp.width, theComp.height, 1);
+            var slider = solid.property("Effects").addProperty("Slider Control");
+            slider.name = "Thickness";
+            slider.property("Slider").setValue(8);
+
+            var color = solid.property("Effects").addProperty("Color Control");
+            color.property("Color").setValue([0,1,0]);
+
+            var firstRun = true;
+
+            for(var i = 0; i < theLayers.length; i++){
+                // ...then loop through each layer in the selected comp
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                if (curLayer.parent != null) {
+                    var beam = solid.property("Effects").addProperty("Beam");
+                    if (firstRun) {
+                        beam.property("Composite On Original").setValue(0);
+                        firstRun = false;
+                    } else {
+                        beam.property("Composite On Original").setValue(1);
+                    }
+                    beam.property("Length").setValue(1.0);
+                    beam.property("Softness").setValue(0.0);
+                    beam.property("Starting Thickness").expression = "effect(\"Thickness\")(\"Slider\");";
+                    beam.property("Ending Thickness").expression = "effect(\"Thickness\")(\"Slider\");";
+                    beam.property("Inside Color").expression = "effect(\"Color Control\")(\"Color\");";
+                    beam.property("Outside Color").expression = "effect(\"Color Control\")(\"Color\");";
+
+                    var expr1 = "fromComp(thisComp.layer(\"" + curLayer.name + "\").toComp(thisComp.layer(\"" + curLayer.name + "\").anchorPoint));";
+                    beam.property("Starting Point").expression = expr1;
+                    
+                    var expr2 = "fromComp(thisComp.layer(\"" + curLayer.parent.name + "\").toComp(thisComp.layer(\"" + curLayer.parent.name + "\").anchorPoint));";
+                    beam.property("Ending Point").expression = expr2;
+                }
+            }
+            
+            //if (!firstRun) alert("No parent layers were found.")
+                
+        }
+    }
+    solid.locked = true;
+
+    /*
+    } else {
+             alert("Sorry, this feature only works with CS5.5 and higher.");
+     }
+     */
+ 
+    app.endUndoGroup();
+}  //end script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -252,7 +366,6 @@ function depthFill(){  //start script
     app.endUndoGroup();
 }  //end script
 
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
