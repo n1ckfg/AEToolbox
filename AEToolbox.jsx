@@ -152,7 +152,7 @@ function buildUI(this_obj_) {
     win.stereoGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
     //--
     win.overGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
-    win.overGroup1.helpTip = "View connections between parent and child layers."; //onionSkin;
+    win.overGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
     
 
     //-----------------------------------------------------
@@ -225,6 +225,7 @@ function skeleView(){  //start script
             alert("Please select some layers and run the script again.");
         }else{
             var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Skeleton View", theComp.width, theComp.height, 1);
+            solid.guideLayer = true;
             var slider = solid.property("Effects").addProperty("Slider Control");
             slider.name = "Thickness";
             slider.property("Slider").setValue(8);
@@ -1560,6 +1561,8 @@ function onionSkin(){  //start script
     } else { 
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
         solid.adjustmentLayer = true;
+        solid.guideLayer = true;
+
         var echo = solid.property("Effects").addProperty("Echo");
         var slider = solid.property("Effects").addProperty("Slider Control");
         slider.name = "Number of Frames";
