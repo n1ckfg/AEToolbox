@@ -17,7 +17,14 @@ I.  BASIC
      (property selection): Puts a cycle expression on the selected properties.
 7. Graph Audio (layer selection): Converts audio to keyframes and enables the graph view.
 
-II.  RIGGING
+II.  ADVANCED
+1. Lock Y Rotation (layer selection): Forces a layer to always face the camera.
+2. Auto Z Rotation (layer selection): Smart 2D auto-rotation.
+3. Parentable Null (layer selection): Creates a null with expressions that solve certain parenting problems. 
+4. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
+5. Crossfader (comp selection): Fades a layer into a duplicate of itself for a seamless loop.
+
+III.  RIGGING
 1. Blink Control (comp selection): Turns a blink layer inside the comp on and off.  
 2. Jaw Rig (comp selection): Rigs a jaw layer inside the comp for audio control of rotation or position.
 3. Snake Rig (layer selection): Rigs a puppet-pin layer for automated snake-like movement.
@@ -25,13 +32,6 @@ II.  RIGGING
 5. Particle Rig (no selection): Creates a null controller for Particular particles.
 6. Camera Rig (no selection): Creates a camera rigged for point-of-interest and DoF control. 
 7. 3D MoSketch (no selection): Creates a null with 3D controls for use with Motion Sketch.
-
-III.  ADVANCED
-1. Lock Y Rotation (layer selection): Forces a layer to always face the camera.
-2. Auto Z Rotation (layer selection): Smart 2D auto-rotation.
-3. Parentable Null (layer selection): Creates a null with expressions that solve certain parenting problems. 
-4. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
-5. Crossfader (comp selection): Fades a layer into a duplicate of itself for a seamless loop.
 
 IV.  STEREO
 1. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.
@@ -44,3 +44,6 @@ IV.  STEREO
 V.  OVERLAY
 1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.
 2. Skeleton View (layer selection): View connections between parent and child layers.
+
+VI.  IO
+1. Write Example (layer selection): Write an example output file.
