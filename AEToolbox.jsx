@@ -2419,21 +2419,22 @@ function cameraToMaya(){  //start script
                 myFile.writeln("");
                 myFile.writeln("");
 
-                myFile.writeln("connectAttr \"" + curLayer.name + "_translateX.o\" \"" + curLayerName + ".tx\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_translateY.o\" \"" + curLayerName + ".ty\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_translateZ.o\" \"" + curLayerName + ".tz\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_visibility.o\" \"" + curLayerName + ".v\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_translateX.o\" \"" + curLayerName + ".tx\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_translateY.o\" \"" + curLayerName + ".ty\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_translateZ.o\" \"" + curLayerName + ".tz\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_visibility.o\" \"" + curLayerName + ".v\";");
         
                 myFile.writeln("");
                 
-                myFile.writeln("connectAttr \"" + curLayer.name + "_rotateX.o\" \"" + curLayer.name + ".rx\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_rotateY.o\" \"" + curLayer.name + ".ry\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_rotateZ.o\" \"" + curLayer.name + ".rz\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_scaleX.o\" \"" + curLayer.name + ".sx\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_scaleY.o\" \"" + curLayer.name + ".sy\";");
-                myFile.writeln("connectAttr \"" + curLayer.name + "_scaleZ.o\" \"" + curLayer.name + ".sz\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_rotateX.o\" \"" + curLayerName + ".rx\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_rotateY.o\" \"" + curLayerName + ".ry\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_rotateZ.o\" \"" + curLayerName + ".rz\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_scaleX.o\" \"" + curLayerName + ".sx\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_scaleY.o\" \"" + curLayerName + ".sy\";");
+                //myFile.writeln("connectAttr \"" + curLayerName + "_scaleZ.o\" \"" + curLayerName + ".sz\";");
             }
             */
+            
         }
     }
 
