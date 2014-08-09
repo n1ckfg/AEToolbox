@@ -89,11 +89,10 @@ function buildUI(this_obj_) {
     win.guideGroup1 = win.guideGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Skeleton View');
     //--
     // IO group
-    var col3butCount = 2;
+    var col3butCount = 1;
     //win.guideGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
     win.ioGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-    win.ioGroup0 = win.ioGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Write Example');
-    win.ioGroup1 = win.ioGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Camera to Maya');
+    win.ioGroup0 = win.ioGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Camera to Maya');
 
     //-----------------------------------------------------
 
@@ -128,8 +127,7 @@ function buildUI(this_obj_) {
     win.guideGroup0.onClick = onionSkin;
     win.guideGroup1.onClick = skeleView;
     //--
-    win.ioGroup0.onClick = writeExample;
-    win.ioGroup1.onClick = cameraToMaya;
+    win.ioGroup0.onClick = cameraToMaya;
 
     //-----------------------------------------------------
 
@@ -164,8 +162,7 @@ function buildUI(this_obj_) {
     win.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
     win.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
     //--
-    win.ioGroup0.helpTip = "Write an example output file."; //onionSkin;
-    win.ioGroup1.helpTip = "Export camera to Maya."; //cameraToMaya;
+    win.ioGroup0.helpTip = "Export camera to Maya."; //cameraToMaya;
     
     //-----------------------------------------------------
 
@@ -229,69 +226,6 @@ if (w.toString() == "[object Panel]") {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// 26.  Type: apply process to any number of layers
-function writeExample() {  //start script
-    app.beginUndoGroup("Export Example File");
-
-    var theComp = app.project.activeItem; //only selected
-
-    // check if comp is selected
-    if (theComp == null || !(theComp instanceof CompItem)) {
-        // if no comp selected, display an alert
-        alert("Please establish a comp as the active item and run the script again.");
-    } else { 
-        var theLayers = theComp.selectedLayers;
-        var allLayers = theComp.layers;
-
-        if (theLayers.length==0) {
-            alert("Please select some layers and run the script again.");
-        } else {
-
-            //~~~~~~~~~~~~~~~~~~
-
-            var fileMainHeader = "Sample Main Header" + "\r";
-            var fileMainFooter = "Sample Main Footer" + "\r";
-            var scaleFactor = 1.0;
-
-            var myFile = File.saveDialog("Save your file", ".txt", "");
-            var fileOK = myFile.open("w","TEXT","????");
-
-            myFile.writeln(fileMainHeader);
-            //~~~~~~~~~~~~~~~~~~
-            for(var i = 0; i < theLayers.length; i++){
-                // ...then loop through each layer in the selected comp
-                // define the layer in the loop we're currently looking at
-                var curLayer = theLayers[i];
-                var fileName = theComp.name + "_" + curLayer.name;
-                var fileLayerHeader = "Sample Layer Header" + "\r";
-                var fileLayerFooter = "Sample Layer Footer" + "\r";
-
-                myFile.writeln(fileLayerHeader);
-
-                var p = curLayer.property("Position");
-                for(var j = 0; j < p.numKeys; j++) {
-                    var pp = p.keyValue(j+1);
-
-                    pp[0] = ( (pp[0]-(theComp.width/2)) / theComp.width ) * scaleFactor;
-                    pp[1] = ( -1 * (pp[1]-(theComp.height/2)) / theComp.height) * scaleFactor;
-                    pp[2] = ( pp[2] / ((theComp.width+theComp.height)/2) ) * scaleFactor;
-                
-                    var fileKeyPos = "time: " + p.keyTime(j+1) + ", x: " + pp[0] + ", y: " + pp[1] + ", z: " + pp[2] + "\r";
-                                      
-                    myFile.writeln(fileKeyPos);
-                
-               }              
-                myFile.writeln(fileLayerFooter);
-            }
-            myFile.writeln(fileMainFooter);
-            myFile.close;    
-        }
-    }
-
-    app.endUndoGroup();
-}  //end script
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 25.  Type: apply process to any number of layers
@@ -2507,5 +2441,176 @@ function convertAudioToKeyframes(target){
     app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
     target.selected = false; 
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+//EXAMPLES
+
+// 26.  Type: apply process to any number of layers
+function writeExample() {  //start script
+    app.beginUndoGroup("Export Example File");
+
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if (theComp == null || !(theComp instanceof CompItem)) {
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        var allLayers = theComp.layers;
+
+        if (theLayers.length==0) {
+            alert("Please select some layers and run the script again.");
+        } else {
+
+            //~~~~~~~~~~~~~~~~~~
+
+            var fileMainHeader = "Sample Main Header" + "\r";
+            var fileMainFooter = "Sample Main Footer" + "\r";
+            var scaleFactor = 1.0;
+
+            var myFile = File.saveDialog("Save your file", ".txt", "");
+            var fileOK = myFile.open("w","TEXT","????");
+
+            myFile.writeln(fileMainHeader);
+            //~~~~~~~~~~~~~~~~~~
+            for(var i = 0; i < theLayers.length; i++){
+                // ...then loop through each layer in the selected comp
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                var fileName = theComp.name + "_" + curLayer.name;
+                var fileLayerHeader = "Sample Layer Header" + "\r";
+                var fileLayerFooter = "Sample Layer Footer" + "\r";
+
+                myFile.writeln(fileLayerHeader);
+
+                var p = curLayer.property("Position");
+                for(var j = 0; j < p.numKeys; j++) {
+                    var pp = p.keyValue(j+1);
+
+                    pp[0] = ( (pp[0]-(theComp.width/2)) / theComp.width ) * scaleFactor;
+                    pp[1] = ( -1 * (pp[1]-(theComp.height/2)) / theComp.height) * scaleFactor;
+                    pp[2] = ( pp[2] / ((theComp.width+theComp.height)/2) ) * scaleFactor;
+                
+                    var fileKeyPos = "time: " + p.keyTime(j+1) + ", x: " + pp[0] + ", y: " + pp[1] + ", z: " + pp[2] + "\r";
+                                      
+                    myFile.writeln(fileKeyPos);
+                
+               }              
+                myFile.writeln(fileLayerFooter);
+            }
+            myFile.writeln(fileMainFooter);
+            myFile.close;    
+        }
+    }
+
+    app.endUndoGroup();
+}  //end script
+
+// Import XML or JSON file of tracking data for 3D characters
+function importMocap3D(){  //start script
+    app.beginUndoGroup("Import 3D Points From XML or JSON");
+
+    if(parseFloat(app.version) >= 10.5){
+
+
+    var myComp = app.project.activeItem;
+    var fileType="xml";
+    var myRoot;
+    //load xml or json file
+    var myFile = File.openDialog();
+    var fileOK = myFile.open("r");
+    if (fileOK){
+        var myFileString = myFile.read();
+        if(myFile.name.split('.').pop()=="xml"){
+            fileType="xml";
+            myRoot = new XML(myFileString);
+        }else if(myFile.name.split('.').pop()=="json"){
+            fileType="json";
+            myRoot = eval("(" + myFileString + ")");
+        }
+        myFile.close();
+    }
+    
+    if(fileType=="xml"){
+        //~~~~~~~~~~~~~~~~~begin 3D XML version
+        var compRate = parseFloat(myRoot.@fps); // comp frame rate
+
+        var sW = parseFloat(myRoot.@width);
+        var sH = parseFloat(myRoot.@height);
+        var sD = parseFloat(myRoot.@depth);
+
+        var mocap = myComp.layer("mocap");
+
+        var trackPoint = jointNamesMaster;
+
+        // add joint information
+        for(var j=0;j<trackPoint.length;j++){
+            var myEffect = mocap.property("Effects").property(trackPoint[j]);
+            myEffect.name = trackPoint[j];
+            var p = mocap.property("Effects")(trackPoint[j])("3D Point");
+
+            for(var i=0;i<myRoot.MocapFrame.length();i++){
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                //keyframes go here
+                //var pTfps = myRoot.@fps;
+                var pT = i/compRate;
+                var pXs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@x;
+                var pYs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@y;
+                var pZs = myRoot.MocapFrame[i].Skeleton.Joints.descendants(trackPoint[j]).@z;
+
+                if(pXs != "NaN" && pYs != "NaN" && pZs != "NaN"){
+                    var pX = parseFloat(pXs);
+                    var pY = parseFloat(pYs);
+                    var pZ = parseFloat(pZs);
+                    p.setValueAtTime(pT, [pX * sW, pY * sH, pZ * sD]);
+                }
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+
+
+        }
+        //~~~~~~~~~~~~~~~~~end 3D XML version
+    } else if(fileType=="json"){
+        //~~~~~~~~~~~~~begin 3D JSON version
+            var compRate = myRoot.MotionCapture.fps; // comp frame rate
+            var sW = myRoot.MotionCapture.width;
+            var sH = myRoot.MotionCapture.height;
+            var sD = myRoot.MotionCapture.depth;
+            
+            var mocap = myComp.layer("mocap");
+
+            var trackPoint = jointNamesMaster;
+
+            // add joint information
+        for(var name in myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints){
+            var myEffect = mocap.property("Effects").property(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name);
+            myEffect.name = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name;
+            var p = mocap.property("Effects")(myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].name)("3D Point");
+            
+            for(var i=0;i<myRoot.MotionCapture.numFrames;i++){
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                    //keyframes go here
+                    var pT = i/compRate;
+                    var pX = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].x;
+                    var pY = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].y;
+                    var pZ = myRoot.MotionCapture.MocapFrame.Skeleton[0].Joints[name].pos[i].z;
+                    p.setValueAtTime(pT, [pX,pY,pZ]);
+                    
+                //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+            }
+            
+        }
+        //~~~~~~~~~~~~~end 3D JSON version
+    }       
+} else {
+             alert("Sorry, this feature only works with CS5.5 and higher.");
+     }
+ 
+    app.endUndoGroup();
+}  //end script
 
 }

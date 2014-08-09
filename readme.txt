@@ -46,4 +46,4 @@ V.  OVERLAY
 2. Skeleton View (layer selection): View connections between parent and child layers.
 
 VI.  IO
-1. Write Example (layer selection): Write an example output file.
+1. Camera to Maya (layer selection): Export camera to Maya.
