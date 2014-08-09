@@ -2067,7 +2067,7 @@ function cameraToMaya(){  //start script
     if (compRate == 48) fps = "show";
     if (compRate == 30) fps = "ntsc";
     if (compRate == 25) fps = "pal";
-    if (compRate == 24 || compRate == 12 || compRate == 8 || compRate == 6 || compRate == 4) fps = "film";
+    if (compRate <= 24 && compRate % 2 == 0) fps = "film";
     if (compRate == 15) fps = "game";
 
     //****************************** STEP 1: create free ZYX camera in After Effects
@@ -2342,6 +2342,100 @@ function cameraToMaya(){  //start script
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // modifications by Nick Fox-Gieg
 
+    var allLayers = theComp.layers;
+    for (var i=1; i < allLayers.length; i++){
+        var curLayer = allLayers[i];
+        //if (curLayer.numKeys > 0) Bake(theComp,curLayer.property("Position"),curLayer.property("Position"));
+
+        var curLayerName = curLayer.name.replace(/[^a-zA-Z0-9]+/g,"");
+
+        if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent"){
+            pos = curLayer.property("Position").valueAtTime(0,false);
+            Xpos=(pos[0]-worldCenter[0])/worldScale;
+            Ypos=-((pos[1]-worldCenter[1])/worldScale);
+            Zpos=-(pos[2]/worldScale);
+
+            myFile.writeln("createNode transform -n \"" + curLayerName +"\";");
+            
+            myFile.writeln("setAttr \".t\" -type \"double3\" " + Xpos + " " + Ypos + " " + Zpos + " ;");
+            myFile.writeln("setAttr -av \".tx\";");
+            myFile.writeln("setAttr -av \".ty\";");
+            myFile.writeln("setAttr -av \".tz\";");
+            
+            myFile.writeln("createNode locator -n \"locatorShape"+ i +"\" -p \"" + curLayerName +"\";");
+            myFile.writeln("setAttr -k off \".v\";");
+            
+            /*
+            if (curLayer.numKeys > 0) {
+
+                // X position
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_TranslateX\";");
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                for (i=1;i<=totalFrames;i++) {
+                    f=(i-1)*frameDuration;
+                    pos=curLayer.position.valueAtTime(f, false);
+                    Xpos=(pos[0]-worldCenter[0])/worldScale;
+                    myFile.write(" " + i + " " + Xpos);
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                 // Y position
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_TranslateY\";")
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                for (i=1;i<=totalFrames;i++) {
+                    f=(i-1)*frameDuration;
+                    pos=curLayer.position.valueAtTime(f, false);
+                    Ypos=-((pos[1]-worldCenter[1])/worldScale);
+                    myFile.write(" " + i + " " + Ypos);
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                // Z position
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_TranslateZ\";");
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                for (i=1;i<=totalFrames;i++) {
+                    f=(i-1)*frameDuration;
+                    pos=curLayer.position.valueAtTime(f, false);
+                    Zpos=-(pos[2]/worldScale);
+                    myFile.write(" " + i + " " + Zpos);
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                myFile.writeln("connectAttr \"" + curLayer.name + "_translateX.o\" \"" + curLayerName + ".tx\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_translateY.o\" \"" + curLayerName + ".ty\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_translateZ.o\" \"" + curLayerName + ".tz\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_visibility.o\" \"" + curLayerName + ".v\";");
+        
+                myFile.writeln("");
+                
+                myFile.writeln("connectAttr \"" + curLayer.name + "_rotateX.o\" \"" + curLayer.name + ".rx\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_rotateY.o\" \"" + curLayer.name + ".ry\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_rotateZ.o\" \"" + curLayer.name + ".rz\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_scaleX.o\" \"" + curLayer.name + ".sx\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_scaleY.o\" \"" + curLayer.name + ".sy\";");
+                myFile.writeln("connectAttr \"" + curLayer.name + "_scaleZ.o\" \"" + curLayer.name + ".sz\";");
+            }
+            */
+        }
+    }
 
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -2492,6 +2586,8 @@ function convertToKeyframes(theProperty){
         theProperty.selected = true;
         app.executeCommand(app.findMenuCommandId("Convert Expression to Keyframes")); 
         theProperty.selected = false;
+    } else {
+        Bake(app.project.activeItem,theProperty,theProperty);        
     }
 }
 
