@@ -46,31 +46,32 @@ function buildUI(this_obj_) {
     win.basicGroup1 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
     win.basicGroup2 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Locator Null');
     win.basicGroup3 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
-    win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Bake Keyframes');
-    win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Make Loop');
+    win.basicGroup4 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Make Loop');
+    win.basicGroup5 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Random Position');
     win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Graph Audio');
     //--
     // Advanced group
-    var col3butCount = 5;
+    var col3butCount = 7;
     //win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
     win.advGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-    win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Lock Y Rotation');
-    win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Auto Z Rotation');
-    win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Parentable Null');
-    win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Sine Generator');
-    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Crossfade');
+    win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
+    win.advGroup1 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Lock Y Rotation');
+    win.advGroup2 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Auto Z Rotation');
+    win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Parentable Null');
+    win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
+    win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Crossfade');
+    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
     //--
     // Rigging group
-    var col2butCount = 7;
+    var col2butCount = 6;
     //win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
     win.rigGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-    win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Control');
+    win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Rig');
     win.rigGroup1 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig');
     win.rigGroup2 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Snake Rig');
     win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Beam Rig');
     win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Particle Rig');
     win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Camera Rig');
-    win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
     //--
     // Stereo group
     var col3butCount = 4;
@@ -101,15 +102,17 @@ function buildUI(this_obj_) {
     win.basicGroup1.onClick = parentChain;
     win.basicGroup2.onClick = locatorNull;
     win.basicGroup3.onClick = moveToPos;
-    win.basicGroup4.onClick = bakePinKeyframes;
-    win.basicGroup5.onClick = makeLoop;
+    win.basicGroup4.onClick = makeLoop;
+    win.basicGroup5.onClick = randomPos;
     win.basicGroup6.onClick = graphAudio;
     //--
-    win.advGroup0.onClick = lockRotation;
-    win.advGroup1.onClick = autoOrientZ;
-    win.advGroup2.onClick = parentableNull;
-    win.advGroup3.onClick = sineWave;
-    win.advGroup4.onClick = crossfader;
+    win.advGroup0.onClick = bakePinKeyframes;
+    win.advGroup1.onClick = lockRotation;
+    win.advGroup2.onClick = autoOrientZ;
+    win.advGroup3.onClick = parentableNull;
+    win.advGroup4.onClick = sineWave;
+    win.advGroup5.onClick = crossfader;
+    win.advGroup6.onClick = threeDmoSketch;
     //--
     win.rigGroup0.onClick = charBlink;
     win.rigGroup1.onClick = charJaw;
@@ -117,7 +120,6 @@ function buildUI(this_obj_) {
     win.rigGroup3.onClick = charBeam;
     win.rigGroup4.onClick = charParticle;
     win.rigGroup5.onClick = handheldCamera;
-    win.rigGroup6.onClick = threeDmoSketch;
     //--
     win.stereoGroup0.onClick = splitStereoPair;
     win.stereoGroup1.onClick = mergeStereoPair;
@@ -136,15 +138,17 @@ function buildUI(this_obj_) {
     win.basicGroup1.helpTip = "Parent a chain of layers one to another."; //parentChain;
     win.basicGroup2.helpTip = "Creates a new null at the location of each selected layer."; //locatorNull;
     win.basicGroup3.helpTip = "Moves all layers to the location of the last selected layer."; //moveToPos;
-    win.basicGroup4.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
-    win.basicGroup5.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
+    win.basicGroup4.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
+    win.basicGroup5.helpTip = "Randomizes a layer's position."; //randomPos;
     win.basicGroup6.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
     //--
-    win.advGroup0.helpTip = "Forces a layer to always face the camera."; //lockRotation;
-    win.advGroup1.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
-    win.advGroup2.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
-    win.advGroup3.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
-    win.advGroup4.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
+    win.advGroup0.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
+    win.advGroup1.helpTip = "Forces a layer to always face the camera."; //lockRotation;
+    win.advGroup2.helpTip = "Smart 2D auto-rotation."; //autoOrientZ;
+    win.advGroup3.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
+    win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
+    win.advGroup5.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
+    win.advGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     //--    
     win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
     win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
@@ -152,7 +156,6 @@ function buildUI(this_obj_) {
     win.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
     win.rigGroup4.helpTip = "Creates a null controller for Particular particles."; //charParticle;
     win.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
-    win.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     //--
     win.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
     win.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
@@ -226,6 +229,52 @@ if (w.toString() == "[object Panel]") {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 26.  Type: apply process to any number of layers
+function randomPos(){  //start script
+    app.beginUndoGroup("Randomize Position");
+
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if(theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    }else{ 
+        var theLayers = theComp.selectedLayers;
+        
+        var allLayers = theComp.layers;
+
+        var compDepth = 2000;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+
+            //var zOnly = confirm("Randomize Z axis only?");
+
+            for(var i = 0; i < theLayers.length; i++){
+                // ...then loop through each layer in the selected comp
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                var p = curLayer.property("Position");
+                var x = Math.random() * theComp.width;
+                var y = Math.random() * theComp.height;
+                var z = Math.random() * compDepth;
+
+                if(p.numKeys > 0){
+                    p.setValueAtTime(theComp.time, [x,y,z]);
+                } else {
+                    p.setValue([x,y,z]);
+                }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 25.  Type: apply process to any number of layers
@@ -1948,6 +1997,7 @@ function cameraToMaya(){  //start script
     //correct position, rotation, and focal length.  Should work for any AE camera, no matter how it is animated, without any restrictions.
 
     //fixed for CS6 by Nick Fox-Gieg, 2012
+    //null export by Nick Fox-Gieg, 2014
 
     //****************************** GLOBALS
 
@@ -2287,6 +2337,15 @@ function cameraToMaya(){  //start script
     myFile.writeln("");
     myFile.writeln("connectAttr \"" + CamName + "Shape_FocalLength.o\"\"" + CamName + "Shape.fl\";");
     myFile.writeln("");
+
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    // modifications by Nick Fox-Gieg
+
+
+
+    //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    //finish it all up...
 
     //set work area 
     myFile.writeln("createNode script -n \"sceneConfigurationScriptNode\";");
