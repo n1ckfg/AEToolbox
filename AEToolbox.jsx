@@ -89,10 +89,11 @@ function buildUI(this_obj_) {
     win.guideGroup1 = win.guideGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Skeleton View');
     //--
     // IO group
-    var col3butCount = 1;
+    var col3butCount = 2;
     //win.guideGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
     win.ioGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.ioGroup0 = win.ioGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Write Example');
+    win.ioGroup1 = win.ioGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Camera to Maya');
 
     //-----------------------------------------------------
 
@@ -128,6 +129,7 @@ function buildUI(this_obj_) {
     win.guideGroup1.onClick = skeleView;
     //--
     win.ioGroup0.onClick = writeExample;
+    win.ioGroup1.onClick = cameraToMaya;
 
     //-----------------------------------------------------
 
@@ -163,6 +165,7 @@ function buildUI(this_obj_) {
     win.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
     //--
     win.ioGroup0.helpTip = "Write an example output file."; //onionSkin;
+    win.ioGroup1.helpTip = "Export camera to Maya."; //cameraToMaya;
     
     //-----------------------------------------------------
 
@@ -1119,8 +1122,16 @@ function moveToPos(){  //start script
                     lastLayer.parent = null;
                 }
                 //~~~~
-                var p = lastLayer.property("position").value;
-                curLayer.property("position").setValue(p);
+                var lp = lastLayer.property("Position");
+                var cp = curLayer.property("Position");
+                if (lp.numKeys <= 0 && cp.numKeys <= 0) { // neither source nor dest has keys
+                    cp.setValue(lp.value);               
+                } else if (lp.numKeys > 0 && cp.numKeys <= 0) { // source has keys but dest doesn't
+                    cp.setValue(lp.value);               
+                } else { // either source or dest has keys    
+                    cp.setValueAtTime(theComp.time, lp.value);
+                }
+
                 //~~~~
                 try{
                     curLayer.parent = mama;
@@ -1988,7 +1999,449 @@ function bakePinKeyframes(){  //start script
 }  //end script
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// 0.  Type: apply process to any number of layers or properties
+function cameraToMaya(){  //start script
+    app.beginUndoGroup("Export Camera to Maya");
+
+    //****************************** MAIN
+
+    //AE_CameraToMaya v1.1n
+    //by Ryan Gilmore, 2008
+    //www.urbanspaceman.net
+    //contact@urbanspaceman.net
+
+    //Select the camera in After Effects you want to send to Maya, and this script will create an .ma file with a copy of the camera in it, with
+    //correct position, rotation, and focal length.  Should work for any AE camera, no matter how it is animated, without any restrictions.
+
+    //fixed for CS6 by Nick Fox-Gieg, 2012
+
+    //****************************** GLOBALS
+
+    var f = 0;
+
+    var theComp = app.project.activeItem;
+    var compWidth = theComp.width;
+    var compHeight = theComp.height;
+    var selectedLayers = theComp.selectedLayers;
+    var numLayers = selectedLayers.length;
+    var theComplength = theComp.duration; //in seconds
+    var totalFrames=Math.round(theComp.duration*theComp.frameRate)+1;
+    var aeCompRate = theComp.frameRate;
+    var compRate = Math.round(aeCompRate);
+    var frameDuration = theComp.frameDuration;
+
+    var worldScale=100;
+    var worldCenter=[compWidth/2, compHeight/2];
+
+    var aspect = theComp.pixelAspect;
+    // these are more accurate video PARs, that AE rounds off 
+    // [00]  D2 NTSC            0.8592
+    // [01]  D1 NTSC        0.9 
+    // [02]  D4 Stan            0.9481481
+    // [03]  SQUARE         1
+    // [04]  D2 PAL         1.0186      
+    // [05]  D1 PAL         1.0667
+    // [06]  D1 NTSC wide   1.2
+    // [07]  HDV                1.333
+    // [08]  D1 PAL wide    1.4222
+    // [09]  DVCPROHD       1.5
+    // [10]  D4 Ana         1.8962962
+    // [11]  Ana2:1         2
+    var ratio= [0.8592, 0.9, 0.9481481, 1.0, 1.0186, 1.0667, 1.2, 1.333, 1.4222, 1.5, 1.8962962, 2];
+    if (aspect == 0.86){aspect =ratio[0]}
+    else if (aspect == 0.95){aspect =ratio[2]}
+    else if (aspect == 1.02){aspect =ratio[4]}
+    else if (aspect == 1.07){aspect =ratio[5]}
+    else if (aspect == 1.33){aspect =ratio[7]}
+    else if (aspect == 1.42){aspect =ratio[8]}
+    else if (aspect == 1.9){aspect =ratio[10]};
+
+    var frameAspect = (compWidth*aspect)/compHeight;
+
+    mayaFBHeight = 1; //in inches
+    mayaFilmBack = frameAspect*mayaFBHeight; //in inches
+
+    //fps presets for Maya
+    /*
+    if (compRate == 30) {fps = "ntsc"} 
+    else {}
+    if (compRate == 25) {fps = "pal"}
+    else {}
+    if (compRate == 24) {fps = "film"}
+    else {}
+    if (compRate == 15) {fps = "game"}
+    else {}
+    if (compRate == 48) {fps = "show"} 
+    else {}
+    if (compRate == 60) {fps = "ntscf"}
+    else {}
+    if (compRate == 50) {fps = "palf"}
+    else {}
+    */
+    if (compRate == 60) fps = "ntscf";
+    if (compRate == 50) fps = "palf";
+    if (compRate == 48) fps = "show";
+    if (compRate == 30) fps = "ntsc";
+    if (compRate == 25) fps = "pal";
+    if (compRate == 24 || compRate == 12 || compRate == 8 || compRate == 6 || compRate == 4) fps = "film";
+    if (compRate == 15) fps = "game";
+
+    //****************************** STEP 1: create free ZYX camera in After Effects
+
+    DeselectProjectWindowItems();
+
+    //error check: is the comp the active timeline window?
+    if (app.project.activeItem!=null) {
+    theComp = app.project.activeItem;
+
+    //error check: is camera selected?
+    if (theComp.selectedLayers!="") {
+    theCamera = theComp.selectedLayers;
+
+    //error check: is more than one layer selected?
+    if (theCamera.length<2) {
+    CameraName = theCamera[0].name;
+
+    //error check: is it a camera selected?
+    if (theCamera[0].zoom!=null) {
+
+    CamIn=theCamera[0].inPoint;
+    CamOut=theCamera[0].outPoint;
+
+    //if camera has a parent that uses a scale value other than 100, this will affect rotation and zoom calculations.
+    //NB: if the scale does not have equal XYZ values, this script won't work.  That's because this will stretch, 
+    //distort, and skew the camera, and since the first step of this script is to output a free camera, it can't be done since
+    //a skewed free camera is impossible in After Effects.
+    //if their is a parent, the unit value in the rotation matrix is scale/100
+    //otherwise the unit value is 1.
+    if (theCamera[0].parent!=null) {
+        CamMaster=theCamera[0].parent;
+        CamMasterExpression="this_comp.layer("+"\'"+CamMaster.name+"\'"+").scale/100"
+    }else{
+        CamMasterExpression="[1,1,1]"
+    };
+
+    //make new camera.  This will inherit the Y and X rotations.
+    theComp.layers.addCamera("CamCopy_yRot_xRot",[0,0]).startTime=0;
+    CamCopy01=theComp.layer(1);
+    CamCopy01.inPoint=CamIn;
+    CamCopy01.outPoint=CamOut;
+    CamCopy01.pointOfInterest.expression="position";
+    CamCopy01.position.setValue([theComp.width/2, theComp.height/2, 0]);
+    //make camera parent.  This is needed to reverse the rotation order.  This null will inherit the position and Z rotation.
+    theComp.layers.addNull(theComp.duration).name="CamCopy_zRot_pos";
+    CamParent01=theComp.layer(1);
+    setNull(CamParent01,CamIn,CamOut,theComp);
+    //attach child camera to parent
+    CamCopy01.parent=CamParent01;
+
+    //translate the data from the original camera with expressions
+    CamParent01.position.expression="L=thisComp.layer("+"\'"+CameraName+"\'"+");L.toWorld([0,0,0])";
+    CamParent01.rotation.expression="L=this_comp.layer("+"\'"+CameraName+"\'"+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);}else{b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]"
+    CamCopy01.orientation.expression="L=this_comp.layer("+"\'"+CameraName+"\'"+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);}else{b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]"
+    CamCopy01.rotationX.expression="L=this_comp.layer("+"\'"+CameraName+"\'"+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);}else{b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]"
+    CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\'"+CameraName+"\'"+").zoom*1/unit[0]";
+
+    //Make a second copy of the camera, this time it will be baked
+    ShortCamName=removeForbiddenCharacters(CameraName);
+    theComp.layers.addCamera("<"+ShortCamName+">",[0,0]).startTime=0;
+    CamCopy02=theComp.layer(1);
+    CamCopy02.inPoint=CamIn;
+    CamCopy02.outPoint=CamOut;
+    CamCopy02.pointOfInterest.expression="position";
+    CamCopy02.position.setValue([theComp.width/2, theComp.height/2, 0]);
+    //make seconcd camera parent.
+    theComp.layers.addNull(theComp.duration).name="<"+ShortCamName+"Parent"+">";
+    CamParent02=theComp.layer(1);
+    setNull(CamParent02,CamIn,CamOut,theComp)
+    //attach child camera to parent
+    CamCopy02.parent=CamParent02;
+
+    Bake(theComp, theComp.layer(3).position, CamParent02.position);
+    Bake(theComp, theComp.layer(3).rotation, CamParent02.rotation);
+    Bake(theComp, theComp.layer(4).orientation, CamCopy02.orientation);
+    Bake(theComp, theComp.layer(4).rotationX, CamCopy02.rotationX);
+    Bake(theComp, theComp.layer(4).zoom, CamCopy02.zoom);
+
+    //remove the expression camera and its parent
+    theComp.layer(4).remove();
+    theComp.layer(3).remove();
+
+    }else{alert("ERROR!!\r"+
+    "Please select a camera. ")};
+    }else{alert("ERROR!!\r"+
+    "Please select only one layer at a time. ")};
+    }else{alert("ERROR!!\r"+
+    "A camera must be highlighted, and its timeline must be the active window.")};
+    }else{alert("ERROR!!\r"+
+    "A camera must be highlighted, and its timeline must be the active window.")};
+
+    //****************************** STEP 2: create Maya scene file
+
+    var CamName = removeForbiddenCharacters(CameraName);
+
+    //create text file
+    var myFile = File.saveDialog("Save your file", CamName + ".ma", "");
+    var fileOK = myFile.open("w","TEXT","????");
+
+    //Maya scene file header
+    myFile.writeln("//Maya ASCII 6.0 scene");
+    myFile.writeln("//Name: " + CamName + "_export.ma");
+    myFile.writeln("//Last modified:");
+    myFile.writeln("requires maya \"6.0\";");
+    myFile.writeln("currentUnit -l centimeter -a degree -t " + fps + ";");
+    myFile.writeln("");
+
+    //make camera nodes
+
+    //transform node
+    myFile.writeln("createNode transform -n \"" + CamName + "\";");
+
+    // shape node, that will have film back
+    myFile.writeln("createNode camera -n \"" + CamName + "Shape\" -p \"" + CamName + "\";"); //is parented to the transform node
+    myFile.writeln("    setAttr -k off \".v\";");
+    myFile.writeln("    setAttr \".rnd\" yes;");// renderable
+    myFile.writeln("    setAttr \".ow\" 10.0;");
+    myFile.writeln("    setAttr \".dof\" no;");// depth of field
+    myFile.writeln("    setAttr \".s\" no;");
+    myFile.writeln("    setAttr \".eo\" 1.0;");
+    myFile.writeln("    setAttr \".ff\" 1;"); // film fit.  1 = horizontal (FOV measured on the horizontal)
+    myFile.writeln("    setAttr \".cap\" -type \"double2\" " + mayaFilmBack + " " + mayaFBHeight + ";"); // Camera Aperature
+    myFile.writeln("    setAttr \".col\" -type \"float3\" 0.0 0.0 0.0 ;");
+    myFile.writeln("    setAttr \".imn\" -type \"string\" \"" + CamName + "\";");
+    myFile.writeln("    setAttr \".den\" -type \"string\" \"" + CamName + "_Depth\";");
+    myFile.writeln("    setAttr \".man\" -type \"string\" \"" + CamName + "_Mask\";");
+    myFile.writeln("");
+
+    // X position
+    myFile.writeln("createNode animCurveTL -n \"" + CamName + "_TranslateX\";");
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        pos=theComp.layer(1).position.valueAtTime(f, false);
+        Xpos=(pos[0]-worldCenter[0])/worldScale;
+        myFile.write(" " + i + " " + Xpos);
+    }
+
+    myFile.write(";");
+    myFile.writeln("");
+    myFile.writeln("");
+
+    // Y position
+    myFile.writeln("createNode animCurveTL -n \"" + CamName + "_TranslateY\";")
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        pos=theComp.layer(1).position.valueAtTime(f, false);
+        Ypos=-((pos[1]-worldCenter[1])/worldScale);
+        myFile.write(" " + i + " " + Ypos);
+    }
+
+    myFile.write(";");
+    myFile.writeln("");
+    myFile.writeln("");
+
+    // Z position
+    myFile.writeln("createNode animCurveTL -n \"" + CamName + "_TranslateZ\";");
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        pos=theComp.layer(1).position.valueAtTime(f, false);
+        Zpos=-(pos[2]/worldScale);
+        myFile.write(" " + i + " " + Zpos);
+    }
+
+    myFile.write(";");
+    myFile.writeln("");
+    myFile.writeln("");
+
+    // Pitch (X rotation)
+    myFile.writeln("createNode animCurveTA -n \"" + CamName + "_RotateX\";");
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        rotX=theComp.layer(2).rotationX.valueAtTime(f, false);
+        Xrot=rotX;
+        myFile.write(" " + i + " " + Xrot);
+    }
+
+    myFile.write(";");
+    myFile.writeln("");
+    myFile.writeln("");
+
+    // Heading (Y rotation)
+    myFile.writeln("createNode animCurveTA -n \"" + CamName + "_RotateY\";");
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        rotY=theComp.layer(2).orientation.valueAtTime(f, false);
+        Yrot=-(rotY[1]);
+        myFile.write(" " + i + " " + Yrot);
+    }
+
+    myFile.write(";");
+    myFile.writeln("");
+    myFile.writeln("");
+
+    // Bank (Z rotation)
+    myFile.writeln("createNode animCurveTA -n \"" + CamName + "_RotateZ\";");
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        rotZ=theComp.layer(1).rotation.valueAtTime(f, false);
+        Zrot=-(rotZ);
+        myFile.write(" " + i + " " + Zrot);
+    }
+
+    myFile.write(";");
+    myFile.writeln("");
+    myFile.writeln("");
+
+    // Focal length
+    myFile.writeln("createNode animCurveTU -n \"" + CamName + "Shape_FocalLength\";");
+    myFile.writeln("    setAttr \".tan\" 9;");
+    myFile.writeln("    setAttr \".wgt\" no;");
+    myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+            
+    for (i=1;i<=totalFrames;i++) {
+        f=(i-1)*frameDuration;
+        aeZoom = theComp.layer(2).zoom.valueAtTime(f, false);
+        HFOV=Math.atan( (compWidth*aspect*0.5) /aeZoom);//half the FOV, in radians
+        fLength=( (mayaFilmBack*0.5) / Math.tan(HFOV) ) * 25.4; //in inches, converted to mm
+        myFile.write(" " + i + " " + fLength);
+    }
+            
+    myFile.write(";");
+    myFile.writeln(""); 
+    myFile.writeln(""); 
+
+    //Render size settings
+    myFile.writeln("select -ne :time1;");
+    myFile.writeln("    setAttr \".o\" 1;");
+    myFile.writeln("select -ne :defaultResolution;");
+    myFile.writeln("    setAttr \".w\" " + compWidth + ";");
+    myFile.writeln("    setAttr \".h\" " + compHeight + ";");
+    myFile.writeln("    setAttr \".dar\" " + frameAspect + ";");
+    myFile.writeln("");
+
+    //connect the nodes together
+    myFile.writeln("connectAttr \"" + CamName + "_TranslateX.o\" \"" + CamName + ".tx\";");
+    myFile.writeln("connectAttr \"" + CamName + "_TranslateY.o\" \"" + CamName + ".ty\";");
+    myFile.writeln("connectAttr \"" + CamName + "_TranslateZ.o\" \"" + CamName + ".tz\";");
+    myFile.writeln("");
+    myFile.writeln("connectAttr \"" + CamName + "_RotateX.o\" \"" + CamName + ".rx\";");
+    myFile.writeln("connectAttr \"" + CamName + "_RotateY.o\" \"" + CamName + ".ry\";");
+    myFile.writeln("connectAttr \"" + CamName + "_RotateZ.o\" \"" + CamName + ".rz\";");
+    myFile.writeln("");
+    myFile.writeln("connectAttr \"" + CamName + "Shape_FocalLength.o\"\"" + CamName + "Shape.fl\";");
+    myFile.writeln("");
+
+    //set work area 
+    myFile.writeln("createNode script -n \"sceneConfigurationScriptNode\";");
+    myFile.writeln("    setAttr \".b\" -type \"string\"\"playbackOptions -min 1.0 -max " + totalFrames + " -ast 1.0 -aet " + totalFrames + "\";");
+    myFile.writeln("    setAttr \".st\" 6;");
+    myFile.writeln("");
+    myFile.writeln("//End of " + CamName + ".ma");
+
+    myFile.close();
+
+    //erase baked camera and its parent
+
+    theComp.layer(2).remove();
+    theComp.layer(1).remove();
+
+    app.endUndoGroup();
+}  //end script
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 //COMMON FUNCTIONS
+
+//~~~~~~~~~~~~~~~~~~~
+function degreesToRadians(degree) {
+    var pi = Math.PI;
+    var radians = (degree)*(pi/180);
+    return(radians);
+}
+
+function radiansToDegrees(radian) {
+    var pi = Math.PI;
+    var degrees = (radian)*(180/pi);
+    return(degrees);
+}
+
+//allow only names that contain letters and numbers, and do not start with a number
+function removeForbiddenCharacters(theName) {
+    FirstChar=theName.charAt(0);
+    if (FirstChar>"0" && FirstChar<"9") {theName="Cam" + theName};
+    theName=theName.replace(/[^a-zA-Z0-9]+/g,"");//remove special characters and spaces
+    return(theName);
+}
+
+//  Convert Expression to Keyframes (in the work area)
+function Bake(theComp, propBeingCopied, propBeingWritten) {
+    StartBake=theComp.workAreaStart;
+    EndBake=StartBake+theComp.workAreaDuration;
+    NextFrame=1/theComp.frameRate;
+    for (var i=StartBake; i<EndBake; i=i+NextFrame) {
+        propBeingWritten.setValueAtTime(i,propBeingCopied.valueAtTime(i, false));
+    }
+}
+
+//make null layer 3D, set in and out points, center it, turn off light calculations
+function setNull(theNull,In,Out,theComp) {
+    theNull.threeDLayer=true;
+    theNull.startTime=0;
+    theNull.inPoint=In;
+    theNull.outPoint=Out;
+    theNull.anchorPoint.setValue([25,25,0]);
+    theNull.position.setValue([theComp.width/2, theComp.height/2, 0]);
+    theNull.acceptsLights.setValue(false);
+    theNull.acceptsShadows.setValue(false);
+}
+
+//find the index number of a layer in the comp by name
+function findNumberOfLayerByName(LayerName,theComp){
+    for (i=theComp.numLayers;i>=1;i--){
+        theLayer=theComp.layer(i);
+        if (theLayer.name==LayerName) {return(i)};
+    }
+}
+
+//Deselect everything in the project window
+function DeselectProjectWindowItems(){
+    for (i=app.project.items.length;i>=1;i--) {
+        item=app.project.items[i];
+        if (item.selected){item.selected=false};
+    }
+}
+
+//Deselect all the layers in the active Comp
+function DeselectLayers(theComp){
+    for (i=theComp.numLayers;i>=1;i--){
+        item=theComp.layer(i);
+        if (item.selected){item.selected=false};
+    }
+}
+//~~~~~~~~~~~~~~~~~~~
 
 function kill(target){
     var items = app.project.items;
