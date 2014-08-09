@@ -1,4 +1,4 @@
-﻿// AEToolbox 1.16
+﻿// AEToolbox 1.17
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
