@@ -2004,6 +2004,9 @@ function cameraToMaya(){  //start script
     var f = 0;
 
     var theComp = app.project.activeItem;
+    var theLayers = theComp.layers;
+    var allLayers = theComp.layers;
+
     var compWidth = theComp.width;
     var compHeight = theComp.height;
     var selectedLayers = theComp.selectedLayers;
@@ -2342,7 +2345,6 @@ function cameraToMaya(){  //start script
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // modifications by Nick Fox-Gieg
 
-    var allLayers = theComp.layers;
     for (var i=1; i < allLayers.length; i++){
         var curLayer = allLayers[i];
         //if (curLayer.numKeys > 0) Bake(theComp,curLayer.property("Position"),curLayer.property("Position"));
