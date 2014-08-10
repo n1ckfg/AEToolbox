@@ -2198,6 +2198,14 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".imn\" -type \"string\" \"" + CamName + "\";");
     myFile.writeln("    setAttr \".den\" -type \"string\" \"" + CamName + "_Depth\";");
     myFile.writeln("    setAttr \".man\" -type \"string\" \"" + CamName + "_Mask\";");
+    //~~~
+    /*
+    var aeZoom = theComp.layer(2).zoom.valueAtTime(0, false);
+    var HFOV=Math.atan( (compWidth*aspect*0.5) /aeZoom);//half the FOV, in radians
+    var fLength=( (mayaFilmBack*0.5) / Math.tan(HFOV) ) * 25.4; //in inches, converted to mm    
+    myFile.writeln("    setAttr \".fl\" " + fLength + " ;");
+    */
+    //~~~
     myFile.writeln("");
 
     // X position
@@ -2303,6 +2311,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("");
 
     // Focal length
+    
     myFile.writeln("createNode animCurveTU -n \"" + CamName + "Shape_FocalLength\";");
     myFile.writeln("    setAttr \".tan\" 9;");
     myFile.writeln("    setAttr \".wgt\" no;");
@@ -2319,6 +2328,7 @@ function cameraToMaya(){  //start script
     myFile.write(";");
     myFile.writeln(""); 
     myFile.writeln(""); 
+    
 
     //Render size settings
     myFile.writeln("select -ne :time1;");
