@@ -2357,7 +2357,7 @@ function cameraToMaya(){  //start script
         var curLayer = allLayers[i];
         var curLayerName = curLayer.name.replace(/[^a-zA-Z0-9]+/g,"");
         if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent"){
-            alert(curLayerName);
+            //alert(curLayerName);
 
             var pos = curLayer.property("Position").valueAtTime(0,false);
             var Xpos=(pos[0]-worldCenter[0])/worldScale;
