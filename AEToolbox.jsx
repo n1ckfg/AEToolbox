@@ -2214,7 +2214,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         pos=theComp.layer(1).position.valueAtTime(f, false);
         Xpos=(pos[0]-worldCenter[0])/worldScale;
@@ -2231,7 +2231,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         pos=theComp.layer(1).position.valueAtTime(f, false);
         Ypos=-((pos[1]-worldCenter[1])/worldScale);
@@ -2248,7 +2248,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         pos=theComp.layer(1).position.valueAtTime(f, false);
         Zpos=-(pos[2]/worldScale);
@@ -2265,7 +2265,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         rotX=theComp.layer(2).rotationX.valueAtTime(f, false);
         Xrot=rotX;
@@ -2282,7 +2282,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         rotY=theComp.layer(2).orientation.valueAtTime(f, false);
         Yrot=-(rotY[1]);
@@ -2299,7 +2299,7 @@ function cameraToMaya(){  //start script
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         rotZ=theComp.layer(1).rotation.valueAtTime(f, false);
         Zrot=-(rotZ);
@@ -2311,13 +2311,12 @@ function cameraToMaya(){  //start script
     myFile.writeln("");
 
     // Focal length
-    
     myFile.writeln("createNode animCurveTU -n \"" + CamName + "Shape_FocalLength\";");
     myFile.writeln("    setAttr \".tan\" 9;");
     myFile.writeln("    setAttr \".wgt\" no;");
     myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
             
-    for (i=1;i<=totalFrames;i++) {
+    for (var i=1;i<=totalFrames;i++) {
         f=(i-1)*frameDuration;
         aeZoom = theComp.layer(2).zoom.valueAtTime(f, false);
         HFOV=Math.atan( (compWidth*aspect*0.5) /aeZoom);//half the FOV, in radians
@@ -2329,7 +2328,6 @@ function cameraToMaya(){  //start script
     myFile.writeln(""); 
     myFile.writeln(""); 
     
-
     //Render size settings
     myFile.writeln("select -ne :time1;");
     myFile.writeln("    setAttr \".o\" 1;");
@@ -2354,18 +2352,17 @@ function cameraToMaya(){  //start script
 
     //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
     // modifications by Nick Fox-Gieg
-
-    for (var i=1; i < allLayers.length; i++){
+    var allLayers = theComp.layers;
+    for (var i=1; i < allLayers.length; i++) {
         var curLayer = allLayers[i];
-        //if (curLayer.numKeys > 0) Bake(theComp,curLayer.property("Position"),curLayer.property("Position"));
-
         var curLayerName = curLayer.name.replace(/[^a-zA-Z0-9]+/g,"");
-
         if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent"){
-            pos = curLayer.property("Position").valueAtTime(0,false);
-            Xpos=(pos[0]-worldCenter[0])/worldScale;
-            Ypos=-((pos[1]-worldCenter[1])/worldScale);
-            Zpos=-(pos[2]/worldScale);
+            alert(curLayerName);
+
+            var pos = curLayer.property("Position").valueAtTime(0,false);
+            var Xpos=(pos[0]-worldCenter[0])/worldScale;
+            var Ypos=-((pos[1]-worldCenter[1])/worldScale);
+            var Zpos=-(pos[2]/worldScale);
 
             myFile.writeln("createNode transform -n \"" + curLayerName +"\";");
             myFile.writeln("setAttr \".t\" -type \"double3\" " + Xpos + " " + Ypos + " " + Zpos + " ;");
@@ -2376,8 +2373,8 @@ function cameraToMaya(){  //start script
             
             myFile.writeln("createNode locator -n \"locatorShape"+ i +"\" -p \"" + curLayerName +"\";");
             myFile.writeln("setAttr -k off \".v\";");
-            myFile.writeln("");            
-            
+            myFile.writeln("");   
+
             if (curLayer.property("Position").numKeys > 0) {
 
                 // X position
@@ -2386,28 +2383,32 @@ function cameraToMaya(){  //start script
                 myFile.writeln("    setAttr \".wgt\" no;");
                 myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-                for (i=1;i<=totalFrames;i++) {
-                    f=(i-1)*frameDuration;
-                    pos=curLayer.position.valueAtTime(f, false);
-                    Xpos=(pos[0]-worldCenter[0])/worldScale;
-                    myFile.write(" " + i + " " + Xpos);
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var pos=curLayer.position.valueAtTime(f, false);
+                    var Xpos=(pos[0]-worldCenter[0])/worldScale;
+                    myFile.write(" " + counter + " " + Xpos);
+                    counter++;
                 }
 
                 myFile.write(";");
                 myFile.writeln("");
                 myFile.writeln("");
 
-                 // Y position
+                // Y position
                 myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_TranslateY\";")
                 myFile.writeln("    setAttr \".tan\" 9;");
                 myFile.writeln("    setAttr \".wgt\" no;");
                 myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-                for (i=1;i<=totalFrames;i++) {
-                    f=(i-1)*frameDuration;
-                    pos=curLayer.position.valueAtTime(f, false);
-                    Ypos=-((pos[1]-worldCenter[1])/worldScale);
-                    myFile.write(" " + i + " " + Ypos);
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var pos=curLayer.position.valueAtTime(f, false);
+                    var Ypos=-((pos[1]-worldCenter[1])/worldScale);
+                    myFile.write(" " + counter + " " + Ypos);
+                    counter++;
                 }
 
                 myFile.write(";");
@@ -2420,11 +2421,13 @@ function cameraToMaya(){  //start script
                 myFile.writeln("    setAttr \".wgt\" no;");
                 myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
 
-                for (i=1;i<=totalFrames;i++) {
-                    f=(i-1)*frameDuration;
-                    pos=curLayer.position.valueAtTime(f, false);
-                    Zpos=-(pos[2]/worldScale);
-                    myFile.write(" " + i + " " + Zpos);
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var pos=curLayer.position.valueAtTime(f, false);
+                    var Zpos=-(pos[2]/worldScale);
+                    myFile.write(" " + counter + " " + Zpos);
+                    counter++;
                 }
 
                 myFile.write(";");
@@ -2434,18 +2437,18 @@ function cameraToMaya(){  //start script
                 myFile.writeln("connectAttr \"" + curLayerName + "_TranslateX.o\" \"" + curLayerName + ".tx\";");
                 myFile.writeln("connectAttr \"" + curLayerName + "_TranslateY.o\" \"" + curLayerName + ".ty\";");
                 myFile.writeln("connectAttr \"" + curLayerName + "_TranslateZ.o\" \"" + curLayerName + ".tz\";");
-                //myFile.writeln("connectAttr \"" + curLayerName + "_visibility.o\" \"" + curLayerName + ".v\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_visibility.o\" \"" + curLayerName + ".v\";");
         
-                myFile.writeln("");
-                
                 //myFile.writeln("connectAttr \"" + curLayerName + "_rotateX.o\" \"" + curLayerName + ".rx\";");
                 //myFile.writeln("connectAttr \"" + curLayerName + "_rotateY.o\" \"" + curLayerName + ".ry\";");
                 //myFile.writeln("connectAttr \"" + curLayerName + "_rotateZ.o\" \"" + curLayerName + ".rz\";");
+
                 //myFile.writeln("connectAttr \"" + curLayerName + "_scaleX.o\" \"" + curLayerName + ".sx\";");
                 //myFile.writeln("connectAttr \"" + curLayerName + "_scaleY.o\" \"" + curLayerName + ".sy\";");
                 //myFile.writeln("connectAttr \"" + curLayerName + "_scaleZ.o\" \"" + curLayerName + ".sz\";");
+                
+                myFile.writeln("");
             }
-            
         }
     }
 
@@ -2519,7 +2522,7 @@ function setNull(theNull,In,Out,theComp) {
 
 //find the index number of a layer in the comp by name
 function findNumberOfLayerByName(LayerName,theComp){
-    for (i=theComp.numLayers;i>=1;i--){
+    for (var i=theComp.numLayers;i>=1;i--){
         theLayer=theComp.layer(i);
         if (theLayer.name==LayerName) {return(i)};
     }
@@ -2527,7 +2530,7 @@ function findNumberOfLayerByName(LayerName,theComp){
 
 //Deselect everything in the project window
 function DeselectProjectWindowItems(){
-    for (i=app.project.items.length;i>=1;i--) {
+    for (var i=app.project.items.length;i>=1;i--) {
         item=app.project.items[i];
         if (item.selected){item.selected=false};
     }
@@ -2535,7 +2538,7 @@ function DeselectProjectWindowItems(){
 
 //Deselect all the layers in the active Comp
 function DeselectLayers(theComp){
-    for (i=theComp.numLayers;i>=1;i--){
+    for (var i=theComp.numLayers;i>=1;i--){
         item=theComp.layer(i);
         if (item.selected){item.selected=false};
     }
