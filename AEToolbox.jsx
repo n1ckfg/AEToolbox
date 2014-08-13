@@ -2369,12 +2369,29 @@ function cameraToMaya(){  //start script
             myFile.writeln("setAttr -av \".tx\";");
             myFile.writeln("setAttr -av \".ty\";");
             myFile.writeln("setAttr -av \".tz\";");
+            
             myFile.writeln("");
             
+            myFile.writeln("setAttr -av \".rx\";");
+            myFile.writeln("setAttr -av \".ry\";");
+            myFile.writeln("setAttr -av \".rz\";");
+            
+            myFile.writeln("");
+            
+            myFile.writeln("setAttr -av \".sx\";");
+            myFile.writeln("setAttr -av \".sy\";");
+            myFile.writeln("setAttr -av \".sz\";");
+            
+            myFile.writeln("");
+
             myFile.writeln("createNode locator -n \"locatorShape"+ i +"\" -p \"" + curLayerName +"\";");
             myFile.writeln("setAttr -k off \".v\";");
+
+            myFile.writeln("");   
+            myFile.writeln("connectAttr \"" + curLayerName + "_visibility.o\" \"" + curLayerName + ".v\";");
             myFile.writeln("");   
 
+            //1-3 TRANSLATE
             if (curLayer.property("Position").numKeys > 0) {
 
                 // X position
@@ -2437,18 +2454,141 @@ function cameraToMaya(){  //start script
                 myFile.writeln("connectAttr \"" + curLayerName + "_TranslateX.o\" \"" + curLayerName + ".tx\";");
                 myFile.writeln("connectAttr \"" + curLayerName + "_TranslateY.o\" \"" + curLayerName + ".ty\";");
                 myFile.writeln("connectAttr \"" + curLayerName + "_TranslateZ.o\" \"" + curLayerName + ".tz\";");
-                myFile.writeln("connectAttr \"" + curLayerName + "_visibility.o\" \"" + curLayerName + ".v\";");
-        
-                //myFile.writeln("connectAttr \"" + curLayerName + "_rotateX.o\" \"" + curLayerName + ".rx\";");
-                //myFile.writeln("connectAttr \"" + curLayerName + "_rotateY.o\" \"" + curLayerName + ".ry\";");
-                //myFile.writeln("connectAttr \"" + curLayerName + "_rotateZ.o\" \"" + curLayerName + ".rz\";");
-
-                //myFile.writeln("connectAttr \"" + curLayerName + "_scaleX.o\" \"" + curLayerName + ".sx\";");
-                //myFile.writeln("connectAttr \"" + curLayerName + "_scaleY.o\" \"" + curLayerName + ".sy\";");
-                //myFile.writeln("connectAttr \"" + curLayerName + "_scaleZ.o\" \"" + curLayerName + ".sz\";");
-                
+               
                 myFile.writeln("");
             }
+            /*
+            //2-3 ROTATION
+            if (curLayer.rotationX.numKeys > 0 || curLayer.rotationY.numKeys > 0 || curLayer.rotationZ.numKeys > 0 || curLayer.orientation.numKeys > 0) {
+
+                // X rotation
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_RotateX\";");
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var Xrot=curLayer.rotationX.valueAtTime(f, false);
+                    myFile.write(" " + counter + " " + Xrot);
+                    counter++;
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                // Y rotation
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_RotateY\";")
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var Yrot=curLayer.orientation.valueAtTime(f, false);
+                    myFile.write(" " + counter + " " + Yrot);
+                    counter++;
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                // Z rotation
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_RotateZ\";");
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var Zrot=curLayer.rotationZ.valueAtTime(f, false);
+                    myFile.write(" " + counter + " " + Zrot);
+                    counter++;
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                myFile.writeln("connectAttr \"" + curLayerName + "_rotateX.o\" \"" + curLayerName + ".rx\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_rotateY.o\" \"" + curLayerName + ".ry\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_rotateZ.o\" \"" + curLayerName + ".rz\";");
+               
+                myFile.writeln("");
+            }
+
+            //3-3 SCALE
+            if (curLayer.property("Scale").numKeys > 0) {
+
+                // X scale
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_ScaleX\";");
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var scale=curLayer.scale.valueAtTime(f, false);
+                    var Xscale=scale[0]/100;
+                    myFile.write(" " + counter + " " + Xscale);
+                    counter++;
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                // Y scale
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_ScaleY\";")
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var scale=curLayer.scale.valueAtTime(f, false);
+                    var Yscale=scale[1]/100;
+                    myFile.write(" " + counter + " " + Yscale);
+                    counter++;
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                // Z scale
+                myFile.writeln("createNode animCurveTL -n \"" + curLayerName + "_ScaleZ\";");
+                myFile.writeln("    setAttr \".tan\" 9;");
+                myFile.writeln("    setAttr \".wgt\" no;");
+                myFile.write("  setAttr -s " + totalFrames + " \".ktv[1:" + totalFrames + "]\"");
+
+                var counter = 1; // why does this only work with a while loop?
+                while (counter <= totalFrames) {
+                    var f=(counter-1)*frameDuration;
+                    var scale=curLayer.scale.valueAtTime(f, false);
+                    var Zscale=scale[2]/100;
+                    myFile.write(" " + counter + " " + Zscale);
+                    counter++;
+                }
+
+                myFile.write(";");
+                myFile.writeln("");
+                myFile.writeln("");
+
+                myFile.writeln("connectAttr \"" + curLayerName + "_scaleX.o\" \"" + curLayerName + ".sx\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_scaleY.o\" \"" + curLayerName + ".sy\";");
+                myFile.writeln("connectAttr \"" + curLayerName + "_scaleZ.o\" \"" + curLayerName + ".sz\";");
+               
+                myFile.writeln("");
+            }       
+            */     
         }
     }
 
