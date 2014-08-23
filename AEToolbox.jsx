@@ -867,6 +867,8 @@ function charParticle(){  //start script
 function charBeam(){  //start script
     app.beginUndoGroup("Create a Beam Rig");
 
+    var doLightning = confirm("Render lightning?");
+
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
 
@@ -877,19 +879,32 @@ function charBeam(){  //start script
     } else {
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Beam Solid", theComp.width, theComp.height, 1);
         solid.locked = true;
-        var beam_baseSize = solid.property("Effects").addProperty("Slider Control");
-        beam_baseSize.name = "Base Size";
-        beam_baseSize.property("Slider").setValue(8);
-        var beam_maxSize = solid.property("Effects").addProperty("Slider Control");
-        beam_maxSize.name = "Max Size";
-        beam_maxSize.property("Slider").setValue(1000);
-        var beam_minSize = solid.property("Effects").addProperty("Slider Control");
-        beam_minSize.name = "Min Size";
-        beam_minSize.property("Slider").setValue(1);
+        
+        if (!doLightning) {
+            var beam_baseSize = solid.property("Effects").addProperty("Slider Control");
+            beam_baseSize.name = "Base Size";
+            beam_baseSize.property("Slider").setValue(8);
+            var beam_maxSize = solid.property("Effects").addProperty("Slider Control");
+            beam_maxSize.name = "Max Size";
+            beam_maxSize.property("Slider").setValue(1000);
+            var beam_minSize = solid.property("Effects").addProperty("Slider Control");
+            beam_minSize.name = "Min Size";
+            beam_minSize.property("Slider").setValue(1);
+        } else {
+            var beam_baseSize = solid.property("Effects").addProperty("Slider Control");
+            beam_baseSize.name = "Randomize";
+            beam_baseSize.property("Slider").setValue(0);            
+        }
 
-        var beam = solid.property("Effects").addProperty("Beam");
-        beam.property("3D Perspective").setValue(0);
-        beam.property("Length").setValue(1);
+        var beam;
+        if (doLightning) {
+            beam = solid.property("Effects").addProperty("Advanced Lightning");
+            beam.property("Lightning Type").setValue(2); //type strike
+        } else {
+            beam = solid.property("Effects").addProperty("Beam");
+            beam.property("3D Perspective").setValue(0);
+            beam.property("Length").setValue(1);
+        }
 
         var beamStart = theComp.layers.addNull();
         beamStart.name = "beam_start";
@@ -903,32 +918,42 @@ function charBeam(){  //start script
 
 
         var expr1 = "fromComp(thisComp.layer(\"beam_start\").toComp(thisComp.layer(\"beam_start\").anchorPoint));";
-        beam.property("Starting Point").expression = expr1;
-        
         var expr2 = "fromComp(thisComp.layer(\"beam_end\").toComp(thisComp.layer(\"beam_end\").anchorPoint));";
-        beam.property("Ending Point").expression = expr2;
 
-        var expr3 = "var L = \"beam_start\";" + "\r" + 
-                    "var s = thisComp.layer(\"Beam Solid\").effect(\"Base Size\")(\"Slider\");" + "\r" + 
-                    "var sMax = thisComp.layer(\"Beam Solid\").effect(\"Max Size\")(\"Slider\");" + "\r" + 
-                    "var sMin = thisComp.layer(\"Beam Solid\").effect(\"Min Size\")(\"Slider\");" + "\r" + 
-                    "var p = thisComp.layer(L).transform.position;" + "\r" + 
-                    "var ss = s + (-p[2]);" + "\r" + 
-                    "if(ss<sMin) ss = sMin;" + "\r" + 
-                    "if(ss>sMax) ss = sMax;" + "\r" + 
-                    "ss;";
-        beam.property("Starting Thickness").expression = expr3;
+        if (doLightning) {
+            beam.property("Origin").expression = expr1;
+            beam.property("Direction").expression = expr2;
+        } else {
+            beam.property("Starting Point").expression = expr1;
+            beam.property("Ending Point").expression = expr2;
+        }
+        
+        if (!doLightning) {
+            var expr3 = "var L = \"beam_start\";" + "\r" + 
+                        "var s = thisComp.layer(\"Beam Solid\").effect(\"Base Size\")(\"Slider\");" + "\r" + 
+                        "var sMax = thisComp.layer(\"Beam Solid\").effect(\"Max Size\")(\"Slider\");" + "\r" + 
+                        "var sMin = thisComp.layer(\"Beam Solid\").effect(\"Min Size\")(\"Slider\");" + "\r" + 
+                        "var p = thisComp.layer(L).transform.position;" + "\r" + 
+                        "var ss = s + (-p[2]);" + "\r" + 
+                        "if(ss<sMin) ss = sMin;" + "\r" + 
+                        "if(ss>sMax) ss = sMax;" + "\r" + 
+                        "ss;";
+            beam.property("Starting Thickness").expression = expr3;
 
-        var expr4 = "var L = \"beam_end\";" + "\r" + 
-                    "var s = thisComp.layer(\"Beam Solid\").effect(\"Base Size\")(\"Slider\");" + "\r" + 
-                    "var sMax = thisComp.layer(\"Beam Solid\").effect(\"Max Size\")(\"Slider\");" + "\r" + 
-                    "var sMin = thisComp.layer(\"Beam Solid\").effect(\"Min Size\")(\"Slider\");" + "\r" + 
-                    "var p = thisComp.layer(L).transform.position;" + "\r" + 
-                    "var ss = s + (-p[2]);" + "\r" + 
-                    "if(ss<sMin) ss = sMin;" + "\r" + 
-                    "if(ss>sMax) ss = sMax;" + "\r" + 
-                    "ss;";
-        beam.property("Ending Thickness").expression = expr4;
+            var expr4 = "var L = \"beam_end\";" + "\r" + 
+                        "var s = thisComp.layer(\"Beam Solid\").effect(\"Base Size\")(\"Slider\");" + "\r" + 
+                        "var sMax = thisComp.layer(\"Beam Solid\").effect(\"Max Size\")(\"Slider\");" + "\r" + 
+                        "var sMin = thisComp.layer(\"Beam Solid\").effect(\"Min Size\")(\"Slider\");" + "\r" + 
+                        "var p = thisComp.layer(L).transform.position;" + "\r" + 
+                        "var ss = s + (-p[2]);" + "\r" + 
+                        "if(ss<sMin) ss = sMin;" + "\r" + 
+                        "if(ss>sMax) ss = sMax;" + "\r" + 
+                        "ss;";
+            beam.property("Ending Thickness").expression = expr4;
+        } else {
+            var expr3 = "random(effect(\"Randomize\")(\"Slider\"));";
+            beam.property("Conductivity State").expression = expr3;
+        }
     }
  
     app.endUndoGroup();
