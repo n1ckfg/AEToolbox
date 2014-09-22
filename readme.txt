@@ -24,7 +24,7 @@ II.  ADVANCED
 4. Parentable Null (layer selection): Creates a null with expressions that solve certain parenting problems. 
 5. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
 6. Crossfade (comp selection): Fades a layer into a duplicate of itself for a seamless loop.
-7. 3D MoSketch (no selection): Creates a null with 3D controls for use with Motion Sketch.
+7. Depth Sort (layer selection): Sorts layers based on Z depth.
 
 III.  RIGGING
 1. Blink Rig (comp selection): Turns a blink layer inside the comp on and off.  
@@ -33,6 +33,7 @@ III.  RIGGING
 4. Beam Rig (no selection): Creates a 3D laser effect with start and end nulls.
 5. Particle Rig (no selection): Creates a null controller for Particular particles.
 6. Camera Rig (no selection): Creates a camera rigged for point-of-interest and DoF control. 
+7. MoSketch Rig (no selection): Creates a null with 3D controls for use with Motion Sketch.
 
 IV.  STEREO
 1. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.

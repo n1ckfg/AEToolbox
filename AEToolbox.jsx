@@ -60,10 +60,10 @@ function buildUI(this_obj_) {
     win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Parentable Null');
     win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
     win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Crossfade');
-    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], '3D MoSketch');
+    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Depth Sort');
     //--
     // Rigging group
-    var col2butCount = 6;
+    var col2butCount = 7;
     //win.rigGroup = win.add('panel', [colXstart+(colXinc * 1),colYstart,colXend+(colXinc*1),colYendBase+(col2butCount*butYinc)], 'Rigging', {borderStyle: "etched"});
     win.rigGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.rigGroup0 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Rig');
@@ -72,7 +72,8 @@ function buildUI(this_obj_) {
     win.rigGroup3 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Beam Rig');
     win.rigGroup4 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Particle Rig');
     win.rigGroup5 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Camera Rig');
-    //--
+    win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'MoSketch Rig');
+   //--
     // Stereo group
     var col3butCount = 4;
     //win.stereoGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
@@ -112,7 +113,7 @@ function buildUI(this_obj_) {
     win.advGroup3.onClick = parentableNull;
     win.advGroup4.onClick = sineWave;
     win.advGroup5.onClick = crossfader;
-    win.advGroup6.onClick = threeDmoSketch;
+    win.advGroup6.onClick = depthSort;
     //--
     win.rigGroup0.onClick = charBlink;
     win.rigGroup1.onClick = charJaw;
@@ -120,6 +121,7 @@ function buildUI(this_obj_) {
     win.rigGroup3.onClick = charBeam;
     win.rigGroup4.onClick = charParticle;
     win.rigGroup5.onClick = handheldCamera;
+    win.rigGroup6.onClick = threeDmoSketch;
     //--
     win.stereoGroup0.onClick = splitStereoPair;
     win.stereoGroup1.onClick = mergeStereoPair;
@@ -148,7 +150,7 @@ function buildUI(this_obj_) {
     win.advGroup3.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
     win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
     win.advGroup5.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
-    win.advGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
+    win.advGroup6.helpTip = "Sorts layer order by depth."; //depthSort;
     //--    
     win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
     win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
@@ -156,6 +158,7 @@ function buildUI(this_obj_) {
     win.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
     win.rigGroup4.helpTip = "Creates a null controller for Particular particles."; //charParticle;
     win.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+    win.advGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     //--
     win.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
     win.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
@@ -229,6 +232,59 @@ if (w.toString() == "[object Panel]") {
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 27.  Type: apply process to any number of layers
+function depthSort(){  //start script
+    app.beginUndoGroup("Sort by Depth");
+
+    alert("Not currently working; sorry.");
+    
+    var theComp = app.project.activeItem; //only selected
+
+    // check if comp is selected
+    if(theComp == null || !(theComp instanceof CompItem)){
+        // if no comp selected, display an alert
+        alert("Please establish a comp as the active item and run the script again.");
+    }else{ 
+        var theLayers = theComp.selectedLayers;
+        
+        var allLayers = theComp.layers;
+
+        if(theLayers.length==0){
+            alert("Please select some layers and run the script again.");
+        }else{
+
+            var depthArray = [];
+            var depthArraySorted = [];
+
+            for (var i = 0; i < theLayers.length; i++) {
+                // ...then loop through each layer in the selected comp
+                // define the layer in the loop we're currently looking at
+                var curLayer = theLayers[i];
+                var p = curLayer.property("Position").valueAtTime(theComp.time,true);
+                var z = p[2];
+                depthArray.push(z);
+            }
+
+            depthArraySorted = depthArray;
+            // http://www.w3schools.com/jsref/jsref_sort.asp
+            depthArraySorted.sort(function(a, b){return a-b});
+            alert(depthArraySorted);
+
+            for(var i=0; i<depthArraySorted.length; i++){
+                for (var j = 0; j < theLayers.length; j++) {
+                    if (depthArray[i]==depthArraySorted[j]) theLayers[j].moveToBeginning();
+                }
+            }
+
+        }
+    }
+ 
+    app.endUndoGroup();
+}  //end script
+
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // 26.  Type: apply process to any number of layers
@@ -1203,7 +1259,7 @@ function locatorNull(){  //start script
 
 // 11.  process for any number of layers--creates a Z slider for 2D Motion Sketch
 function threeDmoSketch(){  //start script
-    app.beginUndoGroup("Prep for 3D Motion Sketch");
+    app.beginUndoGroup("Prep for 3D Motion Sketch Rig");
 
     //if(parseFloat(app.version) >= 10.5){
     var theComp = app.project.activeItem; //only selected
