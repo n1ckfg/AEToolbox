@@ -51,7 +51,7 @@ function buildUI(this_obj_) {
     win.basicGroup6 = win.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Graph Audio');
     //--
     // Advanced group
-    var col3butCount = 7;
+    var col3butCount = 6;
     //win.advGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
     win.advGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.advGroup0 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
@@ -60,7 +60,6 @@ function buildUI(this_obj_) {
     win.advGroup3 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Parentable Null');
     win.advGroup4 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
     win.advGroup5 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Crossfade');
-    win.advGroup6 = win.advGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Depth Sort');
     //--
     // Rigging group
     var col2butCount = 7;
@@ -75,13 +74,14 @@ function buildUI(this_obj_) {
     win.rigGroup6 = win.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'MoSketch Rig');
    //--
     // Stereo group
-    var col3butCount = 4;
+    var col3butCount = 5;
     //win.stereoGroup = win.add('panel', [colXstart+(colXinc * 2),colYstart,colXend+(colXinc*2),colYendBase+(col3butCount*butYinc)], 'Advanced', {borderStyle: "etched"});
     win.stereoGroup = win.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
     win.stereoGroup0 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Split s3D Pair');
     win.stereoGroup1 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Merge s3D Pair');
     win.stereoGroup2 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 's3D Dispmap');
     win.stereoGroup3 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Depth Fill');
+    win.stereoGroup4 = win.stereoGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Depth Sort');
     //--
     // Guide group
     var col3butCount = 2;
@@ -113,7 +113,6 @@ function buildUI(this_obj_) {
     win.advGroup3.onClick = parentableNull;
     win.advGroup4.onClick = sineWave;
     win.advGroup5.onClick = crossfader;
-    win.advGroup6.onClick = depthSort;
     //--
     win.rigGroup0.onClick = charBlink;
     win.rigGroup1.onClick = charJaw;
@@ -127,6 +126,7 @@ function buildUI(this_obj_) {
     win.stereoGroup1.onClick = mergeStereoPair;
     win.stereoGroup2.onClick = stereoDispMap;
     win.stereoGroup3.onClick = depthFill;
+    win.stereoGroup4.onClick = depthSort;
     //--
     win.guideGroup0.onClick = onionSkin;
     win.guideGroup1.onClick = skeleView;
@@ -150,7 +150,6 @@ function buildUI(this_obj_) {
     win.advGroup3.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
     win.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
     win.advGroup5.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
-    win.advGroup6.helpTip = "Sorts layer order by depth."; //depthSort;
     //--    
     win.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
     win.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
@@ -158,12 +157,13 @@ function buildUI(this_obj_) {
     win.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
     win.rigGroup4.helpTip = "Creates a null controller for Particular particles."; //charParticle;
     win.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
-    win.advGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
+    win.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     //--
     win.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
     win.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
     win.stereoGroup2.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
     win.stereoGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
+    win.stereoGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
     //--
     win.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
     win.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -172,7 +172,7 @@ function buildUI(this_obj_) {
     
     //-----------------------------------------------------
 
-    var selector = win.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Stereo", "Guide", "IO" ]);
+    var selector = win.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Guide", "IO" ]);
     selector.onChange = function() {
         if (selector.selection == 0){ // Basic
             win.basicGroup.visible = true;
@@ -256,34 +256,31 @@ function depthSort(){  //start script
         }else{
 
             var depthArray = [];
-            var depthArraySorted = [];
 
             for (var i = 0; i < theLayers.length; i++) {
                 // ...then loop through each layer in the selected comp
                 // define the layer in the loop we're currently looking at
-                var curLayer = theLayers[i];
                 var p = curLayer.property("Position").valueAtTime(theComp.time,true);
                 var z = p[2];
-                depthArray.push(z);
+                depthArray.push([theLayers[i],z]);
             }
 
-            depthArraySorted = depthArray;
             // http://www.w3schools.com/jsref/jsref_sort.asp
-            depthArraySorted.sort(function(a, b){return a-b});
-            alert(depthArraySorted);
-
-            for(var i=0; i<depthArraySorted.length; i++){
-                for (var j = 0; j < theLayers.length; j++) {
-                    if (depthArray[i]==depthArraySorted[j]) theLayers[j].moveToBeginning();
-                }
-            }
-
+            depthArray.sort(sort2dArray);
+            alert(depthArray);
         }
     }
  
     app.endUndoGroup();
 }  //end script
 
+function sort2dArray(a, b) {
+    if (a[1] == b[1]) {
+        return 0;
+    } else {
+        return (a[1] < b[1]) ? -1 : 1;
+    }
+}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

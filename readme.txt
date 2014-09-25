@@ -24,7 +24,6 @@ II.  ADVANCED
 4. Parentable Null (layer selection): Creates a null with expressions that solve certain parenting problems. 
 5. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
 6. Crossfade (comp selection): Fades a layer into a duplicate of itself for a seamless loop.
-7. Depth Sort (layer selection): Sorts layers based on Z depth.
 
 III.  RIGGING
 1. Blink Rig (comp selection): Turns a blink layer inside the comp on and off.  
@@ -35,13 +34,14 @@ III.  RIGGING
 6. Camera Rig (no selection): Creates a camera rigged for point-of-interest and DoF control. 
 7. MoSketch Rig (no selection): Creates a null with 3D controls for use with Motion Sketch.
 
-IV.  STEREO
+IV.  DEPTH
 1. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.
 2. Merge s3D Pair (layer selection): Merges two left and right comps into a stereo 3D pair comp.
 3. s3D Dispmap...
      (one layer selected): Creates an s3D pair from the selected layer, using it as a displacement map.
      (two layers selected): Creates an s3D pair from the first layer, using the second layer for displacement.
 4. Depth Fill (layer selection): Creates a grayscale depth fill based on distance to camera.
+5. Depth Sort (layer selection): Sorts layers based on Z depth.
 
 V.  OVERLAY
 1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.
