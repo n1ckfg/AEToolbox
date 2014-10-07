@@ -249,8 +249,6 @@ function depthSort(){  //start script
     }else{ 
         var theLayers = theComp.selectedLayers;
         
-        var allLayers = theComp.layers;
-
         if(theLayers.length==0){
             alert("Please select some layers and run the script again.");
         }else{
@@ -259,28 +257,28 @@ function depthSort(){  //start script
 
             for (var i = 0; i < theLayers.length; i++) {
                 // ...then loop through each layer in the selected comp
+                var curLayer = theLayers[i];
                 // define the layer in the loop we're currently looking at
                 var p = curLayer.property("Position").valueAtTime(theComp.time,true);
                 var z = p[2];
-                depthArray.push([theLayers[i],z]);
+                depthArray.push(z);
             }
 
             // http://www.w3schools.com/jsref/jsref_sort.asp
-            depthArray.sort(sort2dArray);
-            alert(depthArray);
+            depthArray.sort(compare);
+            //alert(depthArray);
+            var vals = []
+
+            for(var i=0; i<10; i++){
+                vals.push(Math.random()*100);
+            }
+            vals.sort(compare);
+            //alert(vals);
         }
     }
  
     app.endUndoGroup();
 }  //end script
-
-function sort2dArray(a, b) {
-    if (a[1] == b[1]) {
-        return 0;
-    } else {
-        return (a[1] < b[1]) ? -1 : 1;
-    }
-}
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -648,6 +646,9 @@ function stereoDispMap(){
             }
             var newPrecomp = theComp.layers.precompose([newLayer.index], "Precomp DispMap", true);
             newPrecomp.layers[1].property("Effects").addProperty("Levels");
+            var fb = newPrecomp.layers[1].property("Effects").addProperty("Fast Blur");
+            fb.property("Blurriness").setValue(10);
+
             theComp.layer("Precomp DispMap").enabled = false;
             theComp.layer("Precomp DispMap").audioEnabled = false;
             oldLayer = oldLayer.duplicate(); //make an extra copy to fill in gaps caused by displacement
@@ -2777,6 +2778,15 @@ function kill(target){
             items[i].remove();
         }
     }
+}
+
+function compare(a,b){
+    //return a > b ? 1 : a < b ? -1 : 0;
+    if (a[1] == b[1]) {
+        return 0;
+    } else {
+        return (a[1] < b[1]) ? -1 : 1;
+    }    
 }
 
 function harvestPoint(inputVal, sourceLayer, destLayer, spaceTransform){
