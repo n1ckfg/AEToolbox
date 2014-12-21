@@ -238,8 +238,6 @@ if (w.toString() == "[object Panel]") {
 function depthSort(){  //start script
     app.beginUndoGroup("Sort by Depth");
 
-    //alert("Not currently working; sorry.");
-    
     var theComp = app.project.activeItem; //only selected
 
     // check if comp is selected
@@ -249,19 +247,31 @@ function depthSort(){  //start script
     }else{ 
         var theLayers = theComp.selectedLayers;
         
+        var cz;
+        var isCamera = true;
+        try{
+            cz = theComp.activeCamera.property("Position").valueAtTime(theComp.time,true);
+        }catch(e){
+            isCamera = false;
+        }
+
         if(theLayers.length==0){
             alert("Please select some layers and run the script again.");
         }else{
-            var minMax = confirm("Sort from min to max depth?");
-            if (minMax) {
-                theLayers.sort(sortByZmin);
-            } else {
-                theLayers.sort(sortByZmax);
-            }
+            //if(!isCamera){
+                //var minMax = confirm("Sort from min to max depth?");
+                //if (minMax) {
+                    theLayers.sort(sortByZmin);
+                //} else {
+                    //theLayers.sort(sortByZmax);
+                //}
 
-            for (var i=0; i<theLayers.length; i++) {
-                theLayers[i].moveToBeginning();
-            }
+                for (var i=0; i<theLayers.length; i++) {
+                    if(curLayer.matchName != "ADBE Camera Layer") theLayers[i].moveToBeginning();
+                }
+            //} else {
+                //
+            //}
             /*
             var depthArray = [];
 
