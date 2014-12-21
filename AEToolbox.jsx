@@ -1,4 +1,4 @@
-﻿// AEToolbox 1.17
+﻿// AEToolbox 1.19
 // by Nick Fox-Gieg
 //
 // based on KinectToPin Motion Capture Tools panel
@@ -238,7 +238,7 @@ if (w.toString() == "[object Panel]") {
 function depthSort(){  //start script
     app.beginUndoGroup("Sort by Depth");
 
-    alert("Not currently working; sorry.");
+    //alert("Not currently working; sorry.");
     
     var theComp = app.project.activeItem; //only selected
 
@@ -252,7 +252,17 @@ function depthSort(){  //start script
         if(theLayers.length==0){
             alert("Please select some layers and run the script again.");
         }else{
+            var minMax = confirm("Sort from min to max depth?");
+            if (minMax) {
+                theLayers.sort(sortByZmin);
+            } else {
+                theLayers.sort(sortByZmax);
+            }
 
+            for (var i=0; i<theLayers.length; i++) {
+                theLayers[i].moveToBeginning();
+            }
+            /*
             var depthArray = [];
 
             for (var i = 0; i < theLayers.length; i++) {
@@ -264,16 +274,25 @@ function depthSort(){  //start script
                 depthArray.push(z);
             }
 
-            // http://www.w3schools.com/jsref/jsref_sort.asp
-            depthArray.sort(compare);
-            //alert(depthArray);
-            var vals = []
+            //orders list of layers by list of floats            
+            
+            
+            depthArray.sort(function(a, b){return a-b});
 
-            for(var i=0; i<10; i++){
-                vals.push(Math.random()*100);
+            alert(depthArray);
+
+            //bubbleSort(depthArray,theLayers);  
+
+            for (var i=0; i<theLayers.length; i++) {
+                var curLayer = theLayers[i];
+                var p = curLayer.property("Position").valueAtTime(theComp.time,true);
+                var z = p[2];
+                for (var j=0; j<depthArray.length; j++) {
+                    if(z==depthArray[j]) theLayers[i].moveToBeginning();
+                }
             }
-            vals.sort(compare);
-            //alert(vals);
+            */
+
         }
     }
  
@@ -2781,13 +2800,27 @@ function kill(target){
 }
 
 function compare(a,b){
-    //return a > b ? 1 : a < b ? -1 : 0;
-    if (a[1] == b[1]) {
-        return 0;
-    } else {
-        return (a[1] < b[1]) ? -1 : 1;
-    }    
+    return a > b ? 1 : a < b ? -1 : 0;
 }
+
+function bubbleSort(a,b) {  
+    var swapped;  
+    do {  
+        swapped = false;  
+        for (var i=0; i < a.length-1; i++) {  
+            if (a[i] > a[i+1]) {  
+                var temp = a[i];  
+                a[i] = a[i+1];  
+                a[i+1] = temp;  
+
+                var temp = b[i];  
+                b[i] = b[i+1];  
+                b[i+1] = temp;  
+                swapped = true;  
+            }  
+        }  
+    } while (swapped);  
+}  
 
 function harvestPoint(inputVal, sourceLayer, destLayer, spaceTransform){
     var outputVal;
@@ -2844,6 +2877,26 @@ function convertAudioToKeyframes(target){
     target.selected = true;
     app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
     target.selected = false; 
+}
+
+function sortByZmax(a,b) {
+    if (a.position.value[2] < b.position.value[2]) {
+        return -1;
+    } else if (a.position.value[2] > b.position.value[2]) {
+        return 1;
+    } else {
+        return 0;
+    }
+}
+
+function sortByZmin(b,a) {
+    if (a.position.value[2] < b.position.value[2]) {
+        return -1;
+    } else if (a.position.value[2] > b.position.value[2]) {
+        return 1;
+    } else {
+        return 0;
+    }
 }
 
 
