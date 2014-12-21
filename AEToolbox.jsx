@@ -259,12 +259,12 @@ function depthSort(){  //start script
             alert("Please select some layers and run the script again.");
         }else{
             //if(!isCamera){
-                //var minMax = confirm("Sort from min to max depth?");
-                //if (minMax) {
+                var minMax = confirm("Sort from min to max depth?");
+                if (minMax) {
                     theLayers.sort(sortByZmin);
-                //} else {
-                    //theLayers.sort(sortByZmax);
-                //}
+                } else {
+                    theLayers.sort(sortByZmax);
+                }
 
                 for (var i=0; i<theLayers.length; i++) {
                     //if(theLayers[i].matchName != "ADBE Camera Layer") {
