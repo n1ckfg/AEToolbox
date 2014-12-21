@@ -267,8 +267,15 @@ function depthSort(){  //start script
                 //}
 
                 for (var i=0; i<theLayers.length; i++) {
-                    if(curLayer.matchName != "ADBE Camera Layer") theLayers[i].moveToBeginning();
+                    if(theLayers[i].matchName != "ADBE Camera Layer") {
+                        theLayers[i].moveToBeginning();
+                    }
                 }
+                for (var i=0; i<theLayers.length; i++) {
+                    if(theLayers[i].matchName == "ADBE Camera Layer") {
+                        theLayers[i].moveToBeginning();
+                    }
+                }                
             //} else {
                 //
             //}
