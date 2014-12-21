@@ -43,7 +43,7 @@ IV.  DEPTH
 4. Depth Fill (layer selection): Creates a grayscale depth fill based on distance to camera.
 5. Depth Sort (layer selection): Sorts layers based on Z depth.
 
-V.  OVERLAY
+V.  GUIDE
 1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.
 2. Skeleton View (layer selection): View connections between parent and child layers.
 
