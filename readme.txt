@@ -1,6 +1,6 @@
 AEToolbox UI panel
-Copyright (c) 2014 Nick Fox-Gieg & Victoria Nece
-http://kinecttopin.com
+Copyright (c) 2015 Nick Fox-Gieg
+http://fox-gieg.com
 
 FEATURES:
 
