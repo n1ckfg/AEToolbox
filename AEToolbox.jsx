@@ -12,11 +12,12 @@
 
     // UI Panel Setup
     function init(_panel) {
-        var panel = (_panel instanceof Panel) ? _panel : new Window('palette', 'Script Window',[0,0,360,300]);
+        // * * * * * *
+        var panel = (_panel instanceof Panel) ? _panel : new Window("palette", "Script Window",[0,0,360,300]);
+        // * * * * * *
 
-        // 1. Draw buttons
+        // 1-5. Draw buttons
         //-----------------------------------------------------
-
         // buttons coordinates are X start, Y start, X end, Y end
         var butYoffset = 10;
         var butYoffsetCap = 4;
@@ -35,60 +36,58 @@
 
         // Basic group
         var col1butCount = 7;
-        panel.basicGroup = panel.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.basicGroup0 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Nulls for Pins');
-        panel.basicGroup1 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Parent Chain');
-        panel.basicGroup2 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Locator Null');
-        panel.basicGroup3 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Move to Position');
-        panel.basicGroup4 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Make Loop');
-        panel.basicGroup5 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Random Position');
-        panel.basicGroup6 = panel.basicGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'Graph Audio');
+        panel.basicGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.basicGroup0 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Nulls for Pins");
+        panel.basicGroup1 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Parent Chain");
+        panel.basicGroup2 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Locator Null");
+        panel.basicGroup3 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Move to Position");
+        panel.basicGroup4 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Make Loop");
+        panel.basicGroup5 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Random Position");
+        panel.basicGroup6 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Graph Audio");
        
         // Advanced group
         var col3butCount = 6;
-        panel.advGroup = panel.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.advGroup0 = panel.advGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Bake Keyframes');
-        panel.advGroup1 = panel.advGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Lock Y Rotation');
-        panel.advGroup2 = panel.advGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Auto Z Rotation');
-        panel.advGroup3 = panel.advGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Parentable Null');
-        panel.advGroup4 = panel.advGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Sine Generator');
-        panel.advGroup5 = panel.advGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Crossfade');
+        panel.advGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.advGroup0 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Bake Keyframes");
+        panel.advGroup1 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Lock Y Rotation");
+        panel.advGroup2 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Auto Z Rotation");
+        panel.advGroup3 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Parentable Null");
+        panel.advGroup4 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Sine Generator");
+        panel.advGroup5 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Crossfade");
         
         // Rigging group
         var col2butCount = 7;
-        panel.rigGroup = panel.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.rigGroup0 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Blink Rig');
-        panel.rigGroup1 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Jaw Rig');
-        panel.rigGroup2 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 'Snake Rig');
-        panel.rigGroup3 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Beam Rig');
-        panel.rigGroup4 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Particle Rig');
-        panel.rigGroup5 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], 'Camera Rig');
-        panel.rigGroup6 = panel.rigGroup.add('button', [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], 'MoSketch Rig');
+        panel.rigGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.rigGroup0 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Blink Rig");
+        panel.rigGroup1 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Jaw Rig");
+        panel.rigGroup2 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Snake Rig");
+        panel.rigGroup3 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Beam Rig");
+        panel.rigGroup4 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Particle Rig");
+        panel.rigGroup5 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Camera Rig");
+        panel.rigGroup6 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "MoSketch Rig");
       
         // Stereo group
         var col3butCount = 5;
-        panel.stereoGroup = panel.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.stereoGroup0 = panel.stereoGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Split s3D Pair');
-        panel.stereoGroup1 = panel.stereoGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Merge s3D Pair');
-        panel.stereoGroup2 = panel.stereoGroup.add('button', [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], 's3D Dispmap');
-        panel.stereoGroup3 = panel.stereoGroup.add('button', [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], 'Depth Fill');
-        panel.stereoGroup4 = panel.stereoGroup.add('button', [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], 'Depth Sort');
+        panel.stereoGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.stereoGroup0 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
+        panel.stereoGroup1 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
+        panel.stereoGroup2 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "s3D Dispmap");
+        panel.stereoGroup3 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
+        panel.stereoGroup4 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
       
         // Guide group
         var col3butCount = 2;
-        panel.guideGroup = panel.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.guideGroup0 = panel.guideGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Onion Skin');
-        panel.guideGroup1 = panel.guideGroup.add('button', [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], 'Skeleton View');
+        panel.guideGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.guideGroup0 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Onion Skin");
+        panel.guideGroup1 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Skeleton View");
        
         // IO group
         var col3butCount = 1;
-        panel.ioGroup = panel.add('panel', [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.ioGroup0 = panel.ioGroup.add('button', [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], 'Camera to Maya');
+        panel.ioGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.ioGroup0 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Camera to Maya");
 
-
-        //2. Link buttons to functions
+        // 2-5. Link buttons to functions
         //-----------------------------------------------------
-
         panel.basicGroup0.onClick = nullsForPins;
         panel.basicGroup1.onClick = parentChain;
         panel.basicGroup2.onClick = locatorNull;
@@ -123,10 +122,8 @@
         //--
         panel.ioGroup0.onClick = cameraToMaya;
 
-
-        // 3. Tooltips
+        // 3-5. Tooltips
         //-----------------------------------------------------
-
         panel.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
         panel.basicGroup1.helpTip = "Parent a chain of layers one to another."; //parentChain;
         panel.basicGroup2.helpTip = "Creates a new null at the location of each selected layer."; //locatorNull;
@@ -161,46 +158,46 @@
         //--
         panel.ioGroup0.helpTip = "Export camera to Maya."; //cameraToMaya;
         
+        // 4-5. Selector
         //-----------------------------------------------------
-
         var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Guide", "IO" ]);
         selector.onChange = function() {
-            if (selector.selection == 0){ // Basic
+            if (selector.selection == 0) { // Basic
                 panel.basicGroup.visible = true;
                 panel.advGroup.visible = false;
                 panel.rigGroup.visible = false;
                 panel.stereoGroup.visible = false;
                 panel.guideGroup.visible = false;
                 panel.ioGroup.visible = false;
-            }else if (selector.selection == 1){ // Advanced
+            }else if (selector.selection == 1) { // Advanced
                 panel.basicGroup.visible = false;
                 panel.advGroup.visible = true;
                 panel.rigGroup.visible = false;
                 panel.stereoGroup.visible = false;
                 panel.guideGroup.visible = false;
                 panel.ioGroup.visible = false;
-            }else if (selector.selection == 2){ // Rigging
+            }else if (selector.selection == 2) { // Rigging
                 panel.basicGroup.visible = false;
                 panel.advGroup.visible = false;
                 panel.rigGroup.visible = true;
                 panel.stereoGroup.visible = false;
                 panel.guideGroup.visible = false;
                 panel.ioGroup.visible = false;
-            }else if (selector.selection == 3){ // Stereo
+            }else if (selector.selection == 3) { // Stereo
                 panel.basicGroup.visible = false;
                 panel.advGroup.visible = false;
                 panel.rigGroup.visible = false;
                 panel.stereoGroup.visible = true;
                 panel.guideGroup.visible = false;
                 panel.ioGroup.visible = false;
-            }else if (selector.selection == 4){ // Guide
+            }else if (selector.selection == 4) { // Guide
                 panel.basicGroup.visible = false;
                 panel.advGroup.visible = false;
                 panel.rigGroup.visible = false;
                 panel.stereoGroup.visible = false;
                 panel.guideGroup.visible = true;
                 panel.ioGroup.visible = false;
-            }else if (selector.selection == 5){ // IO
+            }else if (selector.selection == 5) { // IO
                 panel.basicGroup.visible = false;
                 panel.advGroup.visible = false;
                 panel.rigGroup.visible = false;
@@ -214,17 +211,17 @@
         return panel
     }
 
-    //standard error messages;
+    // 5-5. standard error messages;
+    //-----------------------------------------------------
     var errorNoCompSelected = "Select a comp.";
     var errorNoPrecompSelected = "Select a precomp.";
     var errorNoLayerSelected = "Select a layer.";
     var errorPrecompOnly = "This only works on precomps.";
     var errorFootageOnly = "This only works on footage layers.";
     var cs55warning = "Requires CS5.5 and higher."
+
     // * * * * * *
-    // *         *
     init(this);
-    // *         *
     // * * * * * *
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -244,7 +241,7 @@
             var isCamera = true;
             try {
                 cz = theComp.activeCamera.property("Position").valueAtTime(theComp.time,true);
-            } catch(e) {
+            } catch(err) {
                 isCamera = false;
             }
 
@@ -403,7 +400,7 @@
                         effect2.property("Color").setValue([1,1,1]);
                              
                     } else {
-                        alert("Doesn't work on camera layers.");
+                        alert("Doesn"t work on camera layers.");
                     }
                 }
             }
@@ -584,7 +581,7 @@
                     var effect2 = newLayer2.property("Effects").property("Displacement Map");
                     effect2.property("Max Horizontal Displacement").setValue(ioDistance);
                 } catch(err) {
-                    alert("Displacement map must be selected last and be immediately above target layer." + "\r" + "You'll need to change displacement settings manually.")
+                    alert("Displacement map must be selected last and be immediately above target layer." + "\r" + "You"ll need to change displacement settings manually.")
                 }
                 
                 //~~~~~~~~~~~~~
@@ -1020,7 +1017,7 @@
 
     // 13.  Type: process for any number of layers or properties
     function moveToPos() {  
-        app.beginUndoGroup("Move to Last Selected Layer's Position");
+        app.beginUndoGroup("Move to Last Selected Layer"s Position");
 
         var theComp = app.project.activeItem; 
 
@@ -1050,7 +1047,7 @@
                     var cp = curLayer.property("Position");
                     if (lp.numKeys <= 0 && cp.numKeys <= 0) { // neither source nor dest has keys
                         cp.setValue(lp.value);               
-                    } else if (lp.numKeys > 0 && cp.numKeys <= 0) { // source has keys but dest doesn't
+                    } else if (lp.numKeys > 0 && cp.numKeys <= 0) { // source has keys but dest doesn"t
                         cp.setValue(lp.value);               
                     } else { // either source or dest has keys    
                         cp.setValueAtTime(theComp.time, lp.value);
@@ -1587,7 +1584,7 @@
                                 var expr = "loop_out(\"cycle\");";
                                 curProperties[j].expression = expr;
                             } else { 
-                                alert("Can't apply this expression to a property with no keyframes.")
+                                alert("Can"t apply this expression to a property with no keyframes.")
                             }
                         }
                     }                            
@@ -1904,20 +1901,20 @@
         //error check: is it a camera selected?
         if (theCamera[0].zoom!=null) {
 
-        theCamera[0].moveToEnd(); //null layers won't all be counted unless camera is on the bottom
+        theCamera[0].moveToEnd(); //null layers won"t all be counted unless camera is on the bottom
 
         CamIn=theCamera[0].inPoint;
         CamOut=theCamera[0].outPoint;
 
         //if camera has a parent that uses a scale value other than 100, this will affect rotation and zoom calculations.
-        //NB: if the scale does not have equal XYZ values, this script won't work.  That's because this will stretch, 
-        //distort, and skew the camera, and since the first step of this script is to output a free camera, it can't be done since
+        //NB: if the scale does not have equal XYZ values, this script won"t work.  That"s because this will stretch, 
+        //distort, and skew the camera, and since the first step of this script is to output a free camera, it can"t be done since
         //a skewed free camera is impossible in After Effects.
         //if their is a parent, the unit value in the rotation matrix is scale/100
         //otherwise the unit value is 1.
         if (theCamera[0].parent!=null) {
             CamMaster=theCamera[0].parent;
-            CamMasterExpression="this_comp.layer("+"\'"+CamMaster.name+"\'"+").scale/100"
+            CamMasterExpression="this_comp.layer("+"\""+CamMaster.name+"\""+").scale/100"
         } else { 
             CamMasterExpression="[1,1,1]"
         };
@@ -1937,11 +1934,11 @@
         CamCopy01.parent=CamParent01;
 
         //translate the data from the original camera with expressions
-        CamParent01.position.expression="L=thisComp.layer("+"\'"+CameraName+"\'"+");L.toWorld([0,0,0])";
-        CamParent01.rotation.expression="L=this_comp.layer("+"\'"+CameraName+"\'"+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]"
-        CamCopy01.orientation.expression="L=this_comp.layer("+"\'"+CameraName+"\'"+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]"
-        CamCopy01.rotationX.expression="L=this_comp.layer("+"\'"+CameraName+"\'"+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]"
-        CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\'"+CameraName+"\'"+").zoom*1/unit[0]";
+        CamParent01.position.expression="L=thisComp.layer("+"\""+CameraName+"\""+");L.toWorld([0,0,0])";
+        CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]"
+        CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]"
+        CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]"
+        CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\""+CameraName+"\""+").zoom*1/unit[0]";
 
         //Make a second copy of the camera, this time it will be baked
         ShortCamName=removeForbiddenCharacters(CameraName);
@@ -2462,7 +2459,7 @@
         if (!nameExists(name)) {
             return "" + name;
         } else {
-            // create default variables for newDigit and shortname in case there's no trailing digit
+            // create default variables for newDigit and shortname in case there"s no trailing digit
             var newDigit = 1;
             var shortname = name;
  
@@ -2726,10 +2723,10 @@
             var fileOK = myFile.open("r");
             if (fileOK){
                 var myFileString = myFile.read();
-                if (myFile.name.split('.').pop()=="xml") {
+                if (myFile.name.split(".").pop()=="xml") {
                     fileType="xml";
                     myRoot = new XML(myFileString);
-                } else if (myFile.name.split('.').pop()=="json") {
+                } else if (myFile.name.split(".").pop()=="json") {
                     fileType="json";
                     myRoot = eval("(" + myFileString + ")");
                 }
