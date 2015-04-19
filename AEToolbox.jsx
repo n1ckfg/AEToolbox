@@ -400,7 +400,7 @@
                         effect2.property("Color").setValue([1,1,1]);
                              
                     } else {
-                        alert("Doesn"t work on camera layers.");
+                        alert("Doesn't work on camera layers.");
                     }
                 }
             }
@@ -581,7 +581,7 @@
                     var effect2 = newLayer2.property("Effects").property("Displacement Map");
                     effect2.property("Max Horizontal Displacement").setValue(ioDistance);
                 } catch(err) {
-                    alert("Displacement map must be selected last and be immediately above target layer." + "\r" + "You"ll need to change displacement settings manually.")
+                    alert("Displacement map must be selected last and be immediately above target layer." + "\r" + "You'll need to change displacement settings manually.")
                 }
                 
                 //~~~~~~~~~~~~~
@@ -986,7 +986,7 @@
                                         var pinExpr = "var delayFrames = thisComp.layer(\"head_ctl\").effect(\"speed\")(\"Slider\");" + "\r" +
                                                        "var p = effect(\"Puppet\").arap.mesh(\"Mesh 1\").deform(\"head\").position;" + "\r" +
                                                        "var idx = parseInt(thisProperty.propertyGroup(1).name.split(\" \")[2],10)-1;" + "\r" +
-                                                       "var delay = idx*framesToTime(delayFrames);" + "\r" +
+                                                       "var delay = idx * framesToTime(delayFrames);" + "\r" +
                                                        "p.valueAtTime(time-delay)";
 
                                         pin.position.expression = pinExpr;
@@ -998,10 +998,10 @@
                                     curLayer.locked = true;
                                 } catch (e) {}
                             } else { 
-                                alert("This only works on layers with puppet pins.");
+                                alert("Only works on layers with puppet pins.");
                             }
                         } else { 
-                            alert("This only works properly on 2D layers.");
+                            alert("Only works properly on 2D layers.");
                         }
                     } else { 
                         alert(errorFootageOnly);
@@ -1017,7 +1017,7 @@
 
     // 13.  Type: process for any number of layers or properties
     function moveToPos() {  
-        app.beginUndoGroup("Move to Last Selected Layer"s Position");
+        app.beginUndoGroup("Move to Last Selected Layer's Position");
 
         var theComp = app.project.activeItem; 
 
@@ -1499,19 +1499,19 @@
                                "var d = thisComp.frameDuration;" + "\r" + 
                                "var rd;" + "\r" + 
                                "if (s >= 0) {" + "\r" + 
-                               "rd = -d;" + "\r" + 
+                               "  rd = -d;" + "\r" + 
                                "} else if (s < 0) {" + "\r" + 
-                               "rd = d;" + "\r" + 
+                               "  rd = d;" + "\r" + 
                                "}";
 
             prop2.expression = "var s = effect(\"Number of Frames\")(\"Slider\");" + "\r" +
                                "var rs;" + "\r" +
                                "if (s > 0) {" + "\r" +
-                               "rs = s;" + "\r" +
+                               "  rs = s;" + "\r" +
                                "} else if (s == 0) {" + "\r" +
-                               "rs = 0;" + "\r" +
+                               "  rs = 0;" + "\r" +
                                "} else if (s < 0) {" + "\r" +
-                               "rs = -s;" + "\r" +
+                               "  rs = -s;" + "\r" +
                                "}" + "\r" +
                                "rs;";
             prop3.expression = "var val = 0.5;" + "\r" +
@@ -1520,9 +1520,9 @@
                                "var rtn;" + "\r" +
                                "if (s < 0) s = -s;" + "\r" +
                                "if (s != 0) {" + "\r" +
-                               "rtn = val + (offset/s);" + "\r" +
+                               "  rtn = val + (offset/s);" + "\r" +
                                "} else { " + "\r" +
-                               "rtn = 1;" + "\r" +
+                               "  rtn = 1;" + "\r" +
                                "}" + "\r" +
                                "rtn;";
             prop4.setValue(0.5);
@@ -1553,7 +1553,7 @@
                     var curLayer = theLayers[i];
                 
                     var curProperties = curLayer.selectedProperties;
-                    if(curProperties.length==0){
+                    if (curProperties.length == 0) {
                         //alert("Please select some properties and run the script again.");
                         //*** Running this on a selected layer does a time remap... ***
                         if (curLayer.matchName == "ADBE AV Layer"){
@@ -1575,16 +1575,16 @@
                         }                    
                     } else { 
                         //*** Running this on selected properties cycles keyframes ***
-                        for(var j = 0; j<curProperties.length; j++){
+                        for (var j = 0; j<curProperties.length; j++) {
                             var doIt = false;
                             try {
-                                if(curProperties[j].numKeys>0) doIt=true;
+                                if (curProperties[j].numKeys > 0) doIt=true;
                             } catch(err) {}
-                            if(doIt){
+                            if (doIt) {
                                 var expr = "loop_out(\"cycle\");";
                                 curProperties[j].expression = expr;
                             } else { 
-                                alert("Can"t apply this expression to a property with no keyframes.")
+                                alert("Can't apply this expression to a property with no keyframes.")
                             }
                         }
                     }                            
@@ -1821,13 +1821,13 @@
         var selectedLayers = theComp.selectedLayers;
         var numLayers = selectedLayers.length;
         var theComplength = theComp.duration; //in seconds
-        var totalFrames=Math.round(theComp.duration*theComp.frameRate)+1;
+        var totalFrames=Math.round(theComp.duration * theComp.frameRate) + 1;
         var aeCompRate = theComp.frameRate;
         var compRate = Math.round(aeCompRate);
         var frameDuration = theComp.frameDuration;
 
-        var worldScale=100;
-        var worldCenter=[compWidth/2, compHeight/2];
+        var worldScale = 100;
+        var worldCenter = [compWidth / 2, compHeight / 2];
 
         var aspect = theComp.pixelAspect;
         // these are more accurate video PARs, that AE rounds off 
@@ -1844,7 +1844,7 @@
         // [10]  D4 Ana         1.8962962
         // [11]  Ana2:1         2
         var ratio= [0.8592, 0.9, 0.9481481, 1.0, 1.0186, 1.0667, 1.2, 1.333, 1.4222, 1.5, 1.8962962, 2];
-        if (aspect == 0.86){aspect =ratio[0]}
+        if (aspect == 0.86) { aspect =ratio[0] }
         else if (aspect == 0.95){aspect =ratio[2]}
         else if (aspect == 1.02){aspect =ratio[4]}
         else if (aspect == 1.07){aspect =ratio[5]}
@@ -1914,9 +1914,9 @@
         //otherwise the unit value is 1.
         if (theCamera[0].parent!=null) {
             CamMaster=theCamera[0].parent;
-            CamMasterExpression="this_comp.layer("+"\""+CamMaster.name+"\""+").scale/100"
+            CamMasterExpression="this_comp.layer("+"\""+CamMaster.name+"\""+").scale/100";
         } else { 
-            CamMasterExpression="[1,1,1]"
+            CamMasterExpression="[1,1,1]";
         };
 
         //make new camera.  This will inherit the Y and X rotations.
@@ -1935,9 +1935,9 @@
 
         //translate the data from the original camera with expressions
         CamParent01.position.expression="L=thisComp.layer("+"\""+CameraName+"\""+");L.toWorld([0,0,0])";
-        CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]"
-        CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]"
-        CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]"
+        CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]";
+        CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]";
+        CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]";
         CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\""+CameraName+"\""+").zoom*1/unit[0]";
 
         //Make a second copy of the camera, this time it will be baked
@@ -1951,7 +1951,7 @@
         //make seconcd camera parent.
         theComp.layers.addNull(theComp.duration).name="<"+ShortCamName+"Parent"+">";
         CamParent02=theComp.layer(1);
-        setNull(CamParent02,CamIn,CamOut,theComp)
+        setNull(CamParent02,CamIn,CamOut,theComp);
         //attach child camera to parent
         CamCopy02.parent=CamParent02;
 
