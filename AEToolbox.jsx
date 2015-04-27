@@ -3,8 +3,11 @@
 // fox-gieg.com
 //
 // ExtendScript documentation by Victoria Nece
-// victorianece.com/
+// victorianece.com
 // 
+// Thanks to: Jeff Almasol, Jered Cuenco, Dan Ebberts, Ryan Gilmore, 
+// Christopher Green, Peter Kahrel, Chris Wright.
+//
 
 {
     ///////////////////////////////////////////////////////////////////////////////////////////
