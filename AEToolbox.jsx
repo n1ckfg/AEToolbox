@@ -49,7 +49,7 @@
         panel.basicGroup6 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Graph Audio");
        
         // Advanced group
-        var col3butCount = 6;
+        var col3butCount = 7;
         panel.advGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.advGroup0 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Bake Keyframes");
         panel.advGroup1 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Lock Y Rotation");
@@ -57,6 +57,7 @@
         panel.advGroup3 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Parentable Null");
         panel.advGroup4 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Sine Generator");
         panel.advGroup5 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Crossfade");
+        panel.advGroup6 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Motion Blur Twos*");
         
         // Rigging group
         var col2butCount = 7;
@@ -65,7 +66,7 @@
         panel.rigGroup1 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Jaw Rig");
         panel.rigGroup2 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Snake Rig");
         panel.rigGroup3 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Beam Rig");
-        panel.rigGroup4 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Particle Rig");
+        panel.rigGroup4 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Particle Rig*");
         panel.rigGroup5 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Camera Rig");
         panel.rigGroup6 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "MoSketch Rig");
       
@@ -105,6 +106,7 @@
         panel.advGroup3.onClick = parentableNull;
         panel.advGroup4.onClick = sineWave;
         panel.advGroup5.onClick = crossfader;
+        panel.advGroup6.onClick = rsmbTwos;
         //--
         panel.rigGroup0.onClick = charBlink;
         panel.rigGroup1.onClick = charJaw;
@@ -141,12 +143,13 @@
         panel.advGroup3.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
         panel.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
         panel.advGroup5.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
+        panel.advGroup6.helpTip = "*Reelsmart Motion Blur* for animation on twos."; //rsmbTwos;
         //--    
         panel.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
         panel.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
         panel.rigGroup2.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
         panel.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
-        panel.rigGroup4.helpTip = "Creates a null controller for Particular particles."; //charParticle;
+        panel.rigGroup4.helpTip = "Creates a null controller for *Particular* particles."; //charParticle;
         panel.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
         panel.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
         //--
@@ -228,6 +231,44 @@
     // * * * * * *
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 28.  Type: apply process to any number of layers
+    function rsmbTwos() {
+        app.beginUndoGroup("Reelsmart Motion Blur on Twos");
+
+        var theComp = app.project.activeItem;
+
+        if (theComp == null || !(theComp instanceof CompItem)) {
+            alert(errorNoCompSelected);
+        } else { 
+            var theLayers = theComp.selectedLayers;
+
+            if (theLayers.length==0) {
+                alert(errorNoLayerSelected);
+            } else {
+                //var baseOnFps = confirm("Base on comp frame rate?");
+
+                for (var i = 0; i < theLayers.length; i++) {
+                    var effects = theLayers[i].property("Effects");
+
+                    var blur = effects.addProperty("RSMB");
+                    blur.property("Blur Amount").setValue(0.25);
+                    blur.property("Use GPU").setValue(2);
+
+                    var posterize = effects.addProperty("Posterize Time");
+                    //if (baseOnFps) {
+                    posterize.property("Frame Rate").setValue(theComp.frameRate/2);
+                    //} else {
+                        //posterize.property("Frame Rate").setValue(12);
+                    //}
+                }
+            }
+        }
+
+        app.endUndoGroup();
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 27.  Type: apply process to any number of layers

@@ -24,13 +24,14 @@ II.  ADVANCED
 4. Parentable Null (layer selection): Creates a null with expressions that solve certain parenting problems. 
 5. Sine Generator (layer selection): Applies sine-wave motion controls to a layer.  
 6. Crossfade (comp selection): Fades a layer into a duplicate of itself for a seamless loop.
+7. Motion Blur Twos (layer selection): *Reelsmart Motion Blur* for animation on twos.
 
 III.  RIGGING
 1. Blink Rig (comp selection): Turns a blink layer inside the comp on and off.  
 2. Jaw Rig (comp selection): Rigs a jaw layer inside the comp for audio control of rotation or position.
 3. Snake Rig (layer selection): Rigs a puppet-pin layer for automated snake-like movement.
 4. Beam Rig (no selection): Creates a 3D laser effect with start and end nulls.
-5. Particle Rig (no selection): Creates a null controller for Particular particles.
+5. Particle Rig* (no selection): Creates a null controller for *Particular* particles.
 6. Camera Rig (no selection): Creates a camera rigged for point-of-interest and DoF control. 
 7. MoSketch Rig (no selection): Creates a null with 3D controls for use with Motion Sketch.
 
