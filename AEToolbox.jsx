@@ -2,7 +2,7 @@
 // by Nick Fox-Gieg
 // fox-gieg.com
 //
-// ExtendScript documentation by Victoria Nece
+// ExtendScript/Script UI documentation by Victoria Nece
 // victorianece.com
 // 
 // Thanks to: Jeff Almasol, Jered Cuenco, Dan Ebberts, Ryan Gilmore, 
@@ -167,51 +167,30 @@
         // 4-5. Selector
         //-----------------------------------------------------
         var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Guide", "IO" ]);
+        
         selector.onChange = function() {
+            panel.basicGroup.visible = false;
+            panel.advGroup.visible = false;
+            panel.rigGroup.visible = false;
+            panel.stereoGroup.visible = false;
+            panel.guideGroup.visible = false;
+            panel.ioGroup.visible = false;    
+
             if (selector.selection == 0) { // Basic
                 panel.basicGroup.visible = true;
-                panel.advGroup.visible = false;
-                panel.rigGroup.visible = false;
-                panel.stereoGroup.visible = false;
-                panel.guideGroup.visible = false;
-                panel.ioGroup.visible = false;
             }else if (selector.selection == 1) { // Advanced
-                panel.basicGroup.visible = false;
                 panel.advGroup.visible = true;
-                panel.rigGroup.visible = false;
-                panel.stereoGroup.visible = false;
-                panel.guideGroup.visible = false;
-                panel.ioGroup.visible = false;
             }else if (selector.selection == 2) { // Rigging
-                panel.basicGroup.visible = false;
-                panel.advGroup.visible = false;
                 panel.rigGroup.visible = true;
-                panel.stereoGroup.visible = false;
-                panel.guideGroup.visible = false;
-                panel.ioGroup.visible = false;
             }else if (selector.selection == 3) { // Stereo
-                panel.basicGroup.visible = false;
-                panel.advGroup.visible = false;
-                panel.rigGroup.visible = false;
                 panel.stereoGroup.visible = true;
-                panel.guideGroup.visible = false;
-                panel.ioGroup.visible = false;
             }else if (selector.selection == 4) { // Guide
-                panel.basicGroup.visible = false;
-                panel.advGroup.visible = false;
-                panel.rigGroup.visible = false;
-                panel.stereoGroup.visible = false;
                 panel.guideGroup.visible = true;
-                panel.ioGroup.visible = false;
             }else if (selector.selection == 5) { // IO
-                panel.basicGroup.visible = false;
-                panel.advGroup.visible = false;
-                panel.rigGroup.visible = false;
-                panel.stereoGroup.visible = false;
-                panel.guideGroup.visible = false;
                 panel.ioGroup.visible = true;
             }             
         }
+
         selector.selection = 0;
 
         return panel
@@ -348,8 +327,8 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 25.  Type: apply process to any number of layers
-    function skeleView() {
-        app.beginUndoGroup("Skeleton View");
+    function skeleView(doUndoGroup) {
+        if (doUndoGroup || doUndoGroup==undefined) app.beginUndoGroup("Skeleton View");
 
         var theComp = app.project.activeItem;
 
@@ -401,7 +380,7 @@
         }
         solid.locked = true;
 
-        app.endUndoGroup();
+        if (doUndoGroup || doUndoGroup==undefined) app.endUndoGroup();
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -790,6 +769,11 @@
                         theLayers[i].parent = null;
                         theLayers[i].parent = theLayers[i-1];
                     }
+                }
+
+                var doSkeleview = confirm("Create skeleton guide layer?");
+                if (doSkeleview) {
+                    skeleView(false);
                 }
             }
         }
