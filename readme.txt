@@ -1,5 +1,5 @@
 AEToolbox UI panel
-Copyright (c) 2015 Nick Fox-Gieg
+Copyright (c) 2016 Nick Fox-Gieg
 http://fox-gieg.com
 
 FEATURES:
@@ -34,6 +34,7 @@ III.  RIGGING
 5. Particle Rig* (no selection): Creates a null controller for *Particular* particles.
 6. Camera Rig (no selection): Creates a camera rigged for point-of-interest and DoF control. 
 7. MoSketch Rig (no selection): Creates a null with 3D controls for use with Motion Sketch.
+8. Photo Rig (layer selection): Creates precomps that each display one frame from a sequence.
 
 IV.  DEPTH
 1. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.

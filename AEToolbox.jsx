@@ -1,4 +1,4 @@
-// AEToolbox 1.19
+// AEToolbox 1.2
 // by Nick Fox-Gieg
 // fox-gieg.com
 //
@@ -60,7 +60,7 @@
         panel.advGroup6 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Motion Blur Twos*");
         
         // Rigging group
-        var col2butCount = 7;
+        var col2butCount = 8;
         panel.rigGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.rigGroup0 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Blink Rig");
         panel.rigGroup1 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Jaw Rig");
@@ -69,6 +69,7 @@
         panel.rigGroup4 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Particle Rig*");
         panel.rigGroup5 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Camera Rig");
         panel.rigGroup6 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "MoSketch Rig");
+        panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
       
         // Stereo group
         var col3butCount = 5;
@@ -115,6 +116,7 @@
         panel.rigGroup4.onClick = charParticle;
         panel.rigGroup5.onClick = handheldCamera;
         panel.rigGroup6.onClick = threeDmoSketch;
+        panel.rigGroup7.onClick = photoRig;
         //--
         panel.stereoGroup0.onClick = splitStereoPair;
         panel.stereoGroup1.onClick = mergeStereoPair;
@@ -152,6 +154,7 @@
         panel.rigGroup4.helpTip = "Creates a null controller for *Particular* particles."; //charParticle;
         panel.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
         panel.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
+        panel.rigGroup7.helpTip = "Creates precomps that each display one frame from a sequence."; //threeDmoSketch;
         //--
         panel.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
         panel.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
@@ -210,6 +213,47 @@
     // * * * * * *
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 29. Type: Duplicates layers with time remap expression.
+    function photoRig() {  
+        app.beginUndoGroup("Create Photo Rig");
+
+        var theComp = app.project.activeItem; 
+
+        if (theComp == null || !(theComp instanceof CompItem)){
+            alert(errorNoCompSelected);
+        } else { 
+            var theLayers = theComp.selectedLayers;
+            if (theLayers.length==0) {
+                alert(errorNoLayerSelected);
+            } else { 
+                for (var i = 0; i < theLayers.length; i++){
+                    var curLayer = theLayers[i];
+                
+                    //*** Running this on a selected layer does a time remap... ***
+                    if (curLayer.matchName == "ADBE AV Layer"){
+                        curLayer.timeRemapEnabled = true;
+                        var expr = "var dur = (thisLayer.outPoint - thisLayer.inPoint);\n" +
+                                   "dur - ((index / thisComp.numLayers) * dur);";
+                        curLayer.timeRemap.expression = expr;
+                        for (var j=0; j < ((curLayer.outPoint - curLayer.inPoint) * curLayer.source.frameRate) - 1; j++) {
+                            var newLayer = curLayer.duplicate();
+                            //newLayer.inPoint += (j + 1) / theComp.frameRate;
+                            //newLayer.inPoint += (j + 1) * (curLayer.outPoint - curLayer.inPoint);
+                            newLayer.moveToBeginning();
+                        }
+                    } else { 
+                        alert(errorFootageOnly);
+                    }                    
+                                               
+                }
+            }
+        }
+     
+        app.endUndoGroup();
+    }  
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 28.  Type: apply process to any number of layers
