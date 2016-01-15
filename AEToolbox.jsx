@@ -232,9 +232,9 @@
                     var curLayer = theLayers[i];
                 
                     //*** Running this on a selected layer does a time remap... ***
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer" && curLayer.source.numLayers != null) {
                         curLayer.timeRemapEnabled = true;
-                        var expr = "var dur = (thisLayer.outPoint - thisLayer.inPoint);\n" +
+                        var expr = "var dur = (comp(thisLayer.name).layer(1).outPoint - comp(thisLayer.name).layer(1).inPoint);\n" +
                                    "dur - ((index / thisComp.numLayers) * dur);";
                         curLayer.timeRemap.expression = expr;
                         for (var j=0; j < ((curLayer.outPoint - curLayer.inPoint) * curLayer.source.frameRate) - 1; j++) {
@@ -244,7 +244,7 @@
                             newLayer.moveToBeginning();
                         }
                     } else { 
-                        alert(errorFootageOnly);
+                        alert(errorPrecompOnly);
                     }                    
                                                
                 }
