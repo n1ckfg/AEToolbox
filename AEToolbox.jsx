@@ -233,9 +233,19 @@
                 
                     //*** Running this on a selected layer does a time remap... ***
                     if (curLayer.matchName == "ADBE AV Layer" && curLayer.source.numLayers != null) {
+                        var solid = theComp.layers.addNull();
+                        solid.name = getUniqueName("photos_ctl");
+                        var offsetSlider = solid.property("Effects").addProperty("Slider Control");
+                        offsetSlider.name = "offset";
+                        offsetSlider.property("Slider").setValue(-1);
+
+                        curLayer.moveToBeginning();
                         curLayer.timeRemapEnabled = true;
-                        var expr = "var dur = (comp(thisLayer.name).layer(1).outPoint - comp(thisLayer.name).layer(1).inPoint);\n" +
-                                   "dur - ((index / thisComp.numLayers) * dur);";
+
+                        var expr = "var offset = thisComp.layer(\"" + solid.name + "\").effect(\"offset\")(\"Slider\");\n" +
+                                   "var dur = (comp(thisLayer.name).layer(1).outPoint - comp(thisLayer.name).layer(1).inPoint);\n" +
+                                   "dur - (((index + offset) / thisComp.numLayers) * dur);";
+
                         curLayer.timeRemap.expression = expr;
                         for (var j=0; j < ((curLayer.outPoint - curLayer.inPoint) * curLayer.source.frameRate) - 1; j++) {
                             var newLayer = curLayer.duplicate();
@@ -243,6 +253,8 @@
                             //newLayer.inPoint += (j + 1) * (curLayer.outPoint - curLayer.inPoint);
                             newLayer.moveToBeginning();
                         }
+
+                        solid.moveToBeginning();
                     } else { 
                         alert(errorPrecompOnly);
                     }                    
