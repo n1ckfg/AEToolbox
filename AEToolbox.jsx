@@ -269,6 +269,7 @@
                         }
 
                         solid.moveToBeginning();
+                        solid.locked = true;
                     } else { 
                         alert(errorPrecompOnly);
                     }                    
