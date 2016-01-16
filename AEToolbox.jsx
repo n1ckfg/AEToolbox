@@ -235,15 +235,29 @@
                     if (curLayer.matchName == "ADBE AV Layer" && curLayer.source.numLayers != null) {
                         var solid = theComp.layers.addNull();
                         solid.name = getUniqueName("photos_ctl");
+
                         var offsetSlider = solid.property("Effects").addProperty("Slider Control");
                         offsetSlider.name = "offset";
                         offsetSlider.property("Slider").setValue(-1);
 
+                        var durationSlider = solid.property("Effects").addProperty("Slider Control");
+                        durationSlider.name = "duration";
+                        var duration = curLayer.outPoint - curLayer.inPoint;
+                        durationSlider.property("Slider").setValue(duration);
+
                         curLayer.moveToBeginning();
                         curLayer.timeRemapEnabled = true;
 
+                        // TODO: pre-calculate original duration and store it in a slider. Use that instead of current duration.      
+
+                        /*
                         var expr = "var offset = thisComp.layer(\"" + solid.name + "\").effect(\"offset\")(\"Slider\");\n" +
                                    "var dur = (comp(thisLayer.name).layer(1).outPoint - comp(thisLayer.name).layer(1).inPoint);\n" +
+                                   "dur - (((index + offset) / thisComp.numLayers) * dur);";
+                        */
+
+                        var expr = "var offset = thisComp.layer(\"" + solid.name + "\").effect(\"offset\")(\"Slider\");\n" +
+                                   "var dur = thisComp.layer(\"" + solid.name + "\").effect(\"duration\")(\"Slider\");\n" +
                                    "dur - (((index + offset) / thisComp.numLayers) * dur);";
 
                         curLayer.timeRemap.expression = expr;
