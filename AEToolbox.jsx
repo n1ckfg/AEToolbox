@@ -270,6 +270,7 @@
 
                         solid.moveToBeginning();
                         solid.locked = true;
+                        solid.enabled = false;
                     } else { 
                         alert(errorPrecompOnly);
                     }                    
