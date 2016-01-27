@@ -71,14 +71,15 @@
         panel.rigGroup6 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "MoSketch Rig");
         panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
       
-        // Stereo group
-        var col3butCount = 5;
+        // Depth group
+        var col3butCount = 6;
         panel.stereoGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.stereoGroup0 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
         panel.stereoGroup1 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
         panel.stereoGroup2 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "s3D Dispmap");
         panel.stereoGroup3 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
         panel.stereoGroup4 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
+        panel.stereoGroup5 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
       
         // Guide group
         var col3butCount = 2;
@@ -123,6 +124,7 @@
         panel.stereoGroup2.onClick = stereoDispMap;
         panel.stereoGroup3.onClick = depthFill;
         panel.stereoGroup4.onClick = depthSort;
+        panel.stereoGroup5.onClick = stereoController;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -161,6 +163,7 @@
         panel.stereoGroup2.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
         panel.stereoGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
         panel.stereoGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
+        panel.stereoGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -206,6 +209,8 @@
     var errorNoLayerSelected = "Select a layer.";
     var errorPrecompOnly = "This only works on precomps.";
     var errorFootageOnly = "This only works on footage layers.";
+    var errorCameraOnly = "This only works on cameras.";
+    var errorOneCameraOnly = "This only works on one camera.";
     var cs55warning = "Requires CS5.5 and higher."
 
     // * * * * * *
@@ -214,6 +219,59 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
+
+
+    // 30. One-shot--create a bunch of objects and scripts.
+    function stereoController() { 
+        app.beginUndoGroup("Create a Stereo Controller for a Camera");
+
+        var theComp = app.project.activeItem; 
+        
+        if (theComp == null || !(theComp instanceof CompItem)){
+            alert(errorNoCompSelected);
+        } else{
+            if (theComp.selectedLayers.length == 0) {
+                alert(errorNoLayerSelected);
+            } else {
+                theCamera = theComp.selectedLayers;
+
+                if (theCamera.length > 1 || theCamera[0].zoom == null) {
+                    alert(errorOneCameraOnly);
+                } else {
+                    var solid = theComp.layers.addNull();
+                    solid.name = getUniqueName("stereo_controller");
+                    solid.moveToBeginning();
+                    solid.enabled = false;
+
+                    var offsetSlider = solid.property("Effects").addProperty("Slider Control");
+                    offsetSlider.name = "offset";
+
+                    var expr1 = "var x = transform.pointOfInterest[0];" + "\r" +
+                                "var y = transform.pointOfInterest[1];" + "\r" +
+                                "var z = transform.pointOfInterest[2];" + "\r" +
+                                "x += thisComp.layer(\"" + solid.name + "\").effect(\"" + offsetSlider.name + "\")(\"Slider\");" + "\r" +
+                                "[x, y, z];";
+                    theCamera[0].property("Point of Interest").expression = expr1;
+
+                    var expr2 = "var x = transform.position[0];" + "\r" +
+                                "var y = transform.position[1];" + "\r" +
+                                "var z = transform.position[2];" + "\r" +
+                                "x += thisComp.layer(\"" + solid.name + "\").effect(\"" + offsetSlider.name + "\")(\"Slider\");" + "\r" +
+                                "[x, y, z];";
+                    theCamera[0].property("Position").expression = expr2;
+
+                    theCamera[0].locked = true; 
+
+                    //theComp.name += "_L";
+                    //var newComp = theComp.duplicate();
+                    //newComp.name += "_R";
+                }
+            }
+        }          
+     
+        app.endUndoGroup();
+    }  
+
 
     // 29. Type: Duplicates layers with time remap expression.
     function photoRig() {  
@@ -240,6 +298,7 @@
                         offsetSlider.name = "offset";
                         offsetSlider.property("Slider").setValue(-1);
 
+                        // pre-calculate original duration and store it in a slider. Use that instead of current duration.      
                         var durationSlider = solid.property("Effects").addProperty("Slider Control");
                         durationSlider.name = "duration";
                         var duration = curLayer.outPoint - curLayer.inPoint;
@@ -247,8 +306,6 @@
 
                         curLayer.moveToBeginning();
                         curLayer.timeRemapEnabled = true;
-
-                        // TODO: pre-calculate original duration and store it in a slider. Use that instead of current duration.      
 
                         /*
                         var expr = "var offset = thisComp.layer(\"" + solid.name + "\").effect(\"offset\")(\"Slider\");\n" +
@@ -1519,7 +1576,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 7. One-shot--create a complex bunch of objects and scripts.
+    // 7. One-shot--create a bunch of objects and scripts.
     function handheldCamera() {  
         app.beginUndoGroup("Create a \"Handheld\" Camera");
 
