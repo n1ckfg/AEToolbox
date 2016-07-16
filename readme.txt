@@ -44,6 +44,8 @@ IV.  DEPTH
      (two layers selected): Creates an s3D pair from the first layer, using the second layer for displacement.
 4. Depth Fill (layer selection): Creates a grayscale depth fill based on distance to camera.
 5. Depth Sort (layer selection): Sorts layers based on Z depth.
+6. Stereo Controller (comp selection): Creates a stereo controller null for a single camera.
+7. Vive Recording (layer selection): Splits a quad Vive recording into separate layers.
 
 V.  GUIDE
 1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.
@@ -53,3 +55,4 @@ VI.  IO
 1. Camera to Maya (layer selection): Export camera to Maya.
 2. Unity Anim (layer selection): Export keyframes to Unity anim.
 3. JSON Export (layer selection): Export keyframes to JSON.
+4. XML Export (layer selection): Export keyframes to XML.

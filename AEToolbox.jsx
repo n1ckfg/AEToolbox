@@ -72,7 +72,7 @@
         panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
       
         // Depth group
-        var col3butCount = 6;
+        var col3butCount = 7;
         panel.stereoGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.stereoGroup0 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
         panel.stereoGroup1 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
@@ -80,6 +80,7 @@
         panel.stereoGroup3 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
         panel.stereoGroup4 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
         panel.stereoGroup5 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
+        panel.stereoGroup6 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Vive Recording");
       
         // Guide group
         var col3butCount = 2;
@@ -128,6 +129,7 @@
         panel.stereoGroup3.onClick = depthFill;
         panel.stereoGroup4.onClick = depthSort;
         panel.stereoGroup5.onClick = stereoController;
+        panel.stereoGroup6.onClick = viveRecording;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -170,6 +172,7 @@
         panel.stereoGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
         panel.stereoGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
         panel.stereoGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
+        panel.stereoGroup6.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -227,6 +230,68 @@
     // * * * * * *
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 34.  Type: apply process to a whole comp
+    function viveRecording() {
+        app.beginUndoGroup("Split Vive Recording");
+
+        var theComp = app.project.activeItem;
+
+        if (theComp == null || !(theComp instanceof CompItem)){  
+            alert(errorNoCompSelected);  
+        } else { 
+            var sideBySide = confirm("Use side-by-side stereo?");
+
+            var newComp1 = theComp.duplicate();
+            newComp1.name = theComp.name + " L";
+            var theLayers1 = newComp1.layers;
+            
+            while (theLayers1.length > 0) {  
+                var curLayer = theLayers1[1];          
+                curLayer.remove();
+            }
+
+            var newComp1target = theLayers1.add(theComp);
+            if (sideBySide) {
+                newComp1.width = newComp1.width/2;
+            } else { 
+                newComp1.height = newComp1.height/2;
+            }
+
+            //~~~~~~~~~~~~~~~~~
+
+            var newComp2 = theComp.duplicate();
+            newComp2.name = theComp.name + " R";
+            var theLayers2 = newComp2.layers;
+            
+            while (theLayers2.length > 0) {  
+                var curLayer = theLayers2[1];          
+                curLayer.remove();
+            }
+
+            var newComp2target = theLayers2.add(theComp);
+            
+            if (sideBySide) {
+                newComp2.width = newComp2.width/2;
+            } else { 
+                newComp2.height = newComp2.height/2;
+            }
+            
+            var p2 = newComp2target.transform.position.value;
+            
+            if (sideBySide) {
+                newComp2target.transform.position.setValue([0,p2[1]]);
+            } else { 
+                newComp2target.transform.position.setValue([p2[0],0]);
+            }
+
+            theComp.name = "Precomp s3D Pair";
+        }
+
+        app.endUndoGroup();    
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 33.  Type: apply process to any number of layers or properties
