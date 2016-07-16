@@ -51,3 +51,5 @@ V.  GUIDE
 
 VI.  IO
 1. Camera to Maya (layer selection): Export camera to Maya.
+2. Unity Anim (layer selection): Export keyframes to Unity anim.
+3. JSON Export (layer selection): Export keyframes to JSON.

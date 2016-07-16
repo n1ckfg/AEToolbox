@@ -88,9 +88,12 @@
         panel.guideGroup1 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Skeleton View");
        
         // IO group
-        var col3butCount = 1;
+        var col3butCount = 4;
         panel.ioGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.ioGroup0 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Camera to Maya");
+        panel.ioGroup1 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Unity Anim");
+        panel.ioGroup2 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "JSON Export");
+        panel.ioGroup3 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "XML Export");
 
         // 2-5. Link buttons to functions
         //-----------------------------------------------------
@@ -130,6 +133,9 @@
         panel.guideGroup1.onClick = skeleView;
         //--
         panel.ioGroup0.onClick = cameraToMaya;
+        panel.ioGroup1.onClick = unityAnim;
+        panel.ioGroup2.onClick = jsonExport;
+        panel.ioGroup3.onClick = xmlExport;
 
         // 3-5. Tooltips
         //-----------------------------------------------------
@@ -169,6 +175,9 @@
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
         //--
         panel.ioGroup0.helpTip = "Export camera to Maya."; //cameraToMaya;
+        panel.ioGroup1.helpTip = "Export keyframes to Unity anim."; //unityAnim;
+        panel.ioGroup2.helpTip = "Export keyframes to JSON."; //jsonExport;
+        panel.ioGroup3.helpTip = "Export keyframes to XML."; //xmlExport;
         
         // 4-5. Selector
         //-----------------------------------------------------
@@ -220,8 +229,74 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
 
+    // 33.  Type: apply process to any number of layers or properties
 
-    // 30. One-shot--create a bunch of objects and scripts.
+    function xmlExport() {  
+        app.beginUndoGroup("Export to XML");
+        app.endUndoGroup();
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 32.  Type: apply process to any number of layers or properties
+    function jsonExport() {  
+        app.beginUndoGroup("Export to JSON");
+
+        var theComp = app.project.activeItem; 
+        
+        if (theComp == null || !(theComp instanceof CompItem)){
+            alert(errorNoCompSelected);
+        } else { 
+            var theLayers = theComp.selectedLayers;
+            if (theLayers.length==0) {
+                alert(errorNoLayerSelected);
+            } else { 
+                for (var i = 0; i < theLayers.length; i++) {
+                    var curLayer = theLayers[i];                
+                    if (curLayer.matchName == "ADBE AV Layer") {
+                        var curProperty;
+                        try {
+                            curProperty = curLayer.property("position");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                        try {
+                            curProperty = curLayer.property("anchorPoint");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                        try {
+                            curProperty = curLayer.property("rotation");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                        try {
+                            curProperty = curLayer.property("scale");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                        try {
+                            curProperty = curLayer.property("opacity");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                        //~~
+                        try {
+                            curProperty = curLayer.property("pointOfInterest");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                        try {
+                            curProperty = curLayer.property("focusDistance");
+                            convertToKeyframes(curProperty);
+                        } catch(err) {}
+                    } else { 
+                        alert("Only works on footage layers.");
+                    }
+                }
+            }
+        }
+
+        app.endUndoGroup();
+    }  
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 31. One-shot--create a bunch of objects and scripts.
     function stereoController() { 
         app.beginUndoGroup("Create a Stereo Controller for a Camera");
 
@@ -273,7 +348,7 @@
     }  
 
 
-    // 29. Type: Duplicates layers with time remap expression.
+    // 30. Type: Duplicates layers with time remap expression.
     function photoRig() {  
         app.beginUndoGroup("Create Photo Rig");
 
@@ -341,7 +416,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 28.  Type: apply process to any number of layers
+    // 29.  Type: apply process to any number of layers
     function rsmbTwos() {
         app.beginUndoGroup("Reelsmart Motion Blur on Twos");
 
@@ -379,7 +454,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 27.  Type: apply process to any number of layers
+    // 28.  Type: apply process to any number of layers
     function depthSort() {
         app.beginUndoGroup("Sort by Depth");
 
@@ -418,7 +493,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 26.  Type: apply process to any number of layers
+    // 27.  Type: apply process to any number of layers
     function randomPos() {
         app.beginUndoGroup("Randomize Position");
 
@@ -455,7 +530,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 25.  Type: apply process to any number of layers
+    // 26.  Type: apply process to any number of layers
     function skeleView(doUndoGroup) {
         if (doUndoGroup || doUndoGroup==undefined) app.beginUndoGroup("Skeleton View");
 
@@ -514,7 +589,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 24.  Type: apply process to any number of layers
+    // 25.  Type: apply process to any number of layers
     function depthFill() {
         app.beginUndoGroup("Depth Fill");
 
@@ -564,7 +639,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 23.  Type: apply process to any number of layers
+    // 24.  Type: apply process to any number of layers
     function graphAudio() {  
         app.beginUndoGroup("Graph Audio");
 
@@ -595,6 +670,93 @@
      
         app.endUndoGroup();
     }  
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 23. Export
+    function unityAnim() {  //start script
+        app.beginUndoGroup("Export Unity Anim");
+
+        var theComp = app.project.activeItem; //only selected
+
+        // check if comp is selected
+        if (theComp == null || !(theComp instanceof CompItem)) {
+            // if no comp selected, display an alert
+            alert("Please establish a comp as the active item and run the script again.");
+        } else { 
+            var theLayers = theComp.selectedLayers;
+            var allLayers = theComp.layers;
+
+            if (theLayers.length==0) {
+                alert("Please select some layers and run the script again.");
+            } else {
+
+                //~~~~~~~~~~~~~~~~~~
+
+                var unityMainHeader = "%YAML 1.1" + "\r" + 
+                                      "%TAG !u! tag:unity3d.com,2011:" + "\r" + 
+                                      "--- !u!74 &7400000";
+
+                var unityMainFooter = "";
+
+                var scaleFactor = 5.0;
+
+                //~~~~~~~~~~~~~~~~~~
+                for(var i = 0; i < theLayers.length; i++){
+                    // ...then loop through each layer in the selected comp
+                    // define the layer in the loop we're currently looking at
+                    var curLayer = theLayers[i];
+                    var fileName = theComp.name + "_" + curLayer.name;
+                    var unityLayerHeader = "AnimationClip:" + "\r" + 
+                                           "  m_ObjectHideFlags: 0" + "\r" + 
+                                           "  m_PrefabParentObject: {fileID: 0}" + "\r" + 
+                                           "  m_PrefabInternal: {fileID: 0}" + "\r" + 
+                                           "  m_Name: " + fileName + "\r" + 
+                                           "  serializedVersion: 4" + "\r" + 
+                                           "  m_AnimationType: 2" + "\r" + 
+                                           "  m_Compressed: 0" + "\r" + 
+                                           "  m_UseHighQualityCurve: 1" + "\r" + 
+                                           "  m_RotationCurves: []" + "\r" + 
+                                           "  m_CompressedRotationCurves: []" + "\r" + 
+                                           "  m_PositionCurves:" + "\r" + 
+                                           "  - curve:" + "\r" + 
+                                           "      serializedVersion: 2" + "\r" + 
+                                           "      m_Curve:";
+                    var unityLayerFooter = "";
+
+                    var myFile = File.saveDialog("Save your file", ".anim", "");
+                    var fileOK = myFile.open("w","TEXT","????");
+
+                    myFile.writeln(unityMainHeader);
+                    myFile.writeln(unityLayerHeader);
+
+                    var p = curLayer.property("Position");
+                    for(var j = 0; j < p.numKeys; j++) {
+                        var pp = p.keyValue(j+1);
+
+                        pp[0] = ( (pp[0]-(theComp.width/2)) / theComp.width ) * scaleFactor;
+                        pp[1] = ( -1 * (pp[1]-(theComp.height/2)) / theComp.height) * scaleFactor;
+                        pp[2] = ( pp[2] / ((theComp.width+theComp.height)/2) ) * scaleFactor;
+                    
+                        var unityKeyPos = "      - time: " + p.keyTime(j+1) + "\r" +
+                                          "        value: {x: " + pp[0] + ", y: " + pp[1] + ", z: " + pp[2] + "}" + "\r" +
+                                          "        inSlope: {x: 0, y: 0, z: 0}" + "\r" +
+                                          "        outSlope: {x: 0, y: 0, z: 0}" + "\r" +
+                                          "        tangentMode: 0"; 
+                                          
+                        myFile.writeln(unityKeyPos);
+                    
+                   }              
+                    // not using a footer presently                
+                    //myFile.writeln(unityLayerFooter);
+                    //myFile.writeln(unityMainFooter);
+                    myFile.close;    
+                }
+            }
+        }
+
+        app.endUndoGroup();
+    }  //end script
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
