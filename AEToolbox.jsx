@@ -273,7 +273,8 @@
                             precomp2.layers[1].transform.position.setValue([baseWidth * 2, baseHeight * 2]);
                         }
 
-                        var fgLayer = theComp.selectedLayers[0];
+                        var fgLayer = curLayer;
+                        if (titleBarSize !== 0) fgLayer = theComp.selectedLayers[0];
                         fgLayer.name =  origName + "_foreground";
                         fgLayer.transform.anchorPoint.setValue([baseWidth, baseHeight]);
                         fgLayer.transform.position.setValue([baseWidth, baseHeight]);
