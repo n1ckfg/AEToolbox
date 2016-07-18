@@ -250,6 +250,8 @@
                 theComp.height = baseHeight * 2;
 
                 var titleBarSize = 36;
+                if (!confirm("Use title bar compensation?")) titleBarSize = 0;
+                
                 var scaleOffset = 0.5;
                 var theLayers = theComp.selectedLayers;
 
@@ -258,16 +260,18 @@
                     if (curLayer.matchName == "ADBE AV Layer") {
                         var origName = curLayer.name;                        
 
-                        var precomp = theComp.layers.precompose([curLayer.index], "Precomp " + origName, true);
-                        precomp.width = baseWidth * 4;
-                        precomp.height = (baseHeight * 4) - titleBarSize;
-                        precomp.layers[1].transform.position.setValue([baseWidth * 2, (baseHeight * 2) - titleBarSize]);
-
-                        var precomp2 = theComp.layers.precompose([theComp.selectedLayers[0].index], "Precomp " + origName + " 2", true);
-                        precomp2.width = baseWidth * 4;
-                        precomp2.height = baseHeight * 4;
-                        precomp2.layers[1].transform.scale.setValue([100, 100 * (precomp2.height/precomp.height)]);
-                        precomp2.layers[1].transform.position.setValue([baseWidth * 2, baseHeight * 2]);
+                        if (titleBarSize !== 0) {
+                            var precomp = theComp.layers.precompose([curLayer.index], "Precomp " + origName, true);
+                            precomp.width = baseWidth * 4;
+                            precomp.height = (baseHeight * 4) - titleBarSize;
+                            precomp.layers[1].transform.position.setValue([baseWidth * 2, (baseHeight * 2) - titleBarSize]);
+                            
+                            var precomp2 = theComp.layers.precompose([theComp.selectedLayers[0].index], "Precomp " + origName + " 2", true);
+                            precomp2.width = baseWidth * 4;
+                            precomp2.height = baseHeight * 4;
+                            precomp2.layers[1].transform.scale.setValue([100, 100 * (precomp2.height/precomp.height)]);
+                            precomp2.layers[1].transform.position.setValue([baseWidth * 2, baseHeight * 2]);
+                        }
 
                         var fgLayer = theComp.selectedLayers[0];
                         fgLayer.name =  origName + "_foreground";
@@ -289,90 +293,44 @@
                         playerPovLayer.transform.anchorPoint.setValue([baseWidth * 3, baseHeight * 3]);
                         playerPovLayer.transform.position.setValue([baseWidth, baseHeight]);
 
-                        fgLayer.transform.scale.setValue([100, 100 + scaleOffset]);
-                        alphaLayer.transform.scale.setValue([100, 100 + scaleOffset]);
-                        cameraPovLayer.transform.scale.setValue([100, 100 + scaleOffset]);
-                        playerPovLayer.transform.scale.setValue([100, 100 + scaleOffset]);
+                        if (titleBarSize !== 0) {
+                            fgLayer.transform.scale.setValue([100, 100 + scaleOffset]);
+                            alphaLayer.transform.scale.setValue([100, 100 + scaleOffset]);
+                            cameraPovLayer.transform.scale.setValue([100, 100 + scaleOffset]);
+                            playerPovLayer.transform.scale.setValue([100, 100 + scaleOffset]);
+                        }
 
                         var fg_SavedIndex = fgLayer.index;
                         var fgLayer2 = theComp.layers.precompose([fg_SavedIndex], fgLayer.name, true);
                         fgLayer2.width = baseWidth * 2;
                         fgLayer2.height = baseHeight * 2;
-                        fgLayer2.layers[1].collapseTransformation = true;
+                        if (titleBarSize !== 0) fgLayer2.layers[1].collapseTransformation = true;
                         theComp.layers[fg_SavedIndex].audioEnabled = false;
 
                         var alpha_SavedIndex = alphaLayer.index;
                         var alphaLayer2 = theComp.layers.precompose([alpha_SavedIndex], alphaLayer.name, true);
                         alphaLayer2.width = baseWidth * 2;
                         alphaLayer2.height = baseHeight * 2;
-                        alphaLayer2.layers[1].collapseTransformation = true;
+                        if (titleBarSize !== 0) alphaLayer2.layers[1].collapseTransformation = true;
                         theComp.layers[alpha_SavedIndex].audioEnabled = false;
 
                         var cameraPov_SavedIndex = cameraPovLayer.index;
                         var cameraPovLayer2 = theComp.layers.precompose([cameraPov_SavedIndex], cameraPovLayer.name, true);
                         cameraPovLayer2.width = baseWidth * 2;
                         cameraPovLayer2.height = baseHeight * 2;
-                        cameraPovLayer2.layers[1].collapseTransformation = true;
+                        if (titleBarSize !== 0) cameraPovLayer2.layers[1].collapseTransformation = true;
                         theComp.layers[cameraPov_SavedIndex].audioEnabled = true;
 
                         var playerPov_SavedIndex = playerPovLayer.index;
                         var playerPovLayer2 = theComp.layers.precompose([playerPov_SavedIndex], playerPovLayer.name, true);
                         playerPovLayer2.width = baseWidth * 2;
                         playerPovLayer2.height = baseHeight * 2;
-                        playerPovLayer2.layers[1].collapseTransformation = true;
+                        if (titleBarSize !== 0) playerPovLayer2.layers[1].collapseTransformation = true;
                         theComp.layers[playerPov_SavedIndex].audioEnabled = false;
                     } else {
                         alert(errorFootageOnly);
                     }
                 }
-            //var sideBySide = confirm("Use side-by-side stereo?");
-
-            /*
-            var newComp1 = theComp.duplicate();
-            newComp1.name = theComp.name + " L";
-            var theLayers1 = newComp1.layers;
-            
-            while (theLayers1.length > 0) {  
-                var curLayer = theLayers1[1];          
-                curLayer.remove();
-            }
-
-            var newComp1target = theLayers1.add(theComp);
-            if (sideBySide) {
-                newComp1.width = newComp1.width/2;
-            } else { 
-                newComp1.height = newComp1.height/2;
-            }
-
-            //~~~~~~~~~~~~~~~~~
-
-            var newComp2 = theComp.duplicate();
-            newComp2.name = theComp.name + " R";
-            var theLayers2 = newComp2.layers;
-            
-            while (theLayers2.length > 0) {  
-                var curLayer = theLayers2[1];          
-                curLayer.remove();
-            }
-
-            var newComp2target = theLayers2.add(theComp);
-            
-            if (sideBySide) {
-                newComp2.width = newComp2.width/2;
-            } else { 
-                newComp2.height = newComp2.height/2;
-            }
-            
-            var p2 = newComp2target.transform.position.value;
-            
-            if (sideBySide) {
-                newComp2target.transform.position.setValue([0,p2[1]]);
-            } else { 
-                newComp2target.transform.position.setValue([p2[0],0]);
-            }
-
-            theComp.name = "Precomp s3D Pair";
-            */
             }
         }
 
