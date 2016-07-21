@@ -10,8 +10,10 @@ DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 
 cd $DIR
 
-cp AEToolbox.jsx /Applications/Adobe\ After\ Effects\ CS6/Scripts/ScriptUI\ Panels/
-cp AEToolbox.jsx /Applications/Adobe\ After\ Effects\ CC/Scripts/ScriptUI\ Panels/
-cp AEToolbox.jsx /Applications/Adobe\ After\ Effects\ CC\ 2014/Scripts/ScriptUI\ Panels/
-cp AEToolbox.jsx /Applications/Adobe\ After\ Effects\ CC\ 2015/Scripts/ScriptUI\ Panels/
-cp AEToolbox.jsx /Applications/Adobe\ After\ Effects\ CC\ 2015.3/Scripts/ScriptUI\ Panels/
+FILE_NAME=AEToolbox
+
+cp $FILE_NAME.jsx /Applications/Adobe\ After\ Effects\ CS6/Scripts/ScriptUI\ Panels/
+cp $FILE_NAME.jsx /Applications/Adobe\ After\ Effects\ CC/Scripts/ScriptUI\ Panels/
+cp $FILE_NAME.jsx /Applications/Adobe\ After\ Effects\ CC\ 2014/Scripts/ScriptUI\ Panels/
+cp $FILE_NAME.jsx /Applications/Adobe\ After\ Effects\ CC\ 2015/Scripts/ScriptUI\ Panels/
+cp $FILE_NAME.jsx /Applications/Adobe\ After\ Effects\ CC\ 2015.3/Scripts/ScriptUI\ Panels/
