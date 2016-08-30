@@ -46,6 +46,7 @@ IV.  DEPTH
 5. Depth Sort (layer selection): Sorts layers based on Z depth.
 6. Stereo Controller (comp selection): Creates a stereo controller null for a single camera.
 7. Vive Recording (layer selection): Splits a quad Vive recording into separate layers.
+8. 4K Stereo 360 (layer selection): Creates a standard 4K OU 360 stereo comp.
 
 V.  GUIDE
 1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.

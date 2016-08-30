@@ -72,7 +72,7 @@
         panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
       
         // Depth group
-        var col3butCount = 7;
+        var col3butCount = 8;
         panel.stereoGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.stereoGroup0 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
         panel.stereoGroup1 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
@@ -81,6 +81,7 @@
         panel.stereoGroup4 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
         panel.stereoGroup5 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
         panel.stereoGroup6 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Vive Recording");
+        panel.stereoGroup7 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "4K Stereo 360");
       
         // Guide group
         var col3butCount = 2;
@@ -130,6 +131,7 @@
         panel.stereoGroup4.onClick = depthSort;
         panel.stereoGroup5.onClick = stereoController;
         panel.stereoGroup6.onClick = viveRecording;
+        panel.stereoGroup7.onClick = stereo360;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -164,7 +166,7 @@
         panel.rigGroup4.helpTip = "Creates a null controller for *Particular* particles."; //charParticle;
         panel.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
         panel.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
-        panel.rigGroup7.helpTip = "Creates precomps that each display one frame from a sequence."; //threeDmoSketch;
+        panel.rigGroup7.helpTip = "Creates precomps that each display one frame from a sequence."; //photoRig;
         //--
         panel.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
         panel.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
@@ -173,6 +175,7 @@
         panel.stereoGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
         panel.stereoGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
         panel.stereoGroup6.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
+        panel.stereoGroup7.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -196,15 +199,15 @@
 
             if (selector.selection == 0) { // Basic
                 panel.basicGroup.visible = true;
-            }else if (selector.selection == 1) { // Advanced
+            } else if (selector.selection == 1) { // Advanced
                 panel.advGroup.visible = true;
-            }else if (selector.selection == 2) { // Rigging
+            } else if (selector.selection == 2) { // Rigging
                 panel.rigGroup.visible = true;
-            }else if (selector.selection == 3) { // Stereo
+            } else if (selector.selection == 3) { // Stereo
                 panel.stereoGroup.visible = true;
-            }else if (selector.selection == 4) { // Guide
+            } else if (selector.selection == 4) { // Guide
                 panel.guideGroup.visible = true;
-            }else if (selector.selection == 5) { // IO
+            } else if (selector.selection == 5) { // IO
                 panel.ioGroup.visible = true;
             }             
         }
@@ -230,6 +233,37 @@
     // * * * * * *
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 35. Type: apply process to two layers
+    function stereo360() {
+        app.beginUndoGroup("Merge Stereo pair");
+
+        var theComp = app.project.activeItem;
+
+        if (theComp == null || !(theComp instanceof CompItem)){  
+            alert(errorNoCompSelected);  
+        } else { 
+            var theLayers = theComp.selectedLayers;
+
+            if (theLayers.length != 2) {
+                alert("Select exactly two layers.");
+            } else { 
+                theComp.width = 3840;
+                theComp.height = 2160;
+                if (theComp.frameRate == 12) {
+                	theComp.frameRate = 24;
+                } else if (theComp.frameRate == 15) {
+                	theComp.frameRate = 30;
+                }           
+
+                mergeStereoPair(false);
+            }
+        }
+
+        app.endUndoGroup();   
+    }
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 34.  Type: apply process to a whole comp
@@ -872,8 +906,8 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 22.  Type: apply process to two layers
-    function mergeStereoPair() {
-        app.beginUndoGroup("Merge Stereo pair");
+    function mergeStereoPair(doUndoGroup) {
+        if (doUndoGroup) app.beginUndoGroup("Merge Stereo pair");
 
         var theComp = app.project.activeItem;
 
@@ -885,7 +919,7 @@
             if (theLayers.length != 2) {
                 alert("Select exactly two layers.");
             } else { 
-                var sideBySide = confirm("Use side-by-side stereo?");
+                var overUnder = confirm("Use over-under stereo?");
 
                 var leftLayer = theLayers[0];
                 var rightLayer = theLayers[1];
@@ -898,7 +932,7 @@
                 var sL = leftLayer.transform.scale.value;
                 var sR = rightLayer.transform.scale.value;
 
-                if(sideBySide){
+                if (!overUnder) {
                     sL[0] = ((theComp.width/2) / leftLayer.width) * 100;
                     sL[1] = (theComp.height / leftLayer.height) * 100;
                     sR[0] = ((theComp.width/2) / rightLayer.width) * 100;
@@ -918,7 +952,7 @@
                 var pL = leftLayer.transform.position.value;
                 var pR = rightLayer.transform.position.value;
 
-                if(sideBySide){
+                if (!overUnder) {
                     pL[0] = theComp.width*0.25;
                     pL[1] = theComp.height*0.5;
                     pR[0] = theComp.width*0.75;
@@ -935,7 +969,7 @@
             }
         }
 
-        app.endUndoGroup();   
+        if (doUndoGroup) app.endUndoGroup();   
     }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
@@ -955,7 +989,7 @@
             if (theLayers.length==0 || theLayers.length > 2) {
                 alert("Select one or two layers.");
             } else { 
-                var sideBySide = confirm("Use side-by-side stereo?");
+                var overUnder = confirm("Use over-under stereo?");
 
                 var oldLayer = theLayers[0];
 
@@ -1022,7 +1056,7 @@
                 var stereoR = theLayers1.add(newComp);
                 stereoR.audioEnabled = false;
 
-                if (sideBySide) {
+                if (!overUnder) {
                     stereoL.transform.scale.setValue([50,100]);
                     stereoR.transform.scale.setValue([50,100]);
                 } else { 
@@ -1030,7 +1064,7 @@
                     stereoR.transform.scale.setValue([100,50]);                
                 }
                 
-                if (sideBySide) {
+                if (!overUnder) {
                     stereoL.transform.position.setValue([(stereoComp.width*0.25),(stereoComp.height*0.5)]);
                     stereoR.transform.position.setValue([(stereoComp.width*0.75),(stereoComp.height*0.5)]);
                 } else { 
@@ -1054,7 +1088,7 @@
         if (theComp == null || !(theComp instanceof CompItem)){  
             alert(errorNoCompSelected);  
         } else { 
-            var sideBySide = confirm("Use side-by-side stereo?");
+            var overUnder = confirm("Use over-under stereo?");
 
             var newComp1 = theComp.duplicate();
             newComp1.name = theComp.name + " L";
@@ -1066,7 +1100,7 @@
             }
 
             var newComp1target = theLayers1.add(theComp);
-            if (sideBySide) {
+            if (!overUnder) {
                 newComp1.width = newComp1.width/2;
             } else { 
                 newComp1.height = newComp1.height/2;
@@ -1085,7 +1119,7 @@
 
             var newComp2target = theLayers2.add(theComp);
             
-            if (sideBySide) {
+            if (!overUnder) {
                 newComp2.width = newComp2.width/2;
             } else { 
                 newComp2.height = newComp2.height/2;
@@ -1093,7 +1127,7 @@
             
             var p2 = newComp2target.transform.position.value;
             
-            if (sideBySide) {
+            if (!overUnder) {
                 newComp2target.transform.position.setValue([0,p2[1]]);
             } else { 
                 newComp2target.transform.position.setValue([p2[0],0]);
