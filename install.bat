@@ -1,6 +1,6 @@
 @echo off
 
-cd ~%dp0
-cp AEToolbox.jsx "C:\Program Files\YOUR AFTER EFFECTS VERSION\Scripts\ScriptUI Panels\"
+cd %cd%
+copy AEToolbox.jsx "C:\Program Files\Adobe\Adobe After Effects CC 2015.3\Support Files\Scripts\ScriptUI Panels"
 
 @pause
