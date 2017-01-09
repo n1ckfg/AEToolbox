@@ -38,7 +38,7 @@
         var colXinc = 170;
 
         // Basic group
-        var col1butCount = 7;
+        var col1butCount = 8;
         panel.basicGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.basicGroup0 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Nulls for Pins");
         panel.basicGroup1 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Parent Chain");
@@ -47,6 +47,7 @@
         panel.basicGroup4 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Make Loop");
         panel.basicGroup5 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Random Position");
         panel.basicGroup6 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Graph Audio");
+        panel.basicGroup7 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Isolate Color");
        
         // Advanced group
         var col3butCount = 7;
@@ -106,6 +107,7 @@
         panel.basicGroup4.onClick = makeLoop;
         panel.basicGroup5.onClick = randomPos;
         panel.basicGroup6.onClick = graphAudio;
+        panel.basicGroup7.onClick = isolateColor;
         //--
         panel.advGroup0.onClick = bakePinKeyframes;
         panel.advGroup1.onClick = lockRotation;
@@ -150,6 +152,7 @@
         panel.basicGroup4.helpTip = "Puts a cycle expression on Time Remap."; //makeLoop;
         panel.basicGroup5.helpTip = "Randomizes a layer's position."; //randomPos;
         panel.basicGroup6.helpTip = "Converts audio to keyframes and enables the graph view."; //graphAudio;
+        panel.basicGroup7.helpTip = "Keys out everything but selected color."; //isolateColor;
         //--
         panel.advGroup0.helpTip = "Bakes expressions and puppet pins to keyframes."; //bakePinKeyframes;
         panel.advGroup1.helpTip = "Forces a layer to always face the camera."; //lockRotation;
@@ -163,7 +166,7 @@
         panel.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
         panel.rigGroup2.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
         panel.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
-        panel.rigGroup4.helpTip = "Creates a null controller for *Particular* particles."; //charParticle;
+        panel.rigGroup4.helpTip = "*Particular* null controller for particles."; //charParticle;
         panel.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
         panel.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
         panel.rigGroup7.helpTip = "Creates precomps that each display one frame from a sequence."; //photoRig;
@@ -233,6 +236,41 @@
     // * * * * * *
 
     ///////////////////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////////////////////
+
+    // 36. Type: apply process to any number of layers.
+
+        function isolateColor() {  
+        app.beginUndoGroup("Isolate Color");
+
+        var theComp = app.project.activeItem; 
+        
+        if (theComp == null || !(theComp instanceof CompItem)){
+            alert(errorNoCompSelected);
+        } else { 
+            var theLayers = theComp.selectedLayers;
+            if (theLayers.length==0) {
+                alert(errorNoLayerSelected);
+            } else { 
+                for (var i = 0; i < theLayers.length; i++) {
+                    var curLayer = theLayers[i];                
+                    if (curLayer.matchName == "ADBE AV Layer") {
+                        var setMatte = curLayer.property("Effects").addProperty("Set Matte");
+                        setMatte.property("Take Matte From Layer").setValue(0);
+                        setMatte.enabled = false;
+                        var colorKey = curLayer.property("Effects").addProperty("Linear Color Key");
+                        colorKey.property("Key Operation").setValue(2);
+                        var simpleChoker = curLayer.property("Effects").addProperty("Simple Choker");
+                    } else { 
+                        alert(errorFootageOnly);
+                    }
+                }
+            }
+        }
+
+        app.endUndoGroup();
+    }  
+
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 35. Type: apply process to two layers
