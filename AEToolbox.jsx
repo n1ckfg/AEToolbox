@@ -73,7 +73,7 @@
         panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
       
         // Depth group
-        var col3butCount = 8;
+        var col3butCount = 9;
         panel.stereoGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.stereoGroup0 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
         panel.stereoGroup1 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
@@ -83,6 +83,7 @@
         panel.stereoGroup5 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
         panel.stereoGroup6 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Vive Recording");
         panel.stereoGroup7 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "4K Stereo 360");
+        panel.stereoGroup8 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*8),butXend,butYend+(butYinc*8)], "Holoflix 720p");
       
         // Guide group
         var col3butCount = 2;
@@ -134,6 +135,7 @@
         panel.stereoGroup5.onClick = stereoController;
         panel.stereoGroup6.onClick = viveRecording;
         panel.stereoGroup7.onClick = stereo360;
+        panel.stereoGroup8.onClick = holoflix720p;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -179,6 +181,7 @@
         panel.stereoGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
         panel.stereoGroup6.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         panel.stereoGroup7.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
+        panel.stereoGroup8.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -238,9 +241,50 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    // 36. Type: apply process to any number of layers.
 
-        function isolateColor() {  
+    // 37. Type: apply process to any number of layers
+    function holoflix720p() {
+        app.beginUndoGroup("Create Holoflix comps");
+
+        var theComp = app.project.activeItem;
+
+        if (theComp == null || !(theComp instanceof CompItem)){  
+            alert(errorNoCompSelected);  
+        } else { 
+            var theLayers = theComp.selectedLayers;
+
+            if (theLayers.length==0) {
+                alert(errorNoLayerSelected);
+            } else {
+            	var doFrameRate = confirm("Reduce to 12fps?");
+            	for (var i=0; i<theLayers.length; i++) {
+                	var precompRgb = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
+	               	theComp.selectedLayers[i].position.setValue([960, 360]);
+
+                	precompRgb.width = 640;
+                	precompRgb.height = 480;
+                	precompRgb.layers[1].position.setValue([0, 240]);
+                	if (doFrameRate) precompRgb.frameRate = 12;
+
+                	var precompDepth = precompRgb.duplicate();
+                	var origName = precompRgb.name;
+                	precompRgb.name += "_rgb";
+                	precompDepth.name = origName + "_depth";
+                	precompDepth.layers[1].position.setValue([640, 240]);
+
+                	precompDepth = theComp.layers.add(precompDepth);
+                	precompDepth.audioEnabled = false;
+                	precompDepth.position.setValue([320, 360]);
+            	}
+            }
+        }
+
+        app.endUndoGroup();   
+    }
+
+
+    // 36. Type: apply process to any number of layers.
+    function isolateColor() {  
         app.beginUndoGroup("Isolate Color");
 
         var theComp = app.project.activeItem; 

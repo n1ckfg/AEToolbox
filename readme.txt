@@ -1,6 +1,12 @@
-AEToolbox UI panel
-Copyright (c) 2016 Nick Fox-Gieg
+The AEToolbox UI panel was developed with support from:
+   Canada Council on the Arts
+   
+   Eyebeam Art + Technology Center
+   Ontario Arts Council / Chalmers Family Fund
+
+Copyright (c) 2017 Nick Fox-Gieg
 http://fox-gieg.com
+
 
 FEATURES:
 
@@ -48,6 +54,7 @@ IV.  DEPTH
 6. Stereo Controller (comp selection): Creates a stereo controller null for a single camera.
 7. Vive Recording (layer selection): Splits a quad Vive recording into separate layers.
 8. 4K Stereo 360 (layer selection): Creates a standard 4K OU 360 stereo comp.
+9. Holoflix 720p (layer selection): Splits a Holoflix 720p clip into RGB and depth comps.
 
 V.  GUIDE
 1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.
