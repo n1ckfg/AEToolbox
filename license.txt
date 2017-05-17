@@ -1,6 +1,5 @@
 The AEToolbox UI panel was developed with support from:
    Canada Council on the Arts
-   
    Eyebeam Art + Technology Center
    Ontario Arts Council / Chalmers Family Fund
 
