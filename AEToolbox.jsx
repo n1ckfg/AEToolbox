@@ -272,49 +272,37 @@
             }
 
             if (xmlRoot) {
-                var tag = xmlRoot.tag;
-                var header = tag.header;
-                var environment = tag.environment;
-                var screenBounds = environment.screenBounds;
-                var dim = [ parseFloat(screenBounds.x), parseFloat(screenBounds.y), parseFloat(screenBounds.z) ];
+                tag = xmlRoot.descendants("tag");
+                var header = tag.descendants("header");
+                var environment = header.descendants("environment");
+                var screenBounds = environment.descendants("screenBounds");
+                var dim = [ parseFloat(screenBounds.descendants("x")), parseFloat(screenBounds.descendants("y")), parseFloat(screenBounds.descendants("z")) ];
                 if (!dim[0]) dim[0] = 640.0;
                 if (!dim[1]) dim[1] = 640.0;
                 if (!dim[2]) dim[2] = 640.0;
-                alert(dim);
-
-                var drawing = tag.descendants("drawing");
-                var strokesEl = drawing.stroke;
-                var strokes = [];
-                for (var i=1; i<strokesEl.length(); i++) {
-                    var stroke = []
-                    for (var j=1; j<strokesEl[i].pt.length(); j++) {
-                        var pointEl = strokesEl[i].pt[j];
-                        var x = parseFloat(pointEl.x) & dim[0];
-                        var y = parseFloat(pointEl.y) * dim[1];
-                        var z = parseFloat(pointEl.z) * dim[2];
-                        var time = parseFloat(pointEl.time);
-                        if (!x) x = 0.0;
-                        if (!y) y = 0.0;
-                        if (!z) z = 0.0;
-                        if (!time) time = 0.0;
-                        point = [ x, y, z, time ];
-                        if (j==0) alert(point);
-                        stroke.push(point);
-                    }
-                    strokes.push(stroke);
-                }
-                alert(strokes.length);
 
                 var gml = theComp.layers.addSolid([0, 0, 0], "GML", parseInt(dim[0]), parseInt(dim[1]), 1);
                 gml.guideLayer = true;
                 gml.threeDLayer = true;
 
-                for (var i=0; i<strokes.length; i++) {
-                    for (var j=0; j<strokes[i].length; j++) {
-                        var point = strokes[i][j];
+                var drawing = tag.descendants("drawing");
+                var strokesEl = drawing.stroke;
+                for (var i=0; i<strokesEl.length(); i++) {
+                    for (var j=0; j<strokesEl[i].pt.length(); j++) {
+                        var pointEl = strokesEl[i].pt[j];
+                        var x = parseFloat(pointEl.descendants("x")) * dim[0];
+                        var y = parseFloat(pointEl.descendants("y")) * dim[1];
+                        var z = parseFloat(pointEl.descendants("z")) * dim[2];
+                        var time = parseFloat(pointEl.descendants("time"));
+                        
+                        if (!x) x = 0.0;
+                        if (!y) y = 0.0;
+                        if (!z) z = 0.0;
+                        if (!time) time = 0.0;
+
                         var pos = gml.property("Position");
                         // TODO normalize time and fit in comp time
-                        pos.setValueAtTime(point[3] / 1000.0, [ point[0], point[1], point[2] ]);
+                        pos.setValueAtTime(time, [ x, y, z ]);
                     }
                 }
             }
@@ -322,6 +310,14 @@
 
         app.endUndoGroup();
     }  
+
+    function findElements(xml, name) {
+        var returns = 0;
+        for (var i=0; i<xml.descendants.length; i++) {
+            returns++;
+        }
+        return returns;
+    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
