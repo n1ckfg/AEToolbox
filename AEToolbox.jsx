@@ -91,13 +91,18 @@
         panel.guideGroup0 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Onion Skin");
         panel.guideGroup1 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Skeleton View");
        
-        // IO group
+        // Export group
         var col3butCount = 4;
-        panel.ioGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.ioGroup0 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Camera to Maya");
-        panel.ioGroup1 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Unity Anim");
-        panel.ioGroup2 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "JSON Export");
-        panel.ioGroup3 = panel.ioGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "XML Export");
+        panel.exportGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.exportGroup0 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Camera to Maya");
+        panel.exportGroup1 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Unity Anim");
+        panel.exportGroup2 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "JSON Export Test");
+        panel.exportGroup3 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "XML Export Test");
+
+        // Import group
+        var col3butCount = 1;
+        panel.importGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.importGroup0 = panel.importGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "GML to Position");
 
         // 2-5. Link buttons to functions
         //-----------------------------------------------------
@@ -140,10 +145,12 @@
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
         //--
-        panel.ioGroup0.onClick = cameraToMaya;
-        panel.ioGroup1.onClick = unityAnim;
-        panel.ioGroup2.onClick = jsonExport;
-        panel.ioGroup3.onClick = xmlExport;
+        panel.exportGroup0.onClick = cameraToMaya;
+        panel.exportGroup1.onClick = unityAnim;
+        panel.exportGroup2.onClick = jsonExport;
+        panel.exportGroup3.onClick = xmlExport;
+        //--
+        panel.importGroup0.onClick =  gmlToPos;
 
         // 3-5. Tooltips
         //-----------------------------------------------------
@@ -186,14 +193,16 @@
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
         //--
-        panel.ioGroup0.helpTip = "Export camera to Maya."; //cameraToMaya;
-        panel.ioGroup1.helpTip = "Export keyframes to Unity anim."; //unityAnim;
-        panel.ioGroup2.helpTip = "Export keyframes to JSON."; //jsonExport;
-        panel.ioGroup3.helpTip = "Export keyframes to XML."; //xmlExport;
-        
+        panel.exportGroup0.helpTip = "Export camera to Maya."; //cameraToMaya;
+        panel.exportGroup1.helpTip = "Export keyframes to Unity anim."; //unityAnim;
+        panel.exportGroup2.helpTip = "Export keyframes to JSON."; //jsonExport;
+        panel.exportGroup3.helpTip = "Export keyframes to XML."; //xmlExport;
+        //--
+        panel.importGroup0.helpTip = "Import position keyframes from GML."; //gmlToPos;
+
         // 4-5. Selector
         //-----------------------------------------------------
-        var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Guide", "IO" ]);
+        var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Guide", "Export", "Import" ]);
         
         selector.onChange = function() {
             panel.basicGroup.visible = false;
@@ -201,7 +210,8 @@
             panel.rigGroup.visible = false;
             panel.stereoGroup.visible = false;
             panel.guideGroup.visible = false;
-            panel.ioGroup.visible = false;    
+            panel.exportGroup.visible = false;    
+            panel.importGroup.visible = false;    
 
             if (selector.selection == 0) { // Basic
                 panel.basicGroup.visible = true;
@@ -213,9 +223,11 @@
                 panel.stereoGroup.visible = true;
             } else if (selector.selection == 4) { // Guide
                 panel.guideGroup.visible = true;
-            } else if (selector.selection == 5) { // IO
-                panel.ioGroup.visible = true;
-            }             
+            } else if (selector.selection == 5) { // Export
+                panel.exportGroup.visible = true;
+            }  else if (selector.selection == 6) { // Import
+                panel.importGroup.visible = true;
+            }            
         }
 
         selector.selection = 0;
@@ -240,7 +252,78 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
     ///////////////////////////////////////////////////////////////////////////////////////////
+    
+    // 38. Type: apply process to any number of layers.
+    function gmlToPos() {  
+        app.beginUndoGroup("GML to Position");
 
+        var theComp = app.project.activeItem; 
+        
+        if (theComp == null || !(theComp instanceof CompItem)){
+            alert(errorNoCompSelected);
+        } else { 
+            var xmlFile = File.openDialog();
+            var file = xmlFile.open("r");
+            var xmlRoot;
+            if (file) {
+                var xmlString = xmlFile.read();
+                xmlRoot = new XML(xmlString);
+                xmlFile.close();
+            }
+
+            if (xmlRoot) {
+                var tag = xmlRoot.tag;
+                var header = tag.header;
+                var environment = tag.environment;
+                var screenBounds = environment.screenBounds;
+                var dim = [ parseFloat(screenBounds.x), parseFloat(screenBounds.y), parseFloat(screenBounds.z) ];
+                if (!dim[0]) dim[0] = 640.0;
+                if (!dim[1]) dim[1] = 640.0;
+                if (!dim[2]) dim[2] = 640.0;
+                alert(dim);
+
+                var drawing = tag.descendants("drawing");
+                var strokesEl = drawing.stroke;
+                var strokes = [];
+                for (var i=1; i<strokesEl.length(); i++) {
+                    var stroke = []
+                    for (var j=1; j<strokesEl[i].pt.length(); j++) {
+                        var pointEl = strokesEl[i].pt[j];
+                        var x = parseFloat(pointEl.x) & dim[0];
+                        var y = parseFloat(pointEl.y) * dim[1];
+                        var z = parseFloat(pointEl.z) * dim[2];
+                        var time = parseFloat(pointEl.time);
+                        if (!x) x = 0.0;
+                        if (!y) y = 0.0;
+                        if (!z) z = 0.0;
+                        if (!time) time = 0.0;
+                        point = [ x, y, z, time ];
+                        if (j==0) alert(point);
+                        stroke.push(point);
+                    }
+                    strokes.push(stroke);
+                }
+                alert(strokes.length);
+
+                var gml = theComp.layers.addSolid([0, 0, 0], "GML", parseInt(dim[0]), parseInt(dim[1]), 1);
+                gml.guideLayer = true;
+                gml.threeDLayer = true;
+
+                for (var i=0; i<strokes.length; i++) {
+                    for (var j=0; j<strokes[i].length; j++) {
+                        var point = strokes[i][j];
+                        var pos = gml.property("Position");
+                        // TODO normalize time and fit in comp time
+                        pos.setValueAtTime(point[3] / 1000.0, [ point[0], point[1], point[2] ]);
+                    }
+                }
+            }
+        }
+
+        app.endUndoGroup();
+    }  
+
+    ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 37. Type: apply process to any number of layers
     function holoflix720p() {
@@ -281,7 +364,6 @@
 
         app.endUndoGroup();   
     }
-
 
     // 36. Type: apply process to any number of layers.
     function isolateColor() {  
@@ -457,7 +539,6 @@
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 33.  Type: apply process to any number of layers or properties
-
     function xmlExport() {  
         app.beginUndoGroup("Export to XML");
         app.endUndoGroup();
@@ -2343,16 +2424,16 @@
 
         //****************************** MAIN
 
-        //AE_CameraToMaya v1.1n
-        //by Ryan Gilmore, 2008
-        //www.urbanspaceman.net
-        //contact@urbanspaceman.net
+        // AE_CameraToMaya v1.1n
+        // by Ryan Gilmore, 2008
+        // www.urbanspaceman.net
+        // contact@urbanspaceman.net
 
-        //Select the camera in After Effects you want to send to Maya, and this script will create an .ma file with a copy of the camera in it, with
-        //correct position, rotation, and focal length.  Should work for any AE camera, no matter how it is animated, without any restrictions.
+        // Select the camera in After Effects you want to send to Maya, and this script will create an .ma file with a copy of the camera in it, with
+        // correct position, rotation, and focal length.  Should work for any AE camera, no matter how it is animated, without any restrictions.
 
-        //fixed for CS6 by Nick Fox-Gieg, 2012
-        //null export by Nick Fox-Gieg, 2014
+        // fixed for CS6 by Nick Fox-Gieg, 2012
+        // null export by Nick Fox-Gieg, 2014
 
         //****************************** GLOBALS
 
@@ -2400,10 +2481,10 @@
 
         var frameAspect = (compWidth*aspect)/compHeight;
 
-        mayaFBHeight = 1; //in inches
-        mayaFilmBack = frameAspect*mayaFBHeight; //in inches
+        mayaFBHeight = 1; // in inches
+        mayaFilmBack = frameAspect*mayaFBHeight; // in inches
 
-        //fps presets for Maya
+        // fps presets for Maya
         /*
         if (compRate == 30) {fps = "ntsc"} 
         else {}
@@ -2432,19 +2513,19 @@
 
         DeselectProjectWindowItems();
 
-        //error check: is the comp the active timeline window?
+        // error check: is the comp the active timeline window?
         if (app.project.activeItem!=null) {
         theComp = app.project.activeItem;
 
-        //error check: is camera selected?
+        // error check: is camera selected?
         if (theComp.selectedLayers!="") {
         theCamera = theComp.selectedLayers;
 
-        //error check: is more than one layer selected?
+        // error check: is more than one layer selected?
         if (theCamera.length<2) {
         CameraName = theCamera[0].name;
 
-        //error check: is it a camera selected?
+        // error check: is it a camera selected?
         if (theCamera[0].zoom!=null) {
 
         theCamera[0].moveToEnd(); //null layers won"t all be counted unless camera is on the bottom
@@ -2452,12 +2533,12 @@
         CamIn=theCamera[0].inPoint;
         CamOut=theCamera[0].outPoint;
 
-        //if camera has a parent that uses a scale value other than 100, this will affect rotation and zoom calculations.
-        //NB: if the scale does not have equal XYZ values, this script won"t work.  That"s because this will stretch, 
-        //distort, and skew the camera, and since the first step of this script is to output a free camera, it can"t be done since
-        //a skewed free camera is impossible in After Effects.
-        //if their is a parent, the unit value in the rotation matrix is scale/100
-        //otherwise the unit value is 1.
+        // if camera has a parent that uses a scale value other than 100, this will affect rotation and zoom calculations.
+        // NB: if the scale does not have equal XYZ values, this script won"t work.  That"s because this will stretch, 
+        // distort, and skew the camera, and since the first step of this script is to output a free camera, it can"t be done since
+        // a skewed free camera is impossible in After Effects.
+        // if their is a parent, the unit value in the rotation matrix is scale/100
+        // otherwise the unit value is 1.
         if (theCamera[0].parent!=null) {
             CamMaster=theCamera[0].parent;
             CamMasterExpression="this_comp.layer("+"\""+CamMaster.name+"\""+").scale/100";
@@ -2465,28 +2546,28 @@
             CamMasterExpression="[1,1,1]";
         };
 
-        //make new camera.  This will inherit the Y and X rotations.
+        // make new camera.  This will inherit the Y and X rotations.
         theComp.layers.addCamera("CamCopy_yRot_xRot",[0,0]).startTime=0;
         CamCopy01=theComp.layer(1);
         CamCopy01.inPoint=CamIn;
         CamCopy01.outPoint=CamOut;
         CamCopy01.pointOfInterest.expression="position";
         CamCopy01.position.setValue([theComp.width/2, theComp.height/2, 0]);
-        //make camera parent.  This is needed to reverse the rotation order.  This null will inherit the position and Z rotation.
+        // make camera parent.  This is needed to reverse the rotation order.  This null will inherit the position and Z rotation.
         theComp.layers.addNull(theComp.duration).name="CamCopy_zRot_pos";
         CamParent01=theComp.layer(1);
         setNull(CamParent01,CamIn,CamOut,theComp);
-        //attach child camera to parent
+        // attach child camera to parent
         CamCopy01.parent=CamParent01;
 
-        //translate the data from the original camera with expressions
+        // translate the data from the original camera with expressions
         CamParent01.position.expression="L=thisComp.layer("+"\""+CameraName+"\""+");L.toWorld([0,0,0])";
         CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]";
         CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]";
         CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]";
         CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\""+CameraName+"\""+").zoom*1/unit[0]";
 
-        //Make a second copy of the camera, this time it will be baked
+        // Make a second copy of the camera, this time it will be baked
         ShortCamName=removeForbiddenCharacters(CameraName);
         theComp.layers.addCamera("<"+ShortCamName+">",[0,0]).startTime=0;
         CamCopy02=theComp.layer(1);
@@ -2494,11 +2575,11 @@
         CamCopy02.outPoint=CamOut;
         CamCopy02.pointOfInterest.expression="position";
         CamCopy02.position.setValue([theComp.width/2, theComp.height/2, 0]);
-        //make seconcd camera parent.
+        // make seconcd camera parent.
         theComp.layers.addNull(theComp.duration).name="<"+ShortCamName+"Parent"+">";
         CamParent02=theComp.layer(1);
         setNull(CamParent02,CamIn,CamOut,theComp);
-        //attach child camera to parent
+        // attach child camera to parent
         CamCopy02.parent=CamParent02;
 
         Bake(theComp, theComp.layer(3).position, CamParent02.position);
@@ -2524,11 +2605,11 @@
 
         var CamName = removeForbiddenCharacters(CameraName);
 
-        //create text file
+        // create text file
         var myFile = File.saveDialog("Save your file", CamName + ".ma", "");
         var fileOK = myFile.open("w","TEXT","????");
 
-        //Maya scene file header
+        // Maya scene file header
         myFile.writeln("//Maya ASCII 6.0 scene");
         myFile.writeln("//Name: " + CamName + "_export.ma");
         myFile.writeln("//Last modified:");
@@ -2536,9 +2617,9 @@
         myFile.writeln("currentUnit -l centimeter -a degree -t " + fps + ";");
         myFile.writeln("");
 
-        //make camera nodes
+        // make camera nodes
 
-        //transform node
+        // transform node
         myFile.writeln("createNode transform -n \"" + CamName + "\";");
 
         // shape node, that will have film back
@@ -2685,7 +2766,7 @@
         myFile.writeln(""); 
         myFile.writeln(""); 
         
-        //Render size settings
+        // Render size settings
         myFile.writeln("select -ne :time1;");
         myFile.writeln("    setAttr \".o\" 1;");
         myFile.writeln("select -ne :defaultResolution;");
@@ -2694,7 +2775,7 @@
         myFile.writeln("    setAttr \".dar\" " + frameAspect + ";");
         myFile.writeln("");
 
-        //connect the nodes together
+        // connect the nodes together
         myFile.writeln("connectAttr \"" + CamName + "_TranslateX.o\" \"" + CamName + ".tx\";");
         myFile.writeln("connectAttr \"" + CamName + "_TranslateY.o\" \"" + CamName + ".ty\";");
         myFile.writeln("connectAttr \"" + CamName + "_TranslateZ.o\" \"" + CamName + ".tz\";");
@@ -2955,9 +3036,9 @@
 
 
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        //finish it all up...
+        // finish it all up...
 
-        //set work area 
+        // set work area 
         myFile.writeln("createNode script -n \"sceneConfigurationScriptNode\";");
         myFile.writeln("    setAttr \".b\" -type \"string\"\"playbackOptions -min 1.0 -max " + totalFrames + " -ast 1.0 -aet " + totalFrames + "\";");
         myFile.writeln("    setAttr \".st\" 6;");
@@ -2975,7 +3056,7 @@
 
     ///////////////////////////////////////////////////////////////////////////////////////////
 
-    //COMMON FUNCTIONS
+    // COMMON FUNCTIONS
 
     //~~~~~~~~~~~~~~~~~~~
     function degreesToRadians(degree) {

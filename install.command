@@ -20,4 +20,5 @@ do
 	cp $i /Applications/Adobe\ After\ Effects\ CC\ 2014/Scripts/ScriptUI\ Panels/
 	cp $i /Applications/Adobe\ After\ Effects\ CC\ 2015/Scripts/ScriptUI\ Panels/
 	cp $i /Applications/Adobe\ After\ Effects\ CC\ 2015.3/Scripts/ScriptUI\ Panels/
+	cp $i /Applications/Adobe\ After\ Effects\ CC\ 2017/Scripts/ScriptUI\ Panels/
 done

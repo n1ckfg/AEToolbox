@@ -1,3 +1,4 @@
+AEToolbox UI panel
 The AEToolbox UI panel was developed with support from:
    Canada Council on the Arts
    Eyebeam Art + Technology Center
@@ -59,8 +60,11 @@ V.  GUIDE
 5-1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.
 5-2. Skeleton View (layer selection): View connections between parent and child layers.
 
-VI.  IO
+VI.  EXPORT
 6-1. Camera to Maya (layer selection): Export camera to Maya.
 6-2. Unity Anim (layer selection): Export keyframes to Unity anim.
 6-3. JSON Export (layer selection): Export keyframes to JSON.
 6-4. XML Export (layer selection): Export keyframes to XML.
+
+VII. IMPORT
+7-1. GML to Position (comp selection): Import position keyframes from GML.
