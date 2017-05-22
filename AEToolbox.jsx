@@ -311,14 +311,6 @@
         app.endUndoGroup();
     }  
 
-    function findElements(xml, name) {
-        var returns = 0;
-        for (var i=0; i<xml.descendants.length; i++) {
-            returns++;
-        }
-        return returns;
-    }
-
     ///////////////////////////////////////////////////////////////////////////////////////////
 
     // 37. Type: apply process to any number of layers
