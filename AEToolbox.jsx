@@ -3143,6 +3143,34 @@
         }
     }
 
+    function getSelectedItems() {
+        var returns = [];
+        for (var i=1; i<app.project.items.length+1; i++) {
+            var item = app.project.items[i];
+            if (item.selected==true) {
+                returns.push(item);
+            }
+        }
+        return returns;
+    }
+
+    function getSelectedComps() {
+        var returns = [];
+        for (var i=1; i<app.project.items.length+1; i++) {
+            var item = app.project.items[i];
+            if (item.selected==true && item instanceof CompItem) {
+                returns.push(item);
+            }
+        }
+        return returns;
+    }
+
+    function getPreset(filePath, local) {
+        var presetPath = filePath;
+        if (local==true) presetPath = new Folder((new File($.fileName)).path + "/" + presetPath);
+        return File(presetPath);
+    }
+
     // Deselect all the layers in the active Comp
     function DeselectLayers(theComp){
         for (var i = theComp.numLayers; i >= 1; i--) {
@@ -3239,6 +3267,13 @@
         target.selected = true;
         app.executeCommand(app.findMenuCommandId("Convert Audio to Keyframes"));
         target.selected = false; 
+    }
+
+    function getDim(layer) {
+        var time = app.project.activeItem.time;
+        var x = layer.sourceRectAtTime(t=time, includeExtents=false).width;
+        var y = layer.sourceRectAtTime(t=time, includeExtents=false).height;
+        return [ x, y ];
     }
 
     function sortByZmax(a,b) {
