@@ -16,7 +16,7 @@ To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels 
 C:\Program Files\AFTER_EFFECTS_VERSION\Scripts\ScriptUI Panels\
 ```
 <br>
-FEATURES:<br>
+<b>List of Features:</b><br>
 <br>
 1. BASIC<br>
 1.1. Nulls for Pins (layer selection): Creates a controller null for each puppet pin on a layer. <br>
