@@ -8,13 +8,12 @@ Copyright (c) 2018 Nick Fox-Gieg<br>
 http://fox-gieg.com<br>
 <br>
 To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels directory. After restarting After Effects, you can access the AEToolbox panel from the Window menu, just like your other panels. By default, this is:<br>
-<i>(Mac)</i>
 ```
-/Applications/YOUR AFTER EFFECTS VERSION/Scripts/ScriptUI Panels/
-```
-<i>(Windows)</i>
-```
-C:\Program Files\YOUR AFTER EFFECTS VERSION\Scripts\ScriptUI Panels\
+// Mac:
+/Applications/AFTER_EFFECTS_VERSION/Scripts/ScriptUI Panels/
+
+// Windows:
+C:\Program Files\AFTER_EFFECTS_VERSION\Scripts\ScriptUI Panels\
 ```
 <br>
 FEATURES:<br>
