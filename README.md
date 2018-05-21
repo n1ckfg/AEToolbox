@@ -7,21 +7,16 @@ The AEToolbox UI panel was developed with support from:<br>
 Copyright (c) 2018 Nick Fox-Gieg<br>
 http://fox-gieg.com<br>
 <br>
-<br>
-To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels directory.<br>
-<br>
-By default, this is:<br>
+To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels directory. After restarting After Effects, you can access the AEToolbox panel from the Window menu, just like your other panels. By default, this is:<br>
 (Mac)<br>
 ```
 /Applications/YOUR AFTER EFFECTS VERSION/Scripts/ScriptUI Panels/
 ```
-<br>
 (Windows)<br>
 ```
-C:\Program Files\YOUR AFTER EFFECTS VERSION\Scripts\ScriptUI Panels\
+C:\\Program Files\\YOUR AFTER EFFECTS VERSION\\Scripts\\ScriptUI Panels\\
 ```
 <br>
-After restarting After Effects, you can access the AEToolbox panel from the Window menu, just like your other panels.<br>
 <br>
 FEATURES:<br>
 <br>
@@ -29,12 +24,12 @@ FEATURES:<br>
 1.1. Nulls for Pins (layer selection): Creates a controller null for each puppet pin on a layer. <br>
 1.2. Parent Chain (layer selection): Parent a chain of layers one to another.<br>
 1.3. Locator Null...<br>
-     (layer selection): Creates a new null at the location of each selected layer.<br>
-     (no selection): Creates a new null in the center of the comp. <br>
+&nbsp;&nbsp;&nbsp;&nbsp;(layer selection): Creates a new null at the location of each selected layer.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(no selection): Creates a new null in the center of the comp. <br>
 1.4. Move to Position (layer selection): Moves all layers to the location of the last selected layer.<br>
 1.5. Make Loop...<br>
-     (layer selection): Puts a cycle expression on Time Remap.<br>
-     (property selection): Puts a cycle expression on the selected properties.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(layer selection): Puts a cycle expression on Time Remap.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(property selection): Puts a cycle expression on the selected properties.<br>
 1.6. Random Position (layer selection): Randomizes a layer's position.<br>
 1.7. Graph Audio (layer selection): Converts audio to keyframes and enables the graph view.<br>
 1.8. Isolate Color (layer selection): Keys out everything but selected color.<br>
@@ -62,8 +57,8 @@ FEATURES:<br>
 4.1. Split s3D Pair (layer selection): Splits a stereo 3D pair video into two left and right comps.<br>
 4.2. Merge s3D Pair (layer selection): Merges two left and right comps into a stereo 3D pair comp.<br>
 4.3. s3D Dispmap...<br>
-     (one layer selected): Creates an s3D pair from the selected layer, using it as a displacement map.<br>
-     (two layers selected): Creates an s3D pair from the first layer, using the second layer for displacement.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(one layer selected): Creates an s3D pair from the selected layer, using it as a displacement map.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;(two layers selected): Creates an s3D pair from the first layer, using the second layer for displacement.<br>
 4.4. Depth Fill (layer selection): Creates a grayscale depth fill based on distance to camera.<br>
 4.5. Depth Sort (layer selection): Sorts layers based on Z depth.<br>
 4.6. Stereo Controller (comp selection): Creates a stereo controller null for a single camera.<br>
