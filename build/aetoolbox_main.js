@@ -1,4 +1,4 @@
-// AEToolbox 1.2
+// AEToolbox 1.3
 // by Nick Fox-Gieg
 // fox-gieg.com
 //
@@ -73,18 +73,23 @@ function init(_panel) {
     panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
   
     // Depth group
-    var col3butCount = 9;
-    panel.stereoGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-    panel.stereoGroup0 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
-    panel.stereoGroup1 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
-    panel.stereoGroup2 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "s3D Dispmap");
-    panel.stereoGroup3 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
-    panel.stereoGroup4 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
-    panel.stereoGroup5 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
-    panel.stereoGroup6 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Vive Recording");
-    panel.stereoGroup7 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "4K Stereo 360");
-    panel.stereoGroup8 = panel.stereoGroup.add("button", [butXstart,butYstart+(butYinc*8),butXend,butYend+(butYinc*8)], "Holoflix 720p");
+    var col3butCount = 7;
+    panel.depthGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    panel.depthGroup0 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
+    panel.depthGroup1 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
+    panel.depthGroup2 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "s3D Dispmap");
+    panel.depthGroup3 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
+    panel.depthGroup4 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
+    panel.depthGroup5 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
+    panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "4K Stereo 360");
   
+    // Picture-in-picture group
+    var col3butCount = 2;
+    panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+    panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
+    panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix 720p");
+
+
     // Guide group
     var col3butCount = 2;
     panel.guideGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
@@ -132,15 +137,16 @@ function init(_panel) {
     panel.rigGroup6.onClick = threeDmoSketch;
     panel.rigGroup7.onClick = photoRig;
     //--
-    panel.stereoGroup0.onClick = splitStereoPair;
-    panel.stereoGroup1.onClick = mergeStereoPair;
-    panel.stereoGroup2.onClick = stereoDispMap;
-    panel.stereoGroup3.onClick = depthFill;
-    panel.stereoGroup4.onClick = depthSort;
-    panel.stereoGroup5.onClick = stereoController;
-    panel.stereoGroup6.onClick = viveRecording;
-    panel.stereoGroup7.onClick = stereo360;
-    panel.stereoGroup8.onClick = holoflix720p;
+    panel.depthGroup0.onClick = splitStereoPair;
+    panel.depthGroup1.onClick = mergeStereoPair;
+    panel.depthGroup2.onClick = stereoDispMap;
+    panel.depthGroup3.onClick = depthFill;
+    panel.depthGroup4.onClick = depthSort;
+    panel.depthGroup5.onClick = stereoController;
+    panel.depthGroup6.onClick = stereo360;
+    //--
+    panel.pipGroup0.onClick = viveRecording;
+    panel.pipGroup1.onClick = holoflix720p;
     //--
     panel.guideGroup0.onClick = onionSkin;
     panel.guideGroup1.onClick = skeleView;
@@ -180,15 +186,16 @@ function init(_panel) {
     panel.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
     panel.rigGroup7.helpTip = "Creates precomps that each display one frame from a sequence."; //photoRig;
     //--
-    panel.stereoGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
-    panel.stereoGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
-    panel.stereoGroup2.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
-    panel.stereoGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
-    panel.stereoGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
-    panel.stereoGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
-    panel.stereoGroup6.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
-    panel.stereoGroup7.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
-    panel.stereoGroup8.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
+    panel.depthGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
+    panel.depthGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
+    panel.depthGroup2.helpTip = "Creates an s3D pair from the first layer, using the second layer for displacement."; //stereoDispMap;
+    panel.depthGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
+    panel.depthGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
+    panel.depthGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
+    panel.depthGroup6.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
+    //--
+    panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
+    panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
     //--
     panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
     panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -202,13 +209,14 @@ function init(_panel) {
 
     // 4-5. Selector
     //-----------------------------------------------------
-    var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Guide", "Export", "Import" ]);
+    var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "PiP", "Guide", "Export", "Import" ]);
     
     selector.onChange = function() {
         panel.basicGroup.visible = false;
         panel.advGroup.visible = false;
         panel.rigGroup.visible = false;
-        panel.stereoGroup.visible = false;
+        panel.depthGroup.visible = false;
+        panel.pipGroup.visible = false;
         panel.guideGroup.visible = false;
         panel.exportGroup.visible = false;    
         panel.importGroup.visible = false;    
@@ -219,15 +227,17 @@ function init(_panel) {
             panel.advGroup.visible = true;
         } else if (selector.selection == 2) { // Rigging
             panel.rigGroup.visible = true;
-        } else if (selector.selection == 3) { // Stereo
-            panel.stereoGroup.visible = true;
-        } else if (selector.selection == 4) { // Guide
+        } else if (selector.selection == 3) { // Depth
+            panel.depthGroup.visible = true;
+        } else if (selector.selection == 4) { // PiP
+            panel.pipGroup.visible = true;
+        } else if (selector.selection == 5) { // Guide
             panel.guideGroup.visible = true;
-        } else if (selector.selection == 5) { // Export
+        } else if (selector.selection == 6) { // Export
             panel.exportGroup.visible = true;
-        }  else if (selector.selection == 6) { // Import
+        } else if (selector.selection == 7) { // Import
             panel.importGroup.visible = true;
-        }            
+        }     
     }
 
     selector.selection = 0;
