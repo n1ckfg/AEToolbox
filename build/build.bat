@@ -15,5 +15,6 @@ copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CC 2015\Support 
 copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CC 2015.3\Support Files\Scripts\ScriptUI Panels\"
 copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CC 2017\Support Files\Scripts\ScriptUI Panels\"
 copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CC 2018\Support Files\Scripts\ScriptUI Panels\"
+copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CC 2019\Support Files\Scripts\ScriptUI Panels\"
 
 @pause

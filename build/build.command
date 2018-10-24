@@ -24,3 +24,4 @@ cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2015/Scripts/ScriptUI Pan
 cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2015.3/Scripts/ScriptUI Panels/"
 cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2017/Scripts/ScriptUI Panels/"
 cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2018/Scripts/ScriptUI Panels/"
+cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2019/Scripts/ScriptUI Panels/"

@@ -475,7 +475,7 @@ function makeLoop() {
                     //*** Running this on a selected layer does a time remap... ***
                     if (curLayer.matchName == "ADBE AV Layer"){
                         curLayer.timeRemapEnabled = true;
-                        var expr = "loop_out(\"cycle\");";
+                        var expr = "loopOut(\"cycle\");";
                         curLayer.timeRemap.expression = expr;
                         //~~~~
                         //now we have to move the end keyframe one frame sooner--by default you get a glitch.
@@ -498,7 +498,7 @@ function makeLoop() {
                             if (curProperties[j].numKeys > 0) doIt=true;
                         } catch(err) {}
                         if (doIt) {
-                            var expr = "loop_out(\"cycle\");";
+                            var expr = "loopOut(\"cycle\");";
                             curProperties[j].expression = expr;
                         } else { 
                             alert("Can't apply this expression to a property with no keyframes.")
