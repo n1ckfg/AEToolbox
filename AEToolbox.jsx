@@ -16,7 +16,7 @@
 // UI Panel Setup
 function init(_panel) {
     // * * * * * *
-    var panel = (_panel instanceof Panel) ? _panel : new Window("palette", "Script Window",[0,0,170,300]);
+    var panel = (_panel instanceof Panel) ? _panel : new Window("palette", "AEToolbox 1.3.1",[0,0,170,300]);
     // * * * * * *
     if (panel !== null) {
     // 1-5. Draw buttons
