@@ -211,6 +211,15 @@ function init(_panel) {
     //-----------------------------------------------------
     var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "PiP", "Guide", "Export", "Import" ]);
         selector.selection = 0;
+        panel.basicGroup.visible = true;
+        panel.advGroup.visible = false;
+        panel.rigGroup.visible = false;
+        panel.depthGroup.visible = false;
+        panel.pipGroup.visible = false;
+        panel.guideGroup.visible = false;
+        panel.exportGroup.visible = false;    
+        panel.importGroup.visible = false;
+
     selector.onChange = function() {
         panel.basicGroup.visible = false;
         panel.advGroup.visible = false;
