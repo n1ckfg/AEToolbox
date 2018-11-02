@@ -1,10 +1,10 @@
-// 31. One-shot--create a bunch of objects and scripts.
+// Notes: One-shot--create a bunch of objects and scripts.
 function stereoController() { 
     app.beginUndoGroup("Create a Stereo Controller for a Camera");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else{
         if (theComp.selectedLayers.length == 0) {
@@ -51,7 +51,7 @@ function stereoController() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 25.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function depthFill() {
     app.beginUndoGroup("Depth Fill");
 
@@ -100,7 +100,7 @@ function depthFill() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 28.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function depthSort() {
     app.beginUndoGroup("Sort by Depth");
 
@@ -139,13 +139,13 @@ function depthSort() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 22.  Type: apply process to two layers
+// Notes: apply process to two layers
 function mergeStereoPair(doUndoGroup) {
     if (doUndoGroup) app.beginUndoGroup("Merge Stereo pair");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -208,14 +208,14 @@ function mergeStereoPair(doUndoGroup) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 21.  Type: apply process to a whole comp
+// Notes: apply process to a whole comp
 function stereoDispMap() {
     app.beginUndoGroup("s3D Displacement Map");
 
     var ioDistance = 6.0;
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -313,13 +313,13 @@ function stereoDispMap() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 20.  Type: apply process to a whole comp
+// Notes: apply process to a whole comp
 function splitStereoPair() {
     app.beginUndoGroup("Split s3D Pair");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var overUnder = confirm("Use over-under stereo?");
@@ -375,13 +375,13 @@ function splitStereoPair() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 35. Type: apply process to two layers
+// Notes: apply process to two layers
 function stereo360() {
     app.beginUndoGroup("Merge Stereo pair");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;

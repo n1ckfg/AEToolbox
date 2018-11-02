@@ -1,4 +1,4 @@
-// 26.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function skeleView(doUndoGroup) {
     if (doUndoGroup || doUndoGroup==undefined) app.beginUndoGroup("Skeleton View");
 
@@ -57,13 +57,13 @@ function skeleView(doUndoGroup) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 6. Type: One-shot--create an adjustment layer with controllable onion skinning
+// Notes: One-shot--create an adjustment layer with controllable onion skinning
 function onionSkin() {  
     app.beginUndoGroup("Create Onion Skin Layer");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);

@@ -1,10 +1,10 @@
-// 4.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function nullsForPins() {  
     app.beginUndoGroup("Create Nulls for Pins");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -12,10 +12,10 @@ function nullsForPins() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){   
+            for (var i = 0; i < theLayers.length; i++) {   
                 var curLayer = theLayers[i];
                 // condition 1: must be a footage layer
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     //condition 2: must be a 2D layer
                     if (!curLayer.threeDLayer) {
                         //condition 3: must have puppet pins applied
@@ -59,13 +59,13 @@ function nullsForPins() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 18.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function parentChain() {
     app.beginUndoGroup("Parent Chain of Layers");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -73,9 +73,9 @@ function parentChain() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 if (i == 0) {
-                    for (var j = 0; j < theLayers.length; j++){
+                    for (var j = 0; j < theLayers.length; j++) {
                         if(theLayers[i].parent==theLayers[j]) theLayers[i].parent=null;
                     }
                 } else { 
@@ -96,23 +96,23 @@ function parentChain() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 12.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function locatorNull() {  
     app.beginUndoGroup("Create Locator Nulls for Selected Layers");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             theComp.layers.addNull();
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 var mama;
-                if(curLayer.parent){
+                if(curLayer.parent) {
                     mama = curLayer.parent;
                     curLayer.parent = null;
                 }
@@ -135,30 +135,30 @@ function locatorNull() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 13.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function moveToPos() {  
     app.beginUndoGroup("Move to Last Selected Layer's Position");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length <= 1) {
             alert("Select at least two Layers.");
         } else { 
-            for (var i = 0; i < theLayers.length-1; i++){
+            for (var i = 0; i < theLayers.length-1; i++) {
                 var lastLayer = theLayers[theLayers.length-1];
                 
                 var curLayer = theLayers[i];
                 var mama; //holds parent if we need to temporary disable it
                 var papa;
-                if(curLayer.parent){
+                if(curLayer.parent) {
                     mama = curLayer.parent;
                     curLayer.parent = null;
                 }
-                if(lastLayer.parent){
+                if(lastLayer.parent) {
                     papa = lastLayer.parent;
                     lastLayer.parent = null;
                 }
@@ -189,27 +189,27 @@ function moveToPos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 5.  process for any number of layers--enables time remap and applies a loop script
+// Notes: process for any number of layers--enables time remap and applies a loop script
 function makeLoop() {  
     app.beginUndoGroup("Apply Loop Expression");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
             
                 var curProperties = curLayer.selectedProperties;
                 if (curProperties.length == 0) {
                     //alert("Please select some properties and run the script again.");
                     //*** Running this on a selected layer does a time remap... ***
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer") {
                         curLayer.timeRemapEnabled = true;
                         var expr = "loopOut(\"cycle\");";
                         curLayer.timeRemap.expression = expr;
@@ -250,7 +250,7 @@ function makeLoop() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 27.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function randomPos() {
     app.beginUndoGroup("Randomize Position");
 
@@ -287,7 +287,7 @@ function randomPos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 24.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function graphAudio() {  
     app.beginUndoGroup("Graph Audio");
 
@@ -321,13 +321,13 @@ function graphAudio() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 36. Type: apply process to any number of layers.
+// Notes: apply process to any number of layers.
 function isolateColor() {  
     app.beginUndoGroup("Isolate Color");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;

@@ -1,4 +1,4 @@
-// 23. Export
+// Export
 function unityAnim() {  //start script
     app.beginUndoGroup("Export Unity Anim");
 
@@ -27,7 +27,7 @@ function unityAnim() {  //start script
             var scaleFactor = 5.0;
 
             //~~~~~~~~~~~~~~~~~~
-            for(var i = 0; i < theLayers.length; i++){
+            for(var i = 0; i < theLayers.length; i++) {
                 // ...then loop through each layer in the selected comp
                 // define the layer in the loop we're currently looking at
                 var curLayer = theLayers[i];
@@ -85,7 +85,7 @@ function unityAnim() {  //start script
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 26.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function writeExample() {  
     app.beginUndoGroup("Export Example File");
 
@@ -142,7 +142,7 @@ function writeExample() {
     app.endUndoGroup();
 }  
 
-// 33.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function xmlExport() {  
     app.beginUndoGroup("Export to XML");
     app.endUndoGroup();
@@ -150,13 +150,13 @@ function xmlExport() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 32.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function jsonExport() {  
     app.beginUndoGroup("Export to JSON");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -208,7 +208,7 @@ function jsonExport() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 0.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function cameraToMaya() {  
     app.beginUndoGroup("Export Camera to Maya");
 
@@ -262,12 +262,12 @@ function cameraToMaya() {
     // [11]  Ana2:1         2
     var ratio= [0.8592, 0.9, 0.9481481, 1.0, 1.0186, 1.0667, 1.2, 1.333, 1.4222, 1.5, 1.8962962, 2];
     if (aspect == 0.86) { aspect =ratio[0] }
-    else if (aspect == 0.95){aspect =ratio[2]}
-    else if (aspect == 1.02){aspect =ratio[4]}
-    else if (aspect == 1.07){aspect =ratio[5]}
-    else if (aspect == 1.33){aspect =ratio[7]}
-    else if (aspect == 1.42){aspect =ratio[8]}
-    else if (aspect == 1.9){aspect =ratio[10]};
+    else if (aspect == 0.95) {aspect =ratio[2]}
+    else if (aspect == 1.02) {aspect =ratio[4]}
+    else if (aspect == 1.07) {aspect =ratio[5]}
+    else if (aspect == 1.33) {aspect =ratio[7]}
+    else if (aspect == 1.42) {aspect =ratio[8]}
+    else if (aspect == 1.9) {aspect =ratio[10]};
 
     var frameAspect = (compWidth*aspect)/compHeight;
 
@@ -352,9 +352,9 @@ function cameraToMaya() {
 
     // translate the data from the original camera with expressions
     CamParent01.position.expression="L=thisComp.layer("+"\""+CameraName+"\""+");L.toWorld([0,0,0])";
-    CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]";
-    CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]";
-    CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]";
+    CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005) {p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]";
+    CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005) {p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]";
+    CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005) {p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]";
     CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\""+CameraName+"\""+").zoom*1/unit[0]";
 
     // Make a second copy of the camera, this time it will be baked
@@ -584,7 +584,7 @@ function cameraToMaya() {
     for (var i=1; i < allLayers.length; i++) {
         var curLayer = allLayers[i];
         var curLayerName = curLayer.name.replace(/[^a-zA-Z0-9]+/g,"");
-        if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent"){
+        if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent") {
             //alert(curLayerName);
 
             var pos = curLayer.property("Position").valueAtTime(0,false);

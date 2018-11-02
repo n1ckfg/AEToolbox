@@ -1,10 +1,10 @@
-// 11.  process for any number of layers--creates a Z slider for 2D Motion Sketch
+// Notes: process for any number of layers--creates a Z slider for 2D Motion Sketch
 function threeDmoSketch() {  
     app.beginUndoGroup("Prep for 3D Motion Sketch Rig");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var moNull = theComp.layers.addNull();
@@ -29,28 +29,28 @@ function threeDmoSketch() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 9. Type: create controllers inside existing comp
+// Notes: create controllers inside existing comp
 function charJaw() {  
     var sideView = confirm("Is this a side view?");
 
-    if(sideView){
+    if(sideView) {
         app.beginUndoGroup("Create Character Jaw Rig Side");
 
         var theComp = app.project.activeItem; 
         
-        if (theComp == null || !(theComp instanceof CompItem)){ 
+        if (theComp == null || !(theComp instanceof CompItem)) { 
             alert(errorNoCompSelected);
         } else {
             var theLayers = theComp.selectedLayers;
             if (theLayers.length==0) {
                 alert(errorNoPrecompSelected);
             } else { 
-                for (var i = 0; i < theLayers.length; i++){
+                for (var i = 0; i < theLayers.length; i++) {
                     var curLayer = theLayers[i];
                     
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer") {
                         var myLayer = theComp.selectedLayers[0];
-                        if(myLayer.source.numLayers==null){
+                        if(myLayer.source.numLayers==null) {
                             alert(errorPrecompOnly);
                         } else { 
                             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -120,19 +120,19 @@ function charJaw() {
 
         var theComp = app.project.activeItem; 
 
-        if (theComp == null || !(theComp instanceof CompItem)){
+        if (theComp == null || !(theComp instanceof CompItem)) {
             alert(errorNoCompSelected);
         } else {
             var theLayers = theComp.selectedLayers;
             if (theLayers.length==0) {
                 alert(errorNoPrecompSelected);
             } else { 
-                for (var i = 0; i < theLayers.length; i++){
+                for (var i = 0; i < theLayers.length; i++) {
                     var curLayer = theLayers[i];
                     
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer") {
                         var myLayer = theComp.selectedLayers[0];
-                        if(myLayer.source.numLayers==null){
+                        if(myLayer.source.numLayers==null) {
                             alert(errorPrecompOnly);
                         } else { 
                             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -180,25 +180,25 @@ function charJaw() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 8. Type: Create layers inside an existing precomp.
+// Notes: Create layers inside an existing precomp.
 function charBlink() {  
     app.beginUndoGroup("Create Character Blink Control");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoPrecompSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     var myLayer = theComp.selectedLayers[0];
-                    if(myLayer.source.numLayers==null){
+                    if(myLayer.source.numLayers==null) {
                         alert(errorPrecompOnly);
                     } else { 
                         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -225,13 +225,13 @@ function charBlink() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 7. One-shot--create a bunch of objects and scripts.
+// One-shot--create a bunch of objects and scripts.
 function handheldCamera() {  
     app.beginUndoGroup("Create a \"Handheld\" Camera");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var sW = theComp.width/2;
@@ -277,20 +277,20 @@ function handheldCamera() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 30. Type: Duplicates layers with time remap expression.
+// Notes: Duplicates layers with time remap expression.
 function photoRig() {  
     app.beginUndoGroup("Create Photo Rig");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
             
                 //*** Running this on a selected layer does a time remap... ***
@@ -345,13 +345,13 @@ function photoRig() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 17. One-shot--create a complex bunch of objects and scripts.
+// Notes: One-shot--create a complex bunch of objects and scripts.
 function charParticle() {  
     app.beginUndoGroup("Create a Particle Rig");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Particle Solid", theComp.width, theComp.height, 1);
@@ -383,7 +383,7 @@ function charParticle() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 16. One-shot--create a complex bunch of objects and scripts.
+// Notes: One-shot--create a complex bunch of objects and scripts.
 function charBeam() {  
     app.beginUndoGroup("Create a Beam Rig");
 
@@ -391,7 +391,7 @@ function charBeam() {
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Beam Solid", theComp.width, theComp.height, 1);
@@ -477,13 +477,13 @@ function charBeam() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 14.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function charSnake() {  
     app.beginUndoGroup("Snake Rig");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -493,11 +493,11 @@ function charSnake() {
             for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 // condition 1: must be a footage layer
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     //condition 2: must be a 2D layer
                     if (!curLayer.threeDLayer) {
                         //condition 3: must have puppet pins applied
-                        if(curLayer.effect.puppet != null){
+                        if(curLayer.effect.puppet != null) {
                             var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
                             var pinCount = wherePins.numProperties;
 
@@ -507,10 +507,10 @@ function charSnake() {
                             speedSlider.name = "speed";
                             speedSlider.property("Slider").setValue(10);
 
-                            for (var n = 1; n <= pinCount; n++){
+                            for (var n = 1; n <= pinCount; n++) {
                                 var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
 
-                                if(pin.name=="head" || pin.name=="Puppet Pin 1"){
+                                if(pin.name=="head" || pin.name=="Puppet Pin 1") {
                                     if(pin.name=="Puppet Pin 1") pin.name="head";
                                     //~~~~~
                                     //scaled from layer coords to world coords
@@ -522,11 +522,11 @@ function charSnake() {
                                 }
                             }
                             
-                            for (var o = 1; o <= pinCount; o++){
+                            for (var o = 1; o <= pinCount; o++) {
                                 // Get position of puppet pin
                                 var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(o);
                                 //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
-                                if(pin.name=="head" || pin.name=="Puppet Pin 1"){
+                                if(pin.name=="head" || pin.name=="Puppet Pin 1") {
                                     //
                                 } else { 
                                     var pinExpr = "var delayFrames = thisComp.layer(\"head_ctl\").effect(\"speed\")(\"Slider\");" + "\r" +

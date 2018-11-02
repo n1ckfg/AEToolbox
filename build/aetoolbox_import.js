@@ -1,10 +1,10 @@
-// 38. Type: apply process to any number of layers.
+// Notes: apply process to any number of layers.
 function gmlToPos() {  
     app.beginUndoGroup("GML to Position");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var xmlFile = File.openDialog();
@@ -58,11 +58,11 @@ function gmlToPos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// Import XML or JSON file of tracking data for 3D characters
+// Notes: Import XML or JSON file of tracking data for 3D characters
 function importMocap3D() {  
     app.beginUndoGroup("Import 3D Points From XML or JSON");
 
-    if(parseFloat(app.version) >= 10.5){
+    if(parseFloat(app.version) >= 10.5) {
         var myComp = app.project.activeItem;
         var fileType="xml";
         var myRoot;
@@ -70,7 +70,7 @@ function importMocap3D() {
         //load xml or json file
         var myFile = File.openDialog();
         var fileOK = myFile.open("r");
-        if (fileOK){
+        if (fileOK) {
             var myFileString = myFile.read();
             if (myFile.name.split(".").pop()=="xml") {
                 fileType="xml";

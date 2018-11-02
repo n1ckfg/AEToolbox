@@ -84,11 +84,11 @@ function init(_panel) {
         panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "4K Stereo 360");
       
         // Picture-in-picture group
-        var col3butCount = 2;
+        var col3butCount = 3;
         panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
         panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix 720p");
-
+        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "InstaGrid");
 
         // Guide group
         var col3butCount = 2;
@@ -147,6 +147,7 @@ function init(_panel) {
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
+        panel.pipGroup2.onClick = instaGrid;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -196,6 +197,7 @@ function init(_panel) {
         //--
         panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
+        panel.pipGroup2.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -272,13 +274,13 @@ if (aetbUI !== null) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 4.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function nullsForPins() {  
     app.beginUndoGroup("Create Nulls for Pins");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -286,10 +288,10 @@ function nullsForPins() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){   
+            for (var i = 0; i < theLayers.length; i++) {   
                 var curLayer = theLayers[i];
                 // condition 1: must be a footage layer
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     //condition 2: must be a 2D layer
                     if (!curLayer.threeDLayer) {
                         //condition 3: must have puppet pins applied
@@ -333,13 +335,13 @@ function nullsForPins() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 18.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function parentChain() {
     app.beginUndoGroup("Parent Chain of Layers");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -347,9 +349,9 @@ function parentChain() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 if (i == 0) {
-                    for (var j = 0; j < theLayers.length; j++){
+                    for (var j = 0; j < theLayers.length; j++) {
                         if(theLayers[i].parent==theLayers[j]) theLayers[i].parent=null;
                     }
                 } else { 
@@ -370,23 +372,23 @@ function parentChain() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 12.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function locatorNull() {  
     app.beginUndoGroup("Create Locator Nulls for Selected Layers");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             theComp.layers.addNull();
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 var mama;
-                if(curLayer.parent){
+                if(curLayer.parent) {
                     mama = curLayer.parent;
                     curLayer.parent = null;
                 }
@@ -409,30 +411,30 @@ function locatorNull() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 13.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function moveToPos() {  
     app.beginUndoGroup("Move to Last Selected Layer's Position");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length <= 1) {
             alert("Select at least two Layers.");
         } else { 
-            for (var i = 0; i < theLayers.length-1; i++){
+            for (var i = 0; i < theLayers.length-1; i++) {
                 var lastLayer = theLayers[theLayers.length-1];
                 
                 var curLayer = theLayers[i];
                 var mama; //holds parent if we need to temporary disable it
                 var papa;
-                if(curLayer.parent){
+                if(curLayer.parent) {
                     mama = curLayer.parent;
                     curLayer.parent = null;
                 }
-                if(lastLayer.parent){
+                if(lastLayer.parent) {
                     papa = lastLayer.parent;
                     lastLayer.parent = null;
                 }
@@ -463,27 +465,27 @@ function moveToPos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 5.  process for any number of layers--enables time remap and applies a loop script
+// Notes: process for any number of layers--enables time remap and applies a loop script
 function makeLoop() {  
     app.beginUndoGroup("Apply Loop Expression");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
             
                 var curProperties = curLayer.selectedProperties;
                 if (curProperties.length == 0) {
                     //alert("Please select some properties and run the script again.");
                     //*** Running this on a selected layer does a time remap... ***
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer") {
                         curLayer.timeRemapEnabled = true;
                         var expr = "loopOut(\"cycle\");";
                         curLayer.timeRemap.expression = expr;
@@ -524,7 +526,7 @@ function makeLoop() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 27.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function randomPos() {
     app.beginUndoGroup("Randomize Position");
 
@@ -561,7 +563,7 @@ function randomPos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 24.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function graphAudio() {  
     app.beginUndoGroup("Graph Audio");
 
@@ -595,13 +597,13 @@ function graphAudio() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 36. Type: apply process to any number of layers.
+// Notes: apply process to any number of layers.
 function isolateColor() {  
     app.beginUndoGroup("Isolate Color");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -629,13 +631,13 @@ function isolateColor() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 1.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function bakePinKeyframes() {  
     app.beginUndoGroup("Bake Pin Keyframes");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -648,7 +650,7 @@ function bakePinKeyframes() {
                     if (curLayer.effect.puppet != null) {
                         var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
                         var pinCount = wherePins.numProperties;
-                        for (var n = 1; n <= pinCount; n++){
+                        for (var n = 1; n <= pinCount; n++) {
                             // Get position of puppet pin
                             var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n).position;
                             try {
@@ -699,13 +701,13 @@ function bakePinKeyframes() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 2.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function lockRotation() {
     app.beginUndoGroup("Apply Y Rotation Lock");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -713,7 +715,7 @@ function lockRotation() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 var curLayer = theLayers[i];  
 
                 curLayer.threeDLayer = true;
@@ -729,13 +731,13 @@ function lockRotation() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 15.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function autoOrientZ() {
     app.beginUndoGroup("Apply Auto-Orient Z");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -743,7 +745,7 @@ function autoOrientZ() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 var curLayer = theLayers[i];  
 
                 var easeSlider = curLayer.property("Effects").addProperty("Slider Control");
@@ -773,23 +775,23 @@ function autoOrientZ() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 3.  Generate null for things with weird coordinate spaces
+// Notes: Generate null for things with weird coordinate spaces
 function parentableNull() {  
     app.beginUndoGroup("Create Parentable Null");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     var solid = theComp.layers.addNull();
                     solid.name = curLayer.name + "_ctl";
                     var expr = "var L = thisComp.layer(\"" + curLayer.name + "\");" + "\r" +
@@ -807,20 +809,20 @@ function parentableNull() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 10.  process for any number of layers--applies sine wave controllers
+// Notes: process for any number of layers--applies sine wave controllers
 function sineWave() {  
     app.beginUndoGroup("Apply Sine Wave Controls");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 
                 var angleSlider = curLayer.property("Effects").addProperty("Angle Control");
@@ -862,7 +864,7 @@ function sineWave() {
                 expr += "var x = x2;" + "\r" +
                         "var y = y2;" + "\r"; 
 
-                if(curLayer.threeDLayer){
+                if(curLayer.threeDLayer) {
                         expr += "var z = transform.position[2];" + "\r";
                     } else { 
                         expr += "var z = 0;" + "\r";
@@ -891,13 +893,13 @@ function sineWave() {
 
 /////////////////////////////////////////////////////////////////////////////////////////// 
 
-// 19.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function crossfader() {
     app.beginUndoGroup("Crossfade Layers");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -905,7 +907,7 @@ function crossfader() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 app.executeCommand(app.findMenuCommandId("Duplicate"));
                 var curLayer1 = theComp.selectedLayers[0];
                 app.executeCommand(app.findMenuCommandId("Split Layer"));
@@ -931,7 +933,7 @@ function crossfader() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 29.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function rsmbTwos() {
     app.beginUndoGroup("Reelsmart Motion Blur on Twos");
 
@@ -969,13 +971,13 @@ function rsmbTwos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 11.  process for any number of layers--creates a Z slider for 2D Motion Sketch
+// Notes: process for any number of layers--creates a Z slider for 2D Motion Sketch
 function threeDmoSketch() {  
     app.beginUndoGroup("Prep for 3D Motion Sketch Rig");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var moNull = theComp.layers.addNull();
@@ -1000,28 +1002,28 @@ function threeDmoSketch() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 9. Type: create controllers inside existing comp
+// Notes: create controllers inside existing comp
 function charJaw() {  
     var sideView = confirm("Is this a side view?");
 
-    if(sideView){
+    if(sideView) {
         app.beginUndoGroup("Create Character Jaw Rig Side");
 
         var theComp = app.project.activeItem; 
         
-        if (theComp == null || !(theComp instanceof CompItem)){ 
+        if (theComp == null || !(theComp instanceof CompItem)) { 
             alert(errorNoCompSelected);
         } else {
             var theLayers = theComp.selectedLayers;
             if (theLayers.length==0) {
                 alert(errorNoPrecompSelected);
             } else { 
-                for (var i = 0; i < theLayers.length; i++){
+                for (var i = 0; i < theLayers.length; i++) {
                     var curLayer = theLayers[i];
                     
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer") {
                         var myLayer = theComp.selectedLayers[0];
-                        if(myLayer.source.numLayers==null){
+                        if(myLayer.source.numLayers==null) {
                             alert(errorPrecompOnly);
                         } else { 
                             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1091,19 +1093,19 @@ function charJaw() {
 
         var theComp = app.project.activeItem; 
 
-        if (theComp == null || !(theComp instanceof CompItem)){
+        if (theComp == null || !(theComp instanceof CompItem)) {
             alert(errorNoCompSelected);
         } else {
             var theLayers = theComp.selectedLayers;
             if (theLayers.length==0) {
                 alert(errorNoPrecompSelected);
             } else { 
-                for (var i = 0; i < theLayers.length; i++){
+                for (var i = 0; i < theLayers.length; i++) {
                     var curLayer = theLayers[i];
                     
-                    if (curLayer.matchName == "ADBE AV Layer"){
+                    if (curLayer.matchName == "ADBE AV Layer") {
                         var myLayer = theComp.selectedLayers[0];
-                        if(myLayer.source.numLayers==null){
+                        if(myLayer.source.numLayers==null) {
                             alert(errorPrecompOnly);
                         } else { 
                             //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1151,25 +1153,25 @@ function charJaw() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 8. Type: Create layers inside an existing precomp.
+// Notes: Create layers inside an existing precomp.
 function charBlink() {  
     app.beginUndoGroup("Create Character Blink Control");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoPrecompSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     var myLayer = theComp.selectedLayers[0];
-                    if(myLayer.source.numLayers==null){
+                    if(myLayer.source.numLayers==null) {
                         alert(errorPrecompOnly);
                     } else { 
                         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -1196,13 +1198,13 @@ function charBlink() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 7. One-shot--create a bunch of objects and scripts.
+// One-shot--create a bunch of objects and scripts.
 function handheldCamera() {  
     app.beginUndoGroup("Create a \"Handheld\" Camera");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var sW = theComp.width/2;
@@ -1248,20 +1250,20 @@ function handheldCamera() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 30. Type: Duplicates layers with time remap expression.
+// Notes: Duplicates layers with time remap expression.
 function photoRig() {  
     app.beginUndoGroup("Create Photo Rig");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
             
                 //*** Running this on a selected layer does a time remap... ***
@@ -1316,13 +1318,13 @@ function photoRig() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 17. One-shot--create a complex bunch of objects and scripts.
+// Notes: One-shot--create a complex bunch of objects and scripts.
 function charParticle() {  
     app.beginUndoGroup("Create a Particle Rig");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Particle Solid", theComp.width, theComp.height, 1);
@@ -1354,7 +1356,7 @@ function charParticle() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 16. One-shot--create a complex bunch of objects and scripts.
+// Notes: One-shot--create a complex bunch of objects and scripts.
 function charBeam() {  
     app.beginUndoGroup("Create a Beam Rig");
 
@@ -1362,7 +1364,7 @@ function charBeam() {
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else {
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Beam Solid", theComp.width, theComp.height, 1);
@@ -1448,13 +1450,13 @@ function charBeam() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 14.  Type: process for any number of layers or properties
+// Notes: process for any number of layers or properties
 function charSnake() {  
     app.beginUndoGroup("Snake Rig");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -1464,11 +1466,11 @@ function charSnake() {
             for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 // condition 1: must be a footage layer
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     //condition 2: must be a 2D layer
                     if (!curLayer.threeDLayer) {
                         //condition 3: must have puppet pins applied
-                        if(curLayer.effect.puppet != null){
+                        if(curLayer.effect.puppet != null) {
                             var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
                             var pinCount = wherePins.numProperties;
 
@@ -1478,10 +1480,10 @@ function charSnake() {
                             speedSlider.name = "speed";
                             speedSlider.property("Slider").setValue(10);
 
-                            for (var n = 1; n <= pinCount; n++){
+                            for (var n = 1; n <= pinCount; n++) {
                                 var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
 
-                                if(pin.name=="head" || pin.name=="Puppet Pin 1"){
+                                if(pin.name=="head" || pin.name=="Puppet Pin 1") {
                                     if(pin.name=="Puppet Pin 1") pin.name="head";
                                     //~~~~~
                                     //scaled from layer coords to world coords
@@ -1493,11 +1495,11 @@ function charSnake() {
                                 }
                             }
                             
-                            for (var o = 1; o <= pinCount; o++){
+                            for (var o = 1; o <= pinCount; o++) {
                                 // Get position of puppet pin
                                 var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(o);
                                 //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
-                                if(pin.name=="head" || pin.name=="Puppet Pin 1"){
+                                if(pin.name=="head" || pin.name=="Puppet Pin 1") {
                                     //
                                 } else { 
                                     var pinExpr = "var delayFrames = thisComp.layer(\"head_ctl\").effect(\"speed\")(\"Slider\");" + "\r" +
@@ -1532,13 +1534,13 @@ function charSnake() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 31. One-shot--create a bunch of objects and scripts.
+// Notes: One-shot--create a bunch of objects and scripts.
 function stereoController() { 
     app.beginUndoGroup("Create a Stereo Controller for a Camera");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else{
         if (theComp.selectedLayers.length == 0) {
@@ -1585,7 +1587,7 @@ function stereoController() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 25.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function depthFill() {
     app.beginUndoGroup("Depth Fill");
 
@@ -1634,7 +1636,7 @@ function depthFill() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 28.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function depthSort() {
     app.beginUndoGroup("Sort by Depth");
 
@@ -1673,13 +1675,13 @@ function depthSort() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 22.  Type: apply process to two layers
+// Notes: apply process to two layers
 function mergeStereoPair(doUndoGroup) {
     if (doUndoGroup) app.beginUndoGroup("Merge Stereo pair");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -1742,14 +1744,14 @@ function mergeStereoPair(doUndoGroup) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 21.  Type: apply process to a whole comp
+// Notes: apply process to a whole comp
 function stereoDispMap() {
     app.beginUndoGroup("s3D Displacement Map");
 
     var ioDistance = 6.0;
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -1847,13 +1849,13 @@ function stereoDispMap() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 20.  Type: apply process to a whole comp
+// Notes: apply process to a whole comp
 function splitStereoPair() {
     app.beginUndoGroup("Split s3D Pair");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var overUnder = confirm("Use over-under stereo?");
@@ -1909,13 +1911,13 @@ function splitStereoPair() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 35. Type: apply process to two layers
+// Notes: apply process to two layers
 function stereo360() {
     app.beginUndoGroup("Merge Stereo pair");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -1940,13 +1942,43 @@ function stereo360() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 37. Type: apply process to any number of layers
+// Notes: apply process to exactly six layers
+function instaGrid() {
+    app.beginUndoGroup("Create Instagram grid");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)) {  
+        alert(errorNoCompSelected);  
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if (theLayers.length < 1 || theLayers.length > 6) {
+            alert("Select 1-6 layers.");
+        } else {
+            for (var i=0; i<theLayers.length; i++) {
+                if (i===0) theLayers[i].position.setValue([320, 860]);
+                if (i===1) theLayers[i].position.setValue([960, 860]);
+                if (i===2) theLayers[i].position.setValue([1600, 860]);
+                if (i===3) theLayers[i].position.setValue([320, 320]);
+                if (i===4) theLayers[i].position.setValue([960, 320]);
+                if (i===5) theLayers[i].position.setValue([1600, 320]);
+            }
+        }
+    }
+
+    app.endUndoGroup();   
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Notes: apply process to any number of layers
 function holoflix720p() {
     app.beginUndoGroup("Create Holoflix comps");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -1982,13 +2014,13 @@ function holoflix720p() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 34.  Type: apply process to a whole comp
+// Notes: apply process to a whole comp
 function viveRecording() {
     app.beginUndoGroup("Split Vive Recording");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else {
         if (theComp.selectedLayers.length == 0) {
@@ -2090,7 +2122,7 @@ function viveRecording() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 26.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function skeleView(doUndoGroup) {
     if (doUndoGroup || doUndoGroup==undefined) app.beginUndoGroup("Skeleton View");
 
@@ -2149,13 +2181,13 @@ function skeleView(doUndoGroup) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 6. Type: One-shot--create an adjustment layer with controllable onion skinning
+// Notes: One-shot--create an adjustment layer with controllable onion skinning
 function onionSkin() {  
     app.beginUndoGroup("Create Onion Skin Layer");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Onion Skinning", theComp.width, theComp.height, 1);
@@ -2214,7 +2246,7 @@ function onionSkin() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 23. Export
+// Export
 function unityAnim() {  //start script
     app.beginUndoGroup("Export Unity Anim");
 
@@ -2243,7 +2275,7 @@ function unityAnim() {  //start script
             var scaleFactor = 5.0;
 
             //~~~~~~~~~~~~~~~~~~
-            for(var i = 0; i < theLayers.length; i++){
+            for(var i = 0; i < theLayers.length; i++) {
                 // ...then loop through each layer in the selected comp
                 // define the layer in the loop we're currently looking at
                 var curLayer = theLayers[i];
@@ -2301,7 +2333,7 @@ function unityAnim() {  //start script
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 26.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function writeExample() {  
     app.beginUndoGroup("Export Example File");
 
@@ -2358,7 +2390,7 @@ function writeExample() {
     app.endUndoGroup();
 }  
 
-// 33.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function xmlExport() {  
     app.beginUndoGroup("Export to XML");
     app.endUndoGroup();
@@ -2366,13 +2398,13 @@ function xmlExport() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 32.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function jsonExport() {  
     app.beginUndoGroup("Export to JSON");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -2424,7 +2456,7 @@ function jsonExport() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 0.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function cameraToMaya() {  
     app.beginUndoGroup("Export Camera to Maya");
 
@@ -2478,12 +2510,12 @@ function cameraToMaya() {
     // [11]  Ana2:1         2
     var ratio= [0.8592, 0.9, 0.9481481, 1.0, 1.0186, 1.0667, 1.2, 1.333, 1.4222, 1.5, 1.8962962, 2];
     if (aspect == 0.86) { aspect =ratio[0] }
-    else if (aspect == 0.95){aspect =ratio[2]}
-    else if (aspect == 1.02){aspect =ratio[4]}
-    else if (aspect == 1.07){aspect =ratio[5]}
-    else if (aspect == 1.33){aspect =ratio[7]}
-    else if (aspect == 1.42){aspect =ratio[8]}
-    else if (aspect == 1.9){aspect =ratio[10]};
+    else if (aspect == 0.95) {aspect =ratio[2]}
+    else if (aspect == 1.02) {aspect =ratio[4]}
+    else if (aspect == 1.07) {aspect =ratio[5]}
+    else if (aspect == 1.33) {aspect =ratio[7]}
+    else if (aspect == 1.42) {aspect =ratio[8]}
+    else if (aspect == 1.9) {aspect =ratio[10]};
 
     var frameAspect = (compWidth*aspect)/compHeight;
 
@@ -2568,9 +2600,9 @@ function cameraToMaya() {
 
     // translate the data from the original camera with expressions
     CamParent01.position.expression="L=thisComp.layer("+"\""+CameraName+"\""+");L.toWorld([0,0,0])";
-    CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]";
-    CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]";
-    CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005){p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]";
+    CamParent01.rotation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005) {p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[0]";
+    CamCopy01.orientation.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005) {p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];[ 0, BHP[1], 0 ]";
+    CamCopy01.rotationX.expression="L=this_comp.layer("+"\""+CameraName+"\""+");unit="+CamMasterExpression+";u=L.toWorldVec([unit[0],0,0]);v=L.toWorldVec([0,unit[1],0]);w=L.toWorldVec([0,0,unit[2]]);hLock=clamp(u[2],-1,1);h=Math.asin(-hLock);cosH=Math.cos(h);if (Math.abs(cosH) > 0.0005) {p=Math.atan2(v[2], w[2]);b=Math.atan2(u[1],u[0]/thisComp.pixelAspect);} else { b=Math.atan2(w[1], v[1]);p=0;}BHP = [ radiansToDegrees(b), radiansToDegrees(h), radiansToDegrees(p) ];BHP[2]";
     CamCopy01.zoom.expression="unit="+CamMasterExpression+";this_comp.layer("+"\""+CameraName+"\""+").zoom*1/unit[0]";
 
     // Make a second copy of the camera, this time it will be baked
@@ -2800,7 +2832,7 @@ function cameraToMaya() {
     for (var i=1; i < allLayers.length; i++) {
         var curLayer = allLayers[i];
         var curLayerName = curLayer.name.replace(/[^a-zA-Z0-9]+/g,"");
-        if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent"){
+        if (curLayer.matchName != "ADBE Camera Layer" && curLayerName != CamName + "Parent") {
             //alert(curLayerName);
 
             var pos = curLayer.property("Position").valueAtTime(0,false);
@@ -3062,13 +3094,13 @@ function cameraToMaya() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-// 38. Type: apply process to any number of layers.
+// Notes: apply process to any number of layers.
 function gmlToPos() {  
     app.beginUndoGroup("GML to Position");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var xmlFile = File.openDialog();
@@ -3122,11 +3154,11 @@ function gmlToPos() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// Import XML or JSON file of tracking data for 3D characters
+// Notes: Import XML or JSON file of tracking data for 3D characters
 function importMocap3D() {  
     app.beginUndoGroup("Import 3D Points From XML or JSON");
 
-    if(parseFloat(app.version) >= 10.5){
+    if(parseFloat(app.version) >= 10.5) {
         var myComp = app.project.activeItem;
         var fileType="xml";
         var myRoot;
@@ -3134,7 +3166,7 @@ function importMocap3D() {
         //load xml or json file
         var myFile = File.openDialog();
         var fileOK = myFile.open("r");
-        if (fileOK){
+        if (fileOK) {
             var myFileString = myFile.read();
             if (myFile.name.split(".").pop()=="xml") {
                 fileType="xml";
@@ -3306,8 +3338,8 @@ function setNull(theNull,In,Out,theComp) {
 }
 
 // find the index number of a layer in the comp by name
-function findNumberOfLayerByName(LayerName,theComp){
-    for (var i = theComp.numLayers; i >= 1; i--){
+function findNumberOfLayerByName(LayerName,theComp) {
+    for (var i = theComp.numLayers; i >= 1; i--) {
         theLayer = theComp.layer(i);
         if (theLayer.name == LayerName) { return(i) };
     }
@@ -3350,7 +3382,7 @@ function getPreset(filePath, local) {
 }
 
 // Deselect all the layers in the active Comp
-function DeselectLayers(theComp){
+function DeselectLayers(theComp) {
     for (var i = theComp.numLayers; i >= 1; i--) {
         item = theComp.layer(i);
         if (item.selected) { item.selected = false };
@@ -3360,7 +3392,7 @@ function DeselectLayers(theComp){
 function kill(target) {
     var items = app.project.items;
 
-    for (var i = items.length; i >= 1; i--){
+    for (var i = items.length; i >= 1; i--) {
         if (items[i]==target || items[i].name==target.name || items[i].name==target || items[i]==target.name) {
             items[i].remove();
         }

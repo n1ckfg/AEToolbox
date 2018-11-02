@@ -1,10 +1,10 @@
-// 1.  Type: apply process to any number of layers or properties
+// Notes: apply process to any number of layers or properties
 function bakePinKeyframes() {  
     app.beginUndoGroup("Bake Pin Keyframes");
 
     var theComp = app.project.activeItem; 
     
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -17,7 +17,7 @@ function bakePinKeyframes() {
                     if (curLayer.effect.puppet != null) {
                         var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
                         var pinCount = wherePins.numProperties;
-                        for (var n = 1; n <= pinCount; n++){
+                        for (var n = 1; n <= pinCount; n++) {
                             // Get position of puppet pin
                             var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n).position;
                             try {
@@ -68,13 +68,13 @@ function bakePinKeyframes() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 2.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function lockRotation() {
     app.beginUndoGroup("Apply Y Rotation Lock");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -82,7 +82,7 @@ function lockRotation() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 var curLayer = theLayers[i];  
 
                 curLayer.threeDLayer = true;
@@ -98,13 +98,13 @@ function lockRotation() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 15.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function autoOrientZ() {
     app.beginUndoGroup("Apply Auto-Orient Z");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -112,7 +112,7 @@ function autoOrientZ() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 var curLayer = theLayers[i];  
 
                 var easeSlider = curLayer.property("Effects").addProperty("Slider Control");
@@ -142,23 +142,23 @@ function autoOrientZ() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 3.  Generate null for things with weird coordinate spaces
+// Notes: Generate null for things with weird coordinate spaces
 function parentableNull() {  
     app.beginUndoGroup("Create Parentable Null");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 
-                if (curLayer.matchName == "ADBE AV Layer"){
+                if (curLayer.matchName == "ADBE AV Layer") {
                     var solid = theComp.layers.addNull();
                     solid.name = curLayer.name + "_ctl";
                     var expr = "var L = thisComp.layer(\"" + curLayer.name + "\");" + "\r" +
@@ -176,20 +176,20 @@ function parentableNull() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 10.  process for any number of layers--applies sine wave controllers
+// Notes: process for any number of layers--applies sine wave controllers
 function sineWave() {  
     app.beginUndoGroup("Apply Sine Wave Controls");
 
     var theComp = app.project.activeItem; 
 
-    if (theComp == null || !(theComp instanceof CompItem)){
+    if (theComp == null || !(theComp instanceof CompItem)) {
         alert(errorNoCompSelected);
     } else { 
         var theLayers = theComp.selectedLayers;
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){
+            for (var i = 0; i < theLayers.length; i++) {
                 var curLayer = theLayers[i];
                 
                 var angleSlider = curLayer.property("Effects").addProperty("Angle Control");
@@ -231,7 +231,7 @@ function sineWave() {
                 expr += "var x = x2;" + "\r" +
                         "var y = y2;" + "\r"; 
 
-                if(curLayer.threeDLayer){
+                if(curLayer.threeDLayer) {
                         expr += "var z = transform.position[2];" + "\r";
                     } else { 
                         expr += "var z = 0;" + "\r";
@@ -260,13 +260,13 @@ function sineWave() {
 
 /////////////////////////////////////////////////////////////////////////////////////////// 
 
-// 19.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function crossfader() {
     app.beginUndoGroup("Crossfade Layers");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -274,7 +274,7 @@ function crossfader() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else { 
-            for (var i = 0; i < theLayers.length; i++){  
+            for (var i = 0; i < theLayers.length; i++) {  
                 app.executeCommand(app.findMenuCommandId("Duplicate"));
                 var curLayer1 = theComp.selectedLayers[0];
                 app.executeCommand(app.findMenuCommandId("Split Layer"));
@@ -300,7 +300,7 @@ function crossfader() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 29.  Type: apply process to any number of layers
+// Notes: apply process to any number of layers
 function rsmbTwos() {
     app.beginUndoGroup("Reelsmart Motion Blur on Twos");
 

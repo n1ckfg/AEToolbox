@@ -81,8 +81,8 @@ function setNull(theNull,In,Out,theComp) {
 }
 
 // find the index number of a layer in the comp by name
-function findNumberOfLayerByName(LayerName,theComp){
-    for (var i = theComp.numLayers; i >= 1; i--){
+function findNumberOfLayerByName(LayerName,theComp) {
+    for (var i = theComp.numLayers; i >= 1; i--) {
         theLayer = theComp.layer(i);
         if (theLayer.name == LayerName) { return(i) };
     }
@@ -125,7 +125,7 @@ function getPreset(filePath, local) {
 }
 
 // Deselect all the layers in the active Comp
-function DeselectLayers(theComp){
+function DeselectLayers(theComp) {
     for (var i = theComp.numLayers; i >= 1; i--) {
         item = theComp.layer(i);
         if (item.selected) { item.selected = false };
@@ -135,7 +135,7 @@ function DeselectLayers(theComp){
 function kill(target) {
     var items = app.project.items;
 
-    for (var i = items.length; i >= 1; i--){
+    for (var i = items.length; i >= 1; i--) {
         if (items[i]==target || items[i].name==target.name || items[i].name==target || items[i]==target.name) {
             items[i].remove();
         }

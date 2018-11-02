@@ -1,10 +1,40 @@
-// 37. Type: apply process to any number of layers
+// Notes: apply process to exactly six layers
+function instaGrid() {
+    app.beginUndoGroup("Create Instagram grid");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)) {  
+        alert(errorNoCompSelected);  
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if (theLayers.length < 1 || theLayers.length > 6) {
+            alert("Select 1-6 layers.");
+        } else {
+            for (var i=0; i<theLayers.length; i++) {
+                if (i===0) theLayers[i].position.setValue([320, 860]);
+                if (i===1) theLayers[i].position.setValue([960, 860]);
+                if (i===2) theLayers[i].position.setValue([1600, 860]);
+                if (i===3) theLayers[i].position.setValue([320, 320]);
+                if (i===4) theLayers[i].position.setValue([960, 320]);
+                if (i===5) theLayers[i].position.setValue([1600, 320]);
+            }
+        }
+    }
+
+    app.endUndoGroup();   
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Notes: apply process to any number of layers
 function holoflix720p() {
     app.beginUndoGroup("Create Holoflix comps");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
@@ -40,13 +70,13 @@ function holoflix720p() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 
-// 34.  Type: apply process to a whole comp
+// Notes: apply process to a whole comp
 function viveRecording() {
     app.beginUndoGroup("Split Vive Recording");
 
     var theComp = app.project.activeItem;
 
-    if (theComp == null || !(theComp instanceof CompItem)){  
+    if (theComp == null || !(theComp instanceof CompItem)) {  
         alert(errorNoCompSelected);  
     } else {
         if (theComp.selectedLayers.length == 0) {
