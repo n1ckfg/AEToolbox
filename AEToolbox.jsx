@@ -1,4 +1,4 @@
-// AEToolbox 1.3
+// AEToolbox 1.3.1
 // by Nick Fox-Gieg
 // fox-gieg.com
 //
@@ -9,16 +9,16 @@
 // Christopher Green, Peter Kahrel, Chris Wright.
 //
 
-{
+(function AEToolbox(_panel){
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // UI Panel Setup
 function init(_panel) {
     // * * * * * *
-    var panel = (_panel instanceof Panel) ? _panel : new Window("palette", "Script Window",[0,0,360,300]);
+    var panel = (_panel instanceof Panel) ? _panel : new Window("palette", "AEToolbox 1.3.1",[0,0,170,300]);
     // * * * * * *
-
+    if (panel !== null) {
     // 1-5. Draw buttons
     //-----------------------------------------------------
     // buttons coordinates are X start, Y start, X end, Y end
@@ -210,7 +210,16 @@ function init(_panel) {
     // 4-5. Selector
     //-----------------------------------------------------
     var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "PiP", "Guide", "Export", "Import" ]);
-    
+        selector.selection = 0;
+        panel.basicGroup.visible = true;
+        panel.advGroup.visible = false;
+        panel.rigGroup.visible = false;
+        panel.depthGroup.visible = false;
+        panel.pipGroup.visible = false;
+        panel.guideGroup.visible = false;
+        panel.exportGroup.visible = false;    
+        panel.importGroup.visible = false;
+
     selector.onChange = function() {
         panel.basicGroup.visible = false;
         panel.advGroup.visible = false;
@@ -240,8 +249,8 @@ function init(_panel) {
         }     
     }
 
-    selector.selection = 0;
 
+    }
     return panel
 }
 
@@ -257,7 +266,16 @@ var errorOneCameraOnly = "This only works on one camera.";
 var cs55warning = "Requires CS5.5 and higher."
 
 // * * * * * *
-init(this);
+var aetbUI = init(_panel);
+
+if (aetbUI !== null) {
+    if (aetbUI instanceof Window) {
+        aetbUI.center();
+        aetbUI.show();
+    } else {
+        // aetbUI.layout.layout(true);
+    }
+}
 // * * * * * *
 
 ///////////////////////////////////////////////////////////////////////////////////////////
@@ -3464,4 +3482,4 @@ function sortByZmin(b,a) {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
-}
+})(this)
