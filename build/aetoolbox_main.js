@@ -87,8 +87,8 @@ function init(_panel) {
         var col3butCount = 5;
         panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
-        panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix 720p");
-        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "RGBD-TK");
+        panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix");
+        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "RGBD Toolkit");
         panel.pipGroup3 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "InstaGrid");
         panel.pipGroup4 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "4K Stereo 360");
 
@@ -200,9 +200,9 @@ function init(_panel) {
         panel.depthGroup6.helpTip = "Converts between rgb and grayscale depth maps."; //doRgbToGray;
         //--
         panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
-        panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
-        panel.pipGroup2.helpTip = "Splits an RGBD-TK clip into RGB and depth comps." //stereo360;
-        panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
+        panel.pipGroup1.helpTip = "Splits a Holoflix clip into RGB and depth comps." //holoflix720p;
+        panel.pipGroup2.helpTip = "Splits an RGBD Toolkit clip into RGB and depth comps." //rgbdtk;
+        panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //instaGrid;
         panel.pipGroup4.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
