@@ -1,3 +1,33 @@
+// Notes: apply process to any number of layers
+function doRgbToGray() {
+    app.beginUndoGroup("Turn rgb depth maps into grayscale");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)) {  
+        alert(errorNoCompSelected);  
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        var doReverse = confirm("Reverse (Gray to RGB)?");
+        if (theLayers.length==0) {
+            alert(errorNoLayerSelected);
+        } else {
+            for (var i=0; i<theLayers.length; i++) {
+                var precomp = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
+                if (doReverse) {
+                    grayToRgbDepth(precomp);
+                } else {
+                    rgbToGrayDepth(precomp);
+                }
+            }
+        }
+    }
+
+    app.endUndoGroup();   
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 // Notes: One-shot--create a bunch of objects and scripts.
 function stereoController() { 
     app.beginUndoGroup("Create a Stereo Controller for a Camera");

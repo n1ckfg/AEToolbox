@@ -81,15 +81,16 @@ function init(_panel) {
         panel.depthGroup3 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
         panel.depthGroup4 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
         panel.depthGroup5 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
-        panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "4K Stereo 360");
+        panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "RGB to Gray");
       
         // Picture-in-picture / Reformatting group
-        var col3butCount = 4;
+        var col3butCount = 5;
         panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
         panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix 720p");
         panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "RGBD-TK");
         panel.pipGroup3 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "InstaGrid");
+        panel.pipGroup4 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "4K Stereo 360");
 
         // Guide group
         var col3butCount = 2;
@@ -144,12 +145,13 @@ function init(_panel) {
         panel.depthGroup3.onClick = depthFill;
         panel.depthGroup4.onClick = depthSort;
         panel.depthGroup5.onClick = stereoController;
-        panel.depthGroup6.onClick = stereo360;
+        panel.depthGroup6.onClick = doRgbToGray;
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
         panel.pipGroup2.onClick = rgbdtk;
         panel.pipGroup3.onClick = instaGrid;
+        panel.pipGroup4.onClick = stereo360;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -195,12 +197,13 @@ function init(_panel) {
         panel.depthGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
         panel.depthGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
         panel.depthGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
-        panel.depthGroup6.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
+        panel.depthGroup6.helpTip = "Turns rgb depth maps into grayscale."; //doRgbToGray;
         //--
         panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
         panel.pipGroup2.helpTip = "Splits an RGBD-TK clip into RGB and depth comps." //stereo360;
         panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
+        panel.pipGroup4.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -1537,6 +1540,36 @@ function charSnake() {
 
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
+// Notes: apply process to any number of layers
+function doRgbToGray() {
+    app.beginUndoGroup("Turn rgb depth maps into grayscale");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)) {  
+        alert(errorNoCompSelected);  
+    } else { 
+        var theLayers = theComp.selectedLayers;
+        var doReverse = confirm("Reverse (Gray to RGB)?");
+        if (theLayers.length==0) {
+            alert(errorNoLayerSelected);
+        } else {
+            for (var i=0; i<theLayers.length; i++) {
+                var precomp = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
+                if (doReverse) {
+                    grayToRgbDepth(precomp);
+                } else {
+                    rgbToGrayDepth(precomp);
+                }
+            }
+        }
+    }
+
+    app.endUndoGroup();   
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 // Notes: One-shot--create a bunch of objects and scripts.
 function stereoController() { 
     app.beginUndoGroup("Create a Stereo Controller for a Camera");
@@ -2005,27 +2038,7 @@ function rgbdtk() {
                 precompDepth.name = origName + "_depth";
                 precompDepth.layers[1].position.setValue([256, 0]);
 
-                var dLayerR = precompDepth.layers[1];
-                dLayerR.blendingMode = BlendingMode.ADD;
-                var rEffect = dLayerR.property("Effects").addProperty("Channel Combiner");
-                rEffect.property("Invert").setValue(1);
-                rEffect.property("From").setValue(12); // Hue
-                rEffect.property("To").setValue(10); // Red only
-
-                var dLayerG = dLayerR.duplicate();
-                var gEffect = dLayerG.property("Effects").property("Channel Combiner");
-                gEffect.property("To").setValue(11);
-
-                var dLayerB = dLayerR.duplicate();
-                var bEffect = dLayerB.property("Effects").property("Channel Combiner");
-                bEffect.property("To").setValue(12);
-
-                var solid = precompDepth.layers.addSolid([0, 1.0, 1.0], "Adjustment Layer", precompDepth.width, precompDepth.height, 1);
-                solid.adjustmentLayer = true;
-                var sEffect1 = solid.property("Effects").addProperty("Extract");
-                sEffect1.property("White Point").setValue(254);
-                var sEffect2 = solid.property("Effects").addProperty("Simple Choker");
-                sEffect2.property("Choke Matte").setValue(1.0);
+                rgbToGrayDepth(precompDepth);
 
                 precompDepth = theComp.layers.add(precompDepth);
                 precompDepth.audioEnabled = false;
@@ -3323,6 +3336,53 @@ function importMocap3D() {
 ///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////
 // COMMON FUNCTIONS
+
+function grayToRgbDepth(comp) {
+    var dLayerR = comp.layers[1];
+    dLayerR.blendingMode = BlendingMode.ADD;
+    var rEffect1 = dLayerR.property("Effects").addProperty("Tint");
+    rEffect1.property("Map White To").setValue([1,0,0,1]);
+    var rEffect2 = dLayerR.property("Effects").addProperty("Channel Combiner");
+    rEffect2.property("Invert").setValue(1);
+    rEffect2.property("From").setValue(7); // Red
+    rEffect2.property("To").setValue(6); // Hue
+
+    var dLayerG = dLayerR.duplicate();
+    var gEffect1 = dLayerG.property("Effects").property("Tint");
+    gEffect1.property("Map White To").setValue([0,1,0,1]);
+    var gEffect2 = dLayerG.property("Effects").property("Channel Combiner");
+    gEffect2.property("From").setValue(8); // Green
+
+    var dLayerB = dLayerR.duplicate();
+    var bEffect1 = dLayerB.property("Effects").property("Tint");
+    bEffect1.property("Map White To").setValue([0,0,1,1]);
+    var bEffect2 = dLayerB.property("Effects").property("Channel Combiner");
+    bEffect2.property("From").setValue(9); // Blue
+}
+
+function rgbToGrayDepth(comp) {
+    var dLayerR = comp.layers[1];
+    dLayerR.blendingMode = BlendingMode.ADD;
+    var rEffect = dLayerR.property("Effects").addProperty("Channel Combiner");
+    rEffect.property("Invert").setValue(1);
+    rEffect.property("From").setValue(12); // Hue
+    rEffect.property("To").setValue(10); // Red only
+
+    var dLayerG = dLayerR.duplicate();
+    var gEffect = dLayerG.property("Effects").property("Channel Combiner");
+    gEffect.property("To").setValue(11);
+
+    var dLayerB = dLayerR.duplicate();
+    var bEffect = dLayerB.property("Effects").property("Channel Combiner");
+    bEffect.property("To").setValue(12);
+
+    var solid = comp.layers.addSolid([0, 1.0, 1.0], "Adjustment Layer", comp.width, comp.height, 1);
+    solid.adjustmentLayer = true;
+    var sEffect1 = solid.property("Effects").addProperty("Extract");
+    sEffect1.property("White Point").setValue(254);
+    var sEffect2 = solid.property("Effects").addProperty("Simple Choker");
+    sEffect2.property("Choke Matte").setValue(1.0);
+}
 
 function degreesToRadians(degree) {
     var pi = Math.PI;

@@ -1,5 +1,52 @@
 // COMMON FUNCTIONS
 
+function grayToRgbDepth(comp) {
+    var dLayerR = comp.layers[1];
+    dLayerR.blendingMode = BlendingMode.ADD;
+    var rEffect1 = dLayerR.property("Effects").addProperty("Tint");
+    rEffect1.property("Map White To").setValue([1,0,0,1]);
+    var rEffect2 = dLayerR.property("Effects").addProperty("Channel Combiner");
+    rEffect2.property("Invert").setValue(1);
+    rEffect2.property("From").setValue(7); // Red
+    rEffect2.property("To").setValue(6); // Hue
+
+    var dLayerG = dLayerR.duplicate();
+    var gEffect1 = dLayerG.property("Effects").property("Tint");
+    gEffect1.property("Map White To").setValue([0,1,0,1]);
+    var gEffect2 = dLayerG.property("Effects").property("Channel Combiner");
+    gEffect2.property("From").setValue(8); // Green
+
+    var dLayerB = dLayerR.duplicate();
+    var bEffect1 = dLayerB.property("Effects").property("Tint");
+    bEffect1.property("Map White To").setValue([0,0,1,1]);
+    var bEffect2 = dLayerB.property("Effects").property("Channel Combiner");
+    bEffect2.property("From").setValue(9); // Blue
+}
+
+function rgbToGrayDepth(comp) {
+    var dLayerR = comp.layers[1];
+    dLayerR.blendingMode = BlendingMode.ADD;
+    var rEffect = dLayerR.property("Effects").addProperty("Channel Combiner");
+    rEffect.property("Invert").setValue(1);
+    rEffect.property("From").setValue(12); // Hue
+    rEffect.property("To").setValue(10); // Red only
+
+    var dLayerG = dLayerR.duplicate();
+    var gEffect = dLayerG.property("Effects").property("Channel Combiner");
+    gEffect.property("To").setValue(11);
+
+    var dLayerB = dLayerR.duplicate();
+    var bEffect = dLayerB.property("Effects").property("Channel Combiner");
+    bEffect.property("To").setValue(12);
+
+    var solid = comp.layers.addSolid([0, 1.0, 1.0], "Adjustment Layer", comp.width, comp.height, 1);
+    solid.adjustmentLayer = true;
+    var sEffect1 = solid.property("Effects").addProperty("Extract");
+    sEffect1.property("White Point").setValue(254);
+    var sEffect2 = solid.property("Effects").addProperty("Simple Choker");
+    sEffect2.property("Choke Matte").setValue(1.0);
+}
+
 function degreesToRadians(degree) {
     var pi = Math.PI;
     var radians = (degree)*(pi/180);

@@ -58,27 +58,7 @@ function rgbdtk() {
                 precompDepth.name = origName + "_depth";
                 precompDepth.layers[1].position.setValue([256, 0]);
 
-                var dLayerR = precompDepth.layers[1];
-                dLayerR.blendingMode = BlendingMode.ADD;
-                var rEffect = dLayerR.property("Effects").addProperty("Channel Combiner");
-                rEffect.property("Invert").setValue(1);
-                rEffect.property("From").setValue(12); // Hue
-                rEffect.property("To").setValue(10); // Red only
-
-                var dLayerG = dLayerR.duplicate();
-                var gEffect = dLayerG.property("Effects").property("Channel Combiner");
-                gEffect.property("To").setValue(11);
-
-                var dLayerB = dLayerR.duplicate();
-                var bEffect = dLayerB.property("Effects").property("Channel Combiner");
-                bEffect.property("To").setValue(12);
-
-                var solid = precompDepth.layers.addSolid([0, 1.0, 1.0], "Adjustment Layer", precompDepth.width, precompDepth.height, 1);
-                solid.adjustmentLayer = true;
-                var sEffect1 = solid.property("Effects").addProperty("Extract");
-                sEffect1.property("White Point").setValue(254);
-                var sEffect2 = solid.property("Effects").addProperty("Simple Choker");
-                sEffect2.property("Choke Matte").setValue(1.0);
+                rgbToGrayDepth(precompDepth);
 
                 precompDepth = theComp.layers.add(precompDepth);
                 precompDepth.audioEnabled = false;
