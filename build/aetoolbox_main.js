@@ -211,7 +211,7 @@ function init(_panel) {
 
         // 4-5. Selector
         //-----------------------------------------------------
-        var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "PiP", "Guide", "Export", "Import" ]);
+        var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Reformat", "Guide", "Export", "Import" ]);
 
         selector.onChange = function() {
             panel.basicGroup.visible = false;
