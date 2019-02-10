@@ -81,7 +81,7 @@ function init(_panel) {
         panel.depthGroup3 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Depth Fill");
         panel.depthGroup4 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Depth Sort");
         panel.depthGroup5 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
-        panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "RGB to Gray");
+        panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Gray to RGB");
       
         // Picture-in-picture / Reformatting group
         var col3butCount = 5;
@@ -197,7 +197,7 @@ function init(_panel) {
         panel.depthGroup3.helpTip = "Creates a grayscale depth fill based on distance to camera."; //stereoDispMap;
         panel.depthGroup4.helpTip = "Sorts layer order by depth."; //depthSort;
         panel.depthGroup5.helpTip = "Creates a stereo controller null for a single camera."; //stereoController;
-        panel.depthGroup6.helpTip = "Turns rgb depth maps into grayscale."; //doRgbToGray;
+        panel.depthGroup6.helpTip = "Converts between rgb and grayscale depth maps."; //doRgbToGray;
         //--
         panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
@@ -1542,7 +1542,7 @@ function charSnake() {
 ///////////////////////////////////////////////////////////////////////////////////////////
 // Notes: apply process to any number of layers
 function doRgbToGray() {
-    app.beginUndoGroup("Turn rgb depth maps into grayscale");
+    app.beginUndoGroup("Convert between rgb depth maps and grayscale");
 
     var theComp = app.project.activeItem;
 
@@ -1550,13 +1550,13 @@ function doRgbToGray() {
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
-        var doReverse = confirm("Reverse (Gray to RGB)?");
+        var doReverse = confirm("Reverse (RGB to Gray)?");
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else {
             for (var i=0; i<theLayers.length; i++) {
                 var precomp = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
-                if (doReverse) {
+                if (!doReverse) {
                     grayToRgbDepth(precomp);
                 } else {
                     rgbToGrayDepth(precomp);

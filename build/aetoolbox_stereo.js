@@ -1,6 +1,6 @@
 // Notes: apply process to any number of layers
 function doRgbToGray() {
-    app.beginUndoGroup("Turn rgb depth maps into grayscale");
+    app.beginUndoGroup("Convert between rgb depth maps and grayscale");
 
     var theComp = app.project.activeItem;
 
@@ -8,13 +8,13 @@ function doRgbToGray() {
         alert(errorNoCompSelected);  
     } else { 
         var theLayers = theComp.selectedLayers;
-        var doReverse = confirm("Reverse (Gray to RGB)?");
+        var doReverse = confirm("Reverse (RGB to Gray)?");
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else {
             for (var i=0; i<theLayers.length; i++) {
                 var precomp = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
-                if (doReverse) {
+                if (!doReverse) {
                     grayToRgbDepth(precomp);
                 } else {
                     rgbToGrayDepth(precomp);
