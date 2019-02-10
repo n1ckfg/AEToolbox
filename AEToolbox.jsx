@@ -83,12 +83,13 @@ function init(_panel) {
         panel.depthGroup5 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
         panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "4K Stereo 360");
       
-        // Picture-in-picture group
-        var col3butCount = 3;
+        // Picture-in-picture / Reformatting group
+        var col3butCount = 4;
         panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
         panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix 720p");
-        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "InstaGrid");
+        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "RGBD-TK");
+        panel.pipGroup3 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "InstaGrid");
 
         // Guide group
         var col3butCount = 2;
@@ -147,7 +148,8 @@ function init(_panel) {
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
-        panel.pipGroup2.onClick = instaGrid;
+        panel.pipGroup2.onClick = rgbdtk;
+        panel.pipGroup3.onClick = instaGrid;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -197,7 +199,8 @@ function init(_panel) {
         //--
         panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
-        panel.pipGroup2.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
+        panel.pipGroup2.helpTip = "Splits an RGBD-TK clip into RGB and depth comps." //stereo360;
+        panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -1973,6 +1976,70 @@ function instaGrid() {
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // Notes: apply process to any number of layers
+function rgbdtk() {
+    app.beginUndoGroup("Create RGBD-TK comps");
+
+    var theComp = app.project.activeItem;
+
+    if (theComp == null || !(theComp instanceof CompItem)) {  
+        alert(errorNoCompSelected);  
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if (theLayers.length==0) {
+            alert(errorNoLayerSelected);
+        } else {
+            var doFrameRate = false; //confirm("Reduce to 12fps?");
+            for (var i=0; i<theLayers.length; i++) {
+                var precompRgb = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
+                theComp.selectedLayers[i].position.setValue([256, 212]);
+
+                precompRgb.width = 512;
+                precompRgb.height = 424;
+                precompRgb.layers[1].position.setValue([256, 424]);
+                if (doFrameRate) precompRgb.frameRate = 12;
+
+                var precompDepth = precompRgb.duplicate();
+                var origName = precompRgb.name;
+                precompRgb.name += "_rgb";
+                precompDepth.name = origName + "_depth";
+                precompDepth.layers[1].position.setValue([256, 0]);
+
+                var dLayerR = precompDepth.layers[1];
+                dLayerR.blendingMode = BlendingMode.ADD;
+                var rEffect = dLayerR.property("Effects").addProperty("Channel Combiner");
+                rEffect.property("Invert").setValue(1);
+                rEffect.property("From").setValue(12); // Hue
+                rEffect.property("To").setValue(10); // Red only
+
+                var dLayerG = dLayerR.duplicate();
+                var gEffect = dLayerG.property("Effects").property("Channel Combiner");
+                gEffect.property("To").setValue(11);
+
+                var dLayerB = dLayerR.duplicate();
+                var bEffect = dLayerB.property("Effects").property("Channel Combiner");
+                bEffect.property("To").setValue(12);
+
+                var solid = precompDepth.layers.addSolid([0, 1.0, 1.0], "Adjustment Layer", precompDepth.width, precompDepth.height, 1);
+                solid.adjustmentLayer = true;
+                var sEffect1 = solid.property("Effects").addProperty("Extract");
+                sEffect1.property("White Point").setValue(254);
+                var sEffect2 = solid.property("Effects").addProperty("Simple Choker");
+                sEffect2.property("Choke Matte").setValue(1.0);
+
+                precompDepth = theComp.layers.add(precompDepth);
+                precompDepth.audioEnabled = false;
+                precompDepth.position.setValue([256, 636]);
+            }
+        }
+    }
+
+    app.endUndoGroup();   
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Notes: apply process to any number of layers
 function holoflix720p() {
     app.beginUndoGroup("Create Holoflix comps");
 
@@ -1986,26 +2053,26 @@ function holoflix720p() {
         if (theLayers.length==0) {
             alert(errorNoLayerSelected);
         } else {
-          var doFrameRate = confirm("Reduce to 12fps?");
-          for (var i=0; i<theLayers.length; i++) {
-              var precompRgb = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
+            var doFrameRate = false; //confirm("Reduce to 12fps?");
+            for (var i=0; i<theLayers.length; i++) {
+                var precompRgb = theComp.layers.precompose([theLayers[i].index], theLayers[i].name, true);
                 theComp.selectedLayers[i].position.setValue([960, 360]);
 
-              precompRgb.width = 640;
-              precompRgb.height = 480;
-              precompRgb.layers[1].position.setValue([0, 240]);
-              if (doFrameRate) precompRgb.frameRate = 12;
+                precompRgb.width = 640;
+                precompRgb.height = 480;
+                precompRgb.layers[1].position.setValue([0, 240]);
+                if (doFrameRate) precompRgb.frameRate = 12;
 
-              var precompDepth = precompRgb.duplicate();
-              var origName = precompRgb.name;
-              precompRgb.name += "_rgb";
-              precompDepth.name = origName + "_depth";
-              precompDepth.layers[1].position.setValue([640, 240]);
+                var precompDepth = precompRgb.duplicate();
+                var origName = precompRgb.name;
+                precompRgb.name += "_rgb";
+                precompDepth.name = origName + "_depth";
+                precompDepth.layers[1].position.setValue([640, 240]);
 
-              precompDepth = theComp.layers.add(precompDepth);
-              precompDepth.audioEnabled = false;
-              precompDepth.position.setValue([320, 360]);
-          }
+                precompDepth = theComp.layers.add(precompDepth);
+                precompDepth.audioEnabled = false;
+                precompDepth.position.setValue([320, 360]);
+            }
         }
     }
 

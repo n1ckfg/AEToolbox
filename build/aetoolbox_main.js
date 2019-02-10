@@ -83,12 +83,13 @@ function init(_panel) {
         panel.depthGroup5 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Stereo Controller");
         panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "4K Stereo 360");
       
-        // Picture-in-picture group
-        var col3butCount = 3;
+        // Picture-in-picture / Reformatting group
+        var col3butCount = 4;
         panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
         panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix 720p");
-        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "InstaGrid");
+        panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "RGBD-TK");
+        panel.pipGroup3 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "InstaGrid");
 
         // Guide group
         var col3butCount = 2;
@@ -147,7 +148,8 @@ function init(_panel) {
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
-        panel.pipGroup2.onClick = instaGrid;
+        panel.pipGroup2.onClick = rgbdtk;
+        panel.pipGroup3.onClick = instaGrid;
         //--
         panel.guideGroup0.onClick = onionSkin;
         panel.guideGroup1.onClick = skeleView;
@@ -197,7 +199,8 @@ function init(_panel) {
         //--
         panel.pipGroup0.helpTip = "Splits a quad Vive recording into separate layers." //viveRecording;
         panel.pipGroup1.helpTip = "Splits a Holoflix 720p clip into RGB and depth comps." //stereo360;
-        panel.pipGroup2.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
+        panel.pipGroup2.helpTip = "Splits an RGBD-TK clip into RGB and depth comps." //stereo360;
+        panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //stereo360;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
