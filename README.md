@@ -4,7 +4,7 @@ The AEToolbox UI panel was developed with support from:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Eyebeam Art + Technology Center<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Ontario Arts Council / Chalmers Family Fund<br>
 <br>
-Copyright (c) 2018 Nick Fox-Gieg<br>
+Copyright (c) 2019 Nick Fox-Gieg<br>
 http://fox-gieg.com<br>
 <br>
 To install, drop the AEToolbox.jsx file into your After Effects ScriptUI Panels directory. After restarting After Effects, you can access the AEToolbox panel from the Window menu, just like your other panels. By default, this is:<br>
