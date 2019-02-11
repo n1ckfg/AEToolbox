@@ -299,42 +299,4 @@ function crossfader() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
-
-// Notes: apply process to any number of layers
-function rsmbTwos() {
-    app.beginUndoGroup("Reelsmart Motion Blur on Twos");
-
-    var theComp = app.project.activeItem;
-
-    if (theComp == null || !(theComp instanceof CompItem)) {
-        alert(errorNoCompSelected);
-    } else { 
-        var theLayers = theComp.selectedLayers;
-
-        if (theLayers.length==0) {
-            alert(errorNoLayerSelected);
-        } else {
-            //var baseOnFps = confirm("Base on comp frame rate?");
-
-            for (var i = 0; i < theLayers.length; i++) {
-                var effects = theLayers[i].property("Effects");
-
-                var blur = effects.addProperty("RSMB");
-                blur.property("Blur Amount").setValue(0.25);
-                blur.property("Use GPU").setValue(2);
-
-                var posterize = effects.addProperty("Posterize Time");
-                //if (baseOnFps) {
-                posterize.property("Frame Rate").setValue(theComp.frameRate/2);
-                //} else {
-                    //posterize.property("Frame Rate").setValue(12);
-                //}
-            }
-        }
-    }
-
-    app.endUndoGroup();
-}
-
-///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////

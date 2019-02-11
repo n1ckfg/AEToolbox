@@ -6,7 +6,7 @@ set BUILD_TARGET=..\AEToolbox.jsx
 
 del %BUILD_TARGET%
 
-copy /b aetoolbox_main.js+aetoolbox_basic.js+aetoolbox_advanced.js+aetoolbox_rigging.js+aetoolbox_stereo.js+aetoolbox_pip.js+aetoolbox_guide.js+aetoolbox_export.js+aetoolbox_import.js+aetoolbox_util.js %BUILD_TARGET%
+copy /b aetoolbox_main.js+aetoolbox_basic.js+aetoolbox_advanced.js+aetoolbox_rigging.js+aetoolbox_stereo.js+aetoolbox_pip.js+aetoolbox_guide.js+aetoolbox_export.js+aetoolbox_import.js+aetoolbox_plugins.js+aetoolbox_util.js %BUILD_TARGET%
 
 copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CS6\Support Files\Scripts\ScriptUI Panels\"
 copy %BUILD_TARGET% "C:\Program Files\Adobe\Adobe After Effects CC\Support Files\Scripts\ScriptUI Panels\"

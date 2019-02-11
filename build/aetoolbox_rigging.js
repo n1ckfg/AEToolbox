@@ -346,44 +346,6 @@ function photoRig() {
 ///////////////////////////////////////////////////////////////////////////////////////////
 
 // Notes: One-shot--create a complex bunch of objects and scripts.
-function charParticle() {  
-    app.beginUndoGroup("Create a Particle Rig");
-
-    var theComp = app.project.activeItem; 
-
-    if (theComp == null || !(theComp instanceof CompItem)) {
-        alert(errorNoCompSelected);
-    } else {
-        var solid = theComp.layers.addSolid([0, 1.0, 1.0], "Particle Solid", theComp.width, theComp.height, 1);
-        solid.locked = true;
-
-        var particle_ctl = theComp.layers.addNull();
-        particle_ctl.name = "particle_ctl";
-        particle_ctl.threeDLayer = true;
-
-        try {
-            var particle = solid.property("Effects").addProperty("Particular");
-
-            var expr1 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
-                        "L.toWorld(L.anchorPoint);"
-
-            particle.property("Position XY").expression = expr1;
-
-            var expr2 = "L = thisComp.layer(\"" + particle_ctl.name + "\");" + "\r" + 
-                        "L.toWorld(L.anchorPoint)[2];"
-
-            particle.property("Position Z").expression = expr2;
-        } catch(err) {
-            alert("Requires Trapcode Particular.");           
-        }
-    }
- 
-    app.endUndoGroup();
-}  
-
-///////////////////////////////////////////////////////////////////////////////////////////
-
-// Notes: One-shot--create a complex bunch of objects and scripts.
 function charBeam() {  
     app.beginUndoGroup("Create a Beam Rig");
 

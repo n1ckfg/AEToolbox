@@ -39,7 +39,7 @@ function init(_panel) {
 
         // Basic group
         var col1butCount = 8;
-        panel.basicGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.basicGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col1butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.basicGroup0 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Nulls for Pins");
         panel.basicGroup1 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Parent Chain");
         panel.basicGroup2 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Locator Null");
@@ -50,31 +50,29 @@ function init(_panel) {
         panel.basicGroup7 = panel.basicGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Isolate Color");
        
         // Advanced group
-        var col3butCount = 7;
-        panel.advGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col2butCount = 6;
+        panel.advGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.advGroup0 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Bake Keyframes");
         panel.advGroup1 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Lock Y Rotation");
         panel.advGroup2 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Auto Z Rotation");
         panel.advGroup3 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Parentable Null");
         panel.advGroup4 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Sine Generator");
         panel.advGroup5 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Crossfade");
-        panel.advGroup6 = panel.advGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Motion Blur Twos*");
         
         // Rigging group
-        var col2butCount = 8;
-        panel.rigGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col2butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col3butCount = 7;
+        panel.rigGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.rigGroup0 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Blink Rig");
         panel.rigGroup1 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Jaw Rig");
         panel.rigGroup2 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Snake Rig");
         panel.rigGroup3 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "Beam Rig");
-        panel.rigGroup4 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Particle Rig*");
-        panel.rigGroup5 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "Camera Rig");
-        panel.rigGroup6 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "MoSketch Rig");
-        panel.rigGroup7 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*7),butXend,butYend+(butYinc*7)], "Photo Rig");
+        panel.rigGroup4 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "Camera Rig");
+        panel.rigGroup5 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*5),butXend,butYend+(butYinc*5)], "MoSketch Rig");
+        panel.rigGroup6 = panel.rigGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Photo Rig");
       
         // Depth group
-        var col3butCount = 7;
-        panel.depthGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col4butCount = 7;
+        panel.depthGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col4butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.depthGroup0 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Split s3D Pair");
         panel.depthGroup1 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Merge s3D Pair");
         panel.depthGroup2 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "s3D Dispmap");
@@ -84,8 +82,8 @@ function init(_panel) {
         panel.depthGroup6 = panel.depthGroup.add("button", [butXstart,butYstart+(butYinc*6),butXend,butYend+(butYinc*6)], "Gray to RGB");
       
         // Picture-in-picture / Reformatting group
-        var col3butCount = 5;
-        panel.pipGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col5butCount = 5;
+        panel.pipGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col5butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.pipGroup0 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Vive Recording");
         panel.pipGroup1 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Holoflix");
         panel.pipGroup2 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "RGBD Toolkit");
@@ -93,23 +91,30 @@ function init(_panel) {
         panel.pipGroup4 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "4K Stereo 360");
 
         // Guide group
-        var col3butCount = 2;
-        panel.guideGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col6butCount = 2;
+        panel.guideGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col6butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.guideGroup0 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Onion Skin");
         panel.guideGroup1 = panel.guideGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Skeleton View");
        
         // Export group
-        var col3butCount = 4;
-        panel.exportGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col7butCount = 4;
+        panel.exportGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col7butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.exportGroup0 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Camera to Maya");
         panel.exportGroup1 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Unity Anim");
         panel.exportGroup2 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "JSON Export Test");
         panel.exportGroup3 = panel.exportGroup.add("button", [butXstart,butYstart+(butYinc*3),butXend,butYend+(butYinc*3)], "XML Export Test");
 
         // Import group
-        var col3butCount = 1;
-        panel.importGroup = panel.add("panel", [colXstart+(colXinc * 0),colYstart,colXend+(colXinc*0),colYendBase+(col3butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        var col8butCount = 1;
+        panel.importGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col8butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.importGroup0 = panel.importGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "GML to Position");
+
+        // Plugin group
+        var col9butCount = 3;
+        panel.pluginGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col9butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
+        panel.pluginGroup0 = panel.pluginGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "RSMB Twos");
+        panel.pluginGroup1 = panel.pluginGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Particular Rig");
+        panel.pluginGroup2 = panel.pluginGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "Freeform Pro Rig");
 
         // 2-5. Link buttons to functions
         //-----------------------------------------------------
@@ -128,16 +133,14 @@ function init(_panel) {
         panel.advGroup3.onClick = parentableNull;
         panel.advGroup4.onClick = sineWave;
         panel.advGroup5.onClick = crossfader;
-        panel.advGroup6.onClick = rsmbTwos;
         //--
         panel.rigGroup0.onClick = charBlink;
         panel.rigGroup1.onClick = charJaw;
         panel.rigGroup2.onClick = charSnake;
         panel.rigGroup3.onClick = charBeam;
-        panel.rigGroup4.onClick = charParticle;
-        panel.rigGroup5.onClick = handheldCamera;
-        panel.rigGroup6.onClick = threeDmoSketch;
-        panel.rigGroup7.onClick = photoRig;
+        panel.rigGroup4.onClick = handheldCamera;
+        panel.rigGroup5.onClick = threeDmoSketch;
+        panel.rigGroup6.onClick = photoRig;
         //--
         panel.depthGroup0.onClick = splitStereoPair;
         panel.depthGroup1.onClick = mergeStereoPair;
@@ -162,7 +165,10 @@ function init(_panel) {
         panel.exportGroup3.onClick = xmlExport;
         //--
         panel.importGroup0.onClick =  gmlToPos;
-
+        //--
+        panel.pluginGroup0.onClick = rsmbTwos;
+        panel.pluginGroup1.onClick = charParticle;
+        panel.pluginGroup2.onClick = freeformRig;
         // 3-5. Tooltips
         //-----------------------------------------------------
         panel.basicGroup0.helpTip = "Creates a controller null for each puppet pin on a layer."; //nullsForPins;
@@ -180,16 +186,14 @@ function init(_panel) {
         panel.advGroup3.helpTip = "Creates a null with expressions that solve certain parenting problems."; //parentableNull;
         panel.advGroup4.helpTip = "Applies sine-wave motion controls to a layer."; //sineWave;
         panel.advGroup5.helpTip = "Fades a layer into a duplicate of itself for a seamless loop."; //crossfader;
-        panel.advGroup6.helpTip = "*Reelsmart Motion Blur* for animation on twos."; //rsmbTwos;
         //--    
         panel.rigGroup0.helpTip = "Turns a blink layer inside the comp on and off."; //charBlink;
         panel.rigGroup1.helpTip = "Rigs a jaw layer inside the comp for audio control."; //charJaw;
         panel.rigGroup2.helpTip = "Rigs a puppet-pin layer for automated snake-like movement."; //charSnake;
         panel.rigGroup3.helpTip = "Creates a 3D laser effect with start and end nulls."; //charBeam;
-        panel.rigGroup4.helpTip = "*Particular* null controller for particles."; //charParticle;
-        panel.rigGroup5.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
-        panel.rigGroup6.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
-        panel.rigGroup7.helpTip = "Creates precomps that each display one frame from a sequence."; //photoRig;
+        panel.rigGroup4.helpTip = "Creates a camera rigged for point-of-interest and DoF control."; //handheldCamera;
+        panel.rigGroup5.helpTip = "Creates a null with 3D controls for use with Motion Sketch."; //threeDmoSketch;
+        panel.rigGroup6.helpTip = "Creates precomps that each display one frame from a sequence."; //photoRig;
         //--
         panel.depthGroup0.helpTip = "Splits a stereo 3D pair video into two left and right comps."; //splitStereoPair;
         panel.depthGroup1.helpTip = "Merges two left and right comps into a stereo 3D pair comp."; //mergeStereoPair;
@@ -214,10 +218,14 @@ function init(_panel) {
         panel.exportGroup3.helpTip = "Export keyframes to XML."; //xmlExport;
         //--
         panel.importGroup0.helpTip = "Import position keyframes from GML."; //gmlToPos;
+        //--
+        panel.pluginGroup0.helpTip = "Reelsmart Motion Blur for animation on twos."; //rsmbTwos;
+        panel.pluginGroup1.helpTip = "Particular null controller for particles."; //charParticle;
+        panel.pluginGroup2.helpTip = "Freeform Pro rig for volumetric video."; //charParticle;
 
         // 4-5. Selector
         //-----------------------------------------------------
-        var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Reformat", "Guide", "Export", "Import" ]);
+        var selector = panel.add("dropdownlist",[colXstart, colYstart, colXend, colYendBase],[ "Basic", "Advanced", "Rigging", "Depth", "Reformat", "Guide", "Export", "Import", "Plugins" ]);
 
         selector.onChange = function() {
             panel.basicGroup.visible = false;
@@ -228,6 +236,7 @@ function init(_panel) {
             panel.guideGroup.visible = false;
             panel.exportGroup.visible = false;    
             panel.importGroup.visible = false;    
+            panel.pluginGroup.visible = false;    
 
             if (selector.selection == 0) { // Basic
                 panel.basicGroup.visible = true;
@@ -245,7 +254,9 @@ function init(_panel) {
                 panel.exportGroup.visible = true;
             } else if (selector.selection == 7) { // Import
                 panel.importGroup.visible = true;
-            }     
+            } else if (selector.selection == 8) { // Plugins
+                panel.pluginGroup.visible = true;
+            }      
         }
 
         selector.selection = 0;
