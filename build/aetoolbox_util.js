@@ -165,10 +165,11 @@ function getSelectedComps() {
     return returns;
 }
 
+// *** Layer variables can't be copied between comps--you have to get the layer's source ***
 function getLayerSource(layer) {
     for (var i = 1; i < app.project.items.length+1; i++){
         var item = app.project.items[i];
-        if (item instanceOf CompItem && item.name === layer.name) {
+        if (item.name === layer.name) {
             return item;
         }
     }

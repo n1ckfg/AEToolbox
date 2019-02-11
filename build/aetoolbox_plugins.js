@@ -12,21 +12,28 @@ function freeformRig() {
         if (theLayers.length != 2) {
             alert("Select exactly two layers (depth first).");
         } else { 
-            var depthComp = theLayers[0];
-            var rgbComp = theLayers[1];
-            var depthCompSource = getLayerSource(depthComp);
+            var depthLayer = theLayers[0];
+            var rgbLayer = theLayers[1];
 
-            depthComp.audioEnabled = false;
-            depthComp.enabled = false;
-            rgbComp.audioEnabled = true;
-            rgbComp.enabled = true;
+            depthLayer.audioEnabled = false;
+            depthLayer.enabled = false;
+            rgbLayer.audioEnabled = true;
+            rgbLayer.enabled = true;
 
-            var freeform = rgbComp.property("Effects").addProperty("Mettle FreeForm Pro");
-            freeform.property("Displacement Layer").setValue(depthComp.index);
+            var depthComp = getLayerSource(depthLayer);
+            var rgbComp = getLayerSource(rgbLayer);
+
+            var origRgbLayer = rgbComp.layer(1);
+            var newDepthLayer = rgbComp.layers.add(depthComp);
+            newDepthLayer.audioEnabled = false;
+            newDepthLayer.enabled = false;
+            origRgbLayer.trackMatteType = TrackMatteType.LUMA;
+
+            var freeform = rgbLayer.property("Effects").addProperty("Mettle FreeForm Pro");
+            freeform.property("Displacement Layer").setValue(depthLayer.index);
             freeform.property("Displacement Height").setValue(560);
+            freeform.property("Alpha Threshold").setValue(0);
             freeform.property("Pre-blur Layer").setValue(2); // depth only
-
-            rgbComp.layers.add(depthComp);
         }
     }
 
