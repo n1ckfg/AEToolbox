@@ -1,6 +1,6 @@
 // Notes: apply process to two layers
-function freeformRig(doUndoGroup) {
-    if (doUndoGroup) app.beginUndoGroup("Create Freeform Pro rig");
+function freeformRig() {
+    app.beginUndoGroup("Create Freeform Pro rig");
 
     var theComp = app.project.activeItem;
 
@@ -10,59 +10,27 @@ function freeformRig(doUndoGroup) {
         var theLayers = theComp.selectedLayers;
 
         if (theLayers.length != 2) {
-            alert("Select exactly two layers.");
+            alert("Select exactly two layers (depth first).");
         } else { 
-            var overUnder = confirm("Use over-under stereo?");
+            var depthComp = theLayers[0];
+            var rgbComp = theLayers[1];
+            var depthCompSource = getLayerSource(depthComp);
 
-            var leftLayer = theLayers[0];
-            var rightLayer = theLayers[1];
+            depthComp.audioEnabled = false;
+            depthComp.enabled = false;
+            rgbComp.audioEnabled = true;
+            rgbComp.enabled = true;
 
-            leftLayer.name += " L";
-            rightLayer.name += " R";
-            
-            rightLayer.audioEnabled = false;
+            var freeform = rgbComp.property("Effects").addProperty("Mettle FreeForm Pro");
+            freeform.property("Displacement Layer").setValue(depthComp.index);
+            freeform.property("Displacement Height").setValue(560);
+            freeform.property("Pre-blur Layer").setValue(2); // depth only
 
-            var sL = leftLayer.transform.scale.value;
-            var sR = rightLayer.transform.scale.value;
-
-            if (!overUnder) {
-                sL[0] = ((theComp.width/2) / leftLayer.width) * 100;
-                sL[1] = (theComp.height / leftLayer.height) * 100;
-                sR[0] = ((theComp.width/2) / rightLayer.width) * 100;
-                sR[1] = (theComp.height / rightLayer.height) * 100;
-            } else { 
-                sL[0] = (theComp.width / leftLayer.width) * 100;
-                sL[1] = ((theComp.height/2) / leftLayer.height) * 100;
-                sR[0] = (theComp.width / rightLayer.width) * 100;
-                sR[1] = ((theComp.height/2) / rightLayer.height) * 100;                
-            }         
-
-            leftLayer.transform.scale.setValue([sL[0],sL[1]]);
-            rightLayer.transform.scale.setValue([sR[0],sR[1]]);
-            //leftLayer.transform.scale.setValue([50,100]);
-            //rightLayer.transform.scale.setValue([50,100]);            
-
-            var pL = leftLayer.transform.position.value;
-            var pR = rightLayer.transform.position.value;
-
-            if (!overUnder) {
-                pL[0] = theComp.width*0.25;
-                pL[1] = theComp.height*0.5;
-                pR[0] = theComp.width*0.75;
-                pR[1] = theComp.height*0.5;
-            } else { 
-                pL[0] = theComp.width*0.5;
-                pL[1] = theComp.height*0.25;
-                pR[0] = theComp.width*0.5;
-                pR[1] = theComp.height*0.75;
-            }
-
-            leftLayer.transform.position.setValue([pL[0],pL[1]]);
-            rightLayer.transform.position.setValue([pR[0],pR[1]]);
+            rgbComp.layers.add(depthComp);
         }
     }
 
-    if (doUndoGroup) app.endUndoGroup();   
+    app.endUndoGroup();   
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////

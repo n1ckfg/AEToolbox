@@ -165,6 +165,16 @@ function getSelectedComps() {
     return returns;
 }
 
+function getLayerSource(layer) {
+    for (var i = 1; i < app.project.items.length+1; i++){
+        var item = app.project.items[i];
+        if (item instanceOf CompItem && item.name === layer.name) {
+            return item;
+        }
+    }
+    return null;
+}
+
 function getPreset(filePath, local) {
     var presetPath = filePath;
     if (local==true) presetPath = new Folder((new File($.fileName)).path + "/" + presetPath);
