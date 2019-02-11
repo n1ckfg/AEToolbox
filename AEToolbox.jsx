@@ -3304,6 +3304,7 @@ function freeformRig() {
             var freeform = rgbLayer.property("Effects").addProperty("Mettle FreeForm Pro");
             freeform.property("Displacement Layer").setValue(depthLayer.index);
             freeform.property("Displacement Height").setValue(560);
+            freeform.property("Alpha Threshold").setValue(0);
             freeform.property("Pre-blur Layer").setValue(2); // depth only
         }
     }
@@ -3556,6 +3557,7 @@ function getSelectedComps() {
     return returns;
 }
 
+// *** Layer variables can't be copied between comps--you have to get the layer's source ***
 function getLayerSource(layer) {
     for (var i = 1; i < app.project.items.length+1; i++){
         var item = app.project.items[i];
