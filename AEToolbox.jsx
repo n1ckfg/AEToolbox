@@ -3304,6 +3304,7 @@ function freeformRig() {
             var freeform = rgbLayer.property("Effects").addProperty("Mettle FreeForm Pro");
             freeform.property("Displacement Layer").setValue(depthLayer.index);
             freeform.property("Displacement Height").setValue(560);
+            freeform.property("Display Grid").setValue(0);
             freeform.property("Alpha Threshold").setValue(0);
             freeform.property("Pre-blur Layer").setValue(2); // depth only
         }
