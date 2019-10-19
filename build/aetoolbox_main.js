@@ -155,7 +155,7 @@ function init(_panel) {
         panel.depthGroup5.onClick = stereoController;
         panel.depthGroup6.onClick = doRgbToGray;
         //--
-        panel.imageGroup0.onclick = splitStereoPair;
+        panel.imageGroup0.onclick = softenImage;
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
@@ -216,7 +216,7 @@ function init(_panel) {
         panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //instaGrid;
         panel.pipGroup4.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
         //--
-        panel.imageGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
+        panel.imageGroup0.helpTip = "Duplicates layers with composite modes and blur."; //softenImage;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;

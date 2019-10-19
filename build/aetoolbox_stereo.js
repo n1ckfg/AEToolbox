@@ -268,7 +268,7 @@ function stereoDispMap() {
 
             var newPrecomp = theComp.layers.precompose([newLayer.index], "Precomp DispMap", true);
             newPrecomp.layers[1].property("Effects").addProperty("Levels");
-            var fb = newPrecomp.layers[1].property("Effects").addProperty("Fast Blur");
+            var fb = newPrecomp.layers[1].property("Effects").addProperty("Gaussian Blur");
             fb.property("Blurriness").setValue(10);
 
             theComp.layer("Precomp DispMap").enabled = false;

@@ -1,5 +1,4 @@
 // COMMON FUNCTIONS
-
 function grayToRgbDepth(comp) {
     var dLayerR = comp.layers[1];
     dLayerR.blendingMode = BlendingMode.ADD;
