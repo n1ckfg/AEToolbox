@@ -97,4 +97,75 @@ function softLayeredImage2() {
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////
+
+// Notes: apply process to any number of layers
+function highPass() {
+    app.beginUndoGroup("High Pass");
+
+    var theComp = app.project.activeItem; 
+    
+    if (theComp === null || !(theComp instanceof CompItem)) {
+        alert(errorNoCompSelected);
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if (theLayers.length === 0) {
+            alert(errorNoLayerSelected);
+        } else { 
+            for (var i = 0; i < theLayers.length; i++) {   
+                var curLayer = theLayers[i];
+                // condition 1: must be a footage layer
+                if (curLayer.matchName === "ADBE AV Layer") {
+                    var newLayer = curLayer.duplicate();
+                    var opacity = newLayer.property("opacity");
+                    newLayer.blendingMode = BlendingMode.OVERLAY;
+                    opacity.setValue(50);
+                    newLayer.audioEnabled = false;
+
+                    var effects = newLayer.property("Effects");
+                    
+                    var monochrome = effects.addProperty("Checkbox Control");
+                    monochrome.name = "Monochrome On";
+                    monochrome.property("Checkbox").setValue(true);
+
+                    var soften = effects.addProperty("Checkbox Control");
+                    soften.name = "Soften On";
+                    soften.property("Checkbox").setValue(true);
+
+                    var radius = effects.addProperty("Slider Control");
+                    radius.name = "Radius";
+                    radius.property("Slider").setValue(38);
+
+                    var invert1 = effects.addProperty("Invert");
+                    var transform = effects.addProperty("Transform");
+
+                    var blur = effects.addProperty("Gaussian Blur");
+                    var blurExpr = "effect(\"Radius\")(\"Slider\")";
+                    blur.property("Blurriness").expression = blurExpr;
+
+                    var composite = effects.addProperty("CC Composite");
+                    composite.property("Composite Original").setValue(2);
+
+                    var tint = effects.addProperty("Tint");
+                    var tintExpr = "effect(\"Monochrome On\")(\"Checkbox\")*100";
+                    tint.property("Amount to Tint").expression = tintExpr;
+
+                    var levels = effects.addProperty("Levels");
+                    levels.property("Input Black").setValue(0.249);
+                    levels.property("Input White").setValue(0.751);
+
+                    var invert2 = effects.addProperty("Invert");
+                    var invert2Expr = "Math.abs((effect(\"Soften On\")(\"Checkbox\")*100)-100)";
+                    invert2.property("Blend With Original").expression = invert2Expr;
+                } else { 
+                    alert(errorFootageOnly);
+                }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////////////////

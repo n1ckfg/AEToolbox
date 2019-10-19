@@ -91,10 +91,11 @@ function init(_panel) {
         panel.pipGroup4 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "4K Stereo 360");
 
         // Image Effect group
-        var col5butCount = 2;
+        var col5butCount = 3;
         panel.imageGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col5butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.imageGroup0 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Soften 1");
         panel.imageGroup1 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Soften 2");
+        panel.imageGroup2 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "High Pass");
 
         // Guide group
         var col6butCount = 2;
@@ -158,6 +159,7 @@ function init(_panel) {
         //--
         panel.imageGroup0.onClick = softLayeredImage1;
         panel.imageGroup1.onClick = softLayeredImage2;
+        panel.imageGroup2.onClick = highPass;
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
@@ -220,6 +222,7 @@ function init(_panel) {
         //--
         panel.imageGroup0.helpTip = "Duplicates layers with composite modes and blur, v1."; //softLayeredImage;
         panel.imageGroup1.helpTip = "Duplicates layers with composite modes and blur, v2."; //softLayeredImage;
+        panel.imageGroup2.helpTip = "Creates a high pass layer."; //highPass;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
@@ -2240,6 +2243,77 @@ function softLayeredImage2() {
                     newLayer2.audioEnabled = false;
                     blur2.property("Blurriness").setValue(7);
                     opacity2.setValue(50);
+                } else { 
+                    alert(errorFootageOnly);
+                }
+            }
+        }
+    }
+ 
+    app.endUndoGroup();
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
+// Notes: apply process to any number of layers
+function highPass() {
+    app.beginUndoGroup("High Pass");
+
+    var theComp = app.project.activeItem; 
+    
+    if (theComp === null || !(theComp instanceof CompItem)) {
+        alert(errorNoCompSelected);
+    } else { 
+        var theLayers = theComp.selectedLayers;
+
+        if (theLayers.length === 0) {
+            alert(errorNoLayerSelected);
+        } else { 
+            for (var i = 0; i < theLayers.length; i++) {   
+                var curLayer = theLayers[i];
+                // condition 1: must be a footage layer
+                if (curLayer.matchName === "ADBE AV Layer") {
+                    var newLayer = curLayer.duplicate();
+                    var opacity = newLayer.property("opacity");
+                    newLayer.blendingMode = BlendingMode.OVERLAY;
+                    opacity.setValue(50);
+                    newLayer.audioEnabled = false;
+
+                    var effects = newLayer.property("Effects");
+                    
+                    var monochrome = effects.addProperty("Checkbox Control");
+                    monochrome.name = "Monochrome On";
+                    monochrome.property("Checkbox").setValue(true);
+
+                    var soften = effects.addProperty("Checkbox Control");
+                    soften.name = "Soften On";
+                    soften.property("Checkbox").setValue(true);
+
+                    var radius = effects.addProperty("Slider Control");
+                    radius.name = "Radius";
+                    radius.property("Slider").setValue(38);
+
+                    var invert1 = effects.addProperty("Invert");
+                    var transform = effects.addProperty("Transform");
+
+                    var blur = effects.addProperty("Gaussian Blur");
+                    var blurExpr = "effect(\"Radius\")(\"Slider\")";
+                    blur.property("Blurriness").expression = blurExpr;
+
+                    var composite = effects.addProperty("CC Composite");
+                    composite.property("Composite Original").setValue(2);
+
+                    var tint = effects.addProperty("Tint");
+                    var tintExpr = "effect(\"Monochrome On\")(\"Checkbox\")*100";
+                    tint.property("Amount to Tint").expression = tintExpr;
+
+                    var levels = effects.addProperty("Levels");
+                    levels.property("Input Black").setValue(0.249);
+                    levels.property("Input White").setValue(0.751);
+
+                    var invert2 = effects.addProperty("Invert");
+                    var invert2Expr = "Math.abs((effect(\"Soften On\")(\"Checkbox\")*100)-100)";
+                    invert2.property("Blend With Original").expression = invert2Expr;
                 } else { 
                     alert(errorFootageOnly);
                 }

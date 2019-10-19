@@ -91,10 +91,11 @@ function init(_panel) {
         panel.pipGroup4 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "4K Stereo 360");
 
         // Image Effect group
-        var col5butCount = 2;
+        var col5butCount = 3;
         panel.imageGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col5butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
         panel.imageGroup0 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Soften 1");
         panel.imageGroup1 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Soften 2");
+        panel.imageGroup2 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*2),butXend,butYend+(butYinc*2)], "High Pass");
 
         // Guide group
         var col6butCount = 2;
@@ -158,6 +159,7 @@ function init(_panel) {
         //--
         panel.imageGroup0.onClick = softLayeredImage1;
         panel.imageGroup1.onClick = softLayeredImage2;
+        panel.imageGroup2.onClick = highPass;
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
@@ -220,6 +222,7 @@ function init(_panel) {
         //--
         panel.imageGroup0.helpTip = "Duplicates layers with composite modes and blur, v1."; //softLayeredImage;
         panel.imageGroup1.helpTip = "Duplicates layers with composite modes and blur, v2."; //softLayeredImage;
+        panel.imageGroup2.helpTip = "Creates a high pass layer."; //highPass;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
