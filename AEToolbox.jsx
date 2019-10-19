@@ -156,8 +156,8 @@ function init(_panel) {
         panel.depthGroup5.onClick = stereoController;
         panel.depthGroup6.onClick = doRgbToGray;
         //--
-        panel.imageGroup0.onclick = softLayeredImage1;
-        panel.imageGroup1.onclick = softLayeredImage2;
+        panel.imageGroup0.onClick = softLayeredImage1;
+        panel.imageGroup1.onClick = softLayeredImage2;
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
