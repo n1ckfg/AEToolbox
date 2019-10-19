@@ -91,9 +91,10 @@ function init(_panel) {
         panel.pipGroup4 = panel.pipGroup.add("button", [butXstart,butYstart+(butYinc*4),butXend,butYend+(butYinc*4)], "4K Stereo 360");
 
         // Image Effect group
-        var col5butCount = 1;
+        var col5butCount = 2;
         panel.imageGroup = panel.add("panel", [colXstart, colYstart, colXend, colYendBase+(col5butCount*butYinc)+butYoffset+butYoffsetCap], "", {borderStyle: "etched"});
-        panel.imageGroup0 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Soften");
+        panel.imageGroup0 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*0),butXend,butYend+(butYinc*0)], "Soften 1");
+        panel.imageGroup1 = panel.imageGroup.add("button", [butXstart,butYstart+(butYinc*1),butXend,butYend+(butYinc*1)], "Soften 2");
 
         // Guide group
         var col6butCount = 2;
@@ -155,7 +156,8 @@ function init(_panel) {
         panel.depthGroup5.onClick = stereoController;
         panel.depthGroup6.onClick = doRgbToGray;
         //--
-        panel.imageGroup0.onclick = softenImage;
+        panel.imageGroup0.onclick = softLayeredImage1;
+        panel.imageGroup1.onclick = softLayeredImage2;
         //--
         panel.pipGroup0.onClick = viveRecording;
         panel.pipGroup1.onClick = holoflix720p;
@@ -216,7 +218,8 @@ function init(_panel) {
         panel.pipGroup3.helpTip = "Turns six Instagram clips into a 3 x 2 HD grid." //instaGrid;
         panel.pipGroup4.helpTip = "Creates a 4K OU 360 stereo comp." //stereo360;
         //--
-        panel.imageGroup0.helpTip = "Duplicates layers with composite modes and blur."; //softenImage;
+        panel.imageGroup0.helpTip = "Duplicates layers with composite modes and blur, v1."; //softLayeredImage;
+        panel.imageGroup1.helpTip = "Duplicates layers with composite modes and blur, v2."; //softLayeredImage;
         //--
         panel.guideGroup0.helpTip = "Creates an adjustment layer that applies an onion skin effect."; //onionSkin;
         panel.guideGroup1.helpTip = "View connections between parent and child layers."; //skeleView;
