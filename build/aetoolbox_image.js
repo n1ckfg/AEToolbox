@@ -138,13 +138,17 @@ function highPass() {
 
                     var invert1 = effects.addProperty("Invert");
                     var transform = effects.addProperty("Transform");
+                    transform.property("Opacity").setValue(50);
+                    transform.property("Sampling").setValue(1);
 
                     var blur = effects.addProperty("Gaussian Blur");
                     var blurExpr = "effect(\"Radius\")(\"Slider\")";
                     blur.property("Blurriness").expression = blurExpr;
+                    blur.property("Repeat Edge Pixels").setValue(true);
 
                     var composite = effects.addProperty("CC Composite");
                     composite.property("Composite Original").setValue(2);
+                    composite.property("RGB Only").setValue(false);
 
                     var tint = effects.addProperty("Tint");
                     var tintExpr = "effect(\"Monochrome On\")(\"Checkbox\")*100";
