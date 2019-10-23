@@ -64,15 +64,32 @@ C:\Program Files\AFTER_EFFECTS_VERSION\Scripts\ScriptUI Panels\
 4.8. 4K Stereo 360 (layer selection): Creates a standard 4K OU 360 stereo comp.<br>
 4.9. Holoflix 720p (layer selection): Splits a Holoflix 720p clip into RGB and depth comps.<br>
 <br>
-5. GUIDE<br>
-5.1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.<br>
-5.2. Skeleton View (layer selection): View connections between parent and child layers.<br>
+5. REFORMAT<br>
+5.1. Vive Recording<br>
+5.2. Holoflix<br>
+5.3. RGBD Toolkit<br>
+5.4. InstaGrid<br>
+5.5. 4K Stereo 360<br>
 <br>
-6. EXPORT<br>
-6.1. Camera to Maya (layer selection): Export camera to Maya.<br>
-6.2. Unity Anim (layer selection): Export keyframes to Unity anim.<br>
-6.3. JSON Export (layer selection): Export keyframes to JSON.<br>
-6.4. XML Export (layer selection): Export keyframes to XML.<br>
+6. IMAGE<br>
+6.1. Soften 1<br>
+6.2. Soften 2<br>
+6.3. High Pass<br>
 <br>
-7. IMPORT<br>
-7.1. GML to Position (comp selection): Import position keyframes from GML.
+7. GUIDE<br>
+7.1. Onion Skin (no selection): Creates an adjustment layer that applies an onion skin effect.<br>
+7.2. Skeleton View (layer selection): View connections between parent and child layers.<br>
+<br>
+8. EXPORT<br>
+8.1. Camera to Maya (layer selection): Export camera to Maya.<br>
+8.2. Unity Anim (layer selection): Export keyframes to Unity anim.<br>
+8.3. JSON Export (layer selection): Export keyframes to JSON.<br>
+8.4. XML Export (layer selection): Export keyframes to XML.<br>
+<br>
+9. IMPORT<br>
+9.1. GML to Position (comp selection): Import position keyframes from GML.<br>
+<br>
+10. PLUGIN<br>
+10.1. RSMB Twos<br>
+10.2. Particular Rig<br>
+10.3. Freeform Pro Rig<br>
