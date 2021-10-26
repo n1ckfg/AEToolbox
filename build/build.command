@@ -27,3 +27,4 @@ cat "aetoolbox_main.js" "aetoolbox_basic.js" "aetoolbox_advanced.js" "aetoolbox_
 #cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2019/Scripts/ScriptUI Panels/"
 cp $BUILD_TARGET "/Applications/Adobe After Effects CC 2020/Scripts/ScriptUI Panels/"
 cp $BUILD_TARGET "/Applications/Adobe After Effects 2021/Scripts/ScriptUI Panels/"
+cp $BUILD_TARGET "/Applications/Adobe After Effects 2022/Scripts/ScriptUI Panels/"
