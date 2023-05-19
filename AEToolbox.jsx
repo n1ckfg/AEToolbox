@@ -333,23 +333,38 @@ function nullsForPins() {
                         if (curLayer.effect.puppet != null) {
                             var wherePins = curLayer.property("Effects").property("Puppet").property("arap").property("Mesh").property("Mesh 1").property("Deform");
                             var pinCount = wherePins.numProperties;
+                            
                             for (var n = 1; n <= pinCount; n++) {
-                                // Get position of puppet pin
+                                var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
+                                //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
+                                var solid = theComp.layers.addNull();
+                                //solid.name = pin.name + "_ctl";
+                                solid.name = curLayer.name + "_" + pin.name;
+                                
+                                var p = pin.position.value;
+
+                                //scaled from layer coords to world coords
+                                solid.property("position").setValue(harvestPoint(p, curLayer, solid, "toComp"));
+
+                                // Position of puppet pin (Standard, Advanced)
                                 try { 
-                                    var pin = curLayer.effect("Puppet").arap.mesh("Mesh 1").deform(n);
-                                    //var solid = theComp.layers.addSolid([1.0, 1.0, 0], nullName, 50, 50, 1);
-                                    var solid = theComp.layers.addNull();
-                                    //solid.name = pin.name + "_ctl";
-                                    solid.name = curLayer.name + "_" + pin.name;
-                                    //~~~~~
-                                    //scaled from layer coords to world coords
-                                    var p = pin.position.value;
-                                    solid.property("position").setValue(harvestPoint(p, curLayer, solid, "toComp"));
-                                    //~~~~~~
                                     var pinExpr = "fromComp(thisComp.layer(\""+solid.name+"\").toComp(thisComp.layer(\""+solid.name+"\").anchorPoint));";
                                     pin.position.expression = pinExpr;
                                 } catch(err) {}
+
+                                // Rotation of puppet pin (Bend, Advanced)
+                                try { 
+                                    var pinExpr = "thisComp.layer(\""+solid.name+"\").transform.rotation - 0;";
+                                    pin.rotation.expression = pinExpr;
+                                } catch(err) {}
+
+                                // Scale of puppet pin (Bend, Advanced)
+                                try { 
+                                    var pinExpr = "thisComp.layer(\""+solid.name+"\").transform.scale[0];";
+                                    pin.scale.expression = pinExpr;
+                                } catch(err) {}                            
                             }
+
                             curLayer.property("Effects").property("Puppet").property("On Transparent").setValue(1);                          
                             curLayer.locked = true;
                         } else { 
