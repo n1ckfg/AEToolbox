@@ -8,7 +8,7 @@ del %BUILD_TARGET%
 
 copy /b aetoolbox_main.js+aetoolbox_basic.js+aetoolbox_advanced.js+aetoolbox_rigging.js+aetoolbox_stereo.js+aetoolbox_pip.js+aetoolbox_image.js+aetoolbox_guide.js+aetoolbox_export.js+aetoolbox_import.js+aetoolbox_plugins.js+aetoolbox_util.js %BUILD_TARGET%
 
-set VERSION=Adobe After Effects 2023
+set VERSION=Adobe After Effects 2024
 
 set DEST="C:\Program Files\Adobe\%VERSION%\Support Files\Scripts\ScriptUI Panels\"
 
