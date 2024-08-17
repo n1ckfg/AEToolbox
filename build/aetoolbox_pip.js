@@ -13,9 +13,9 @@ function instaGrid() {
             alert("Select 1-6 layers.");
         } else {
             for (var i=0; i<theLayers.length; i++) {
-                if (i===0) theLayers[i].position.setValue([320, 960]);
-                if (i===1) theLayers[i].position.setValue([960, 960]);
-                if (i===2) theLayers[i].position.setValue([1600, 960]);
+                if (i===0) theLayers[i].position.setValue([320, 860]);
+                if (i===1) theLayers[i].position.setValue([960, 860]);
+                if (i===2) theLayers[i].position.setValue([1600, 860]);
                 if (i===3) theLayers[i].position.setValue([320, 320]);
                 if (i===4) theLayers[i].position.setValue([960, 320]);
                 if (i===5) theLayers[i].position.setValue([1600, 320]);
